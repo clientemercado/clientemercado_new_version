@@ -254,7 +254,6 @@ namespace ClienteMercado.Areas.Company.Controllers
             }
         }
 
-        //========================================================================
         public JsonResult RegistrarUsuEmpresaFornecedor(string cpfUsu, string nomeUsu, int idEmp, string log, string pass, string tipoG, string emailUsu)
         {
             var msgRet = "";
@@ -295,6 +294,5 @@ namespace ClienteMercado.Areas.Company.Controllers
             var result = new { msg = msgRet };
             return Json(result, JsonRequestBehavior.AllowGet);
         }
-        //========================================================================
     }
 }
