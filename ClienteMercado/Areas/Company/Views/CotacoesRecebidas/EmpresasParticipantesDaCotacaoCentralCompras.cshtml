@@ -1,0 +1,234 @@
+﻿@{
+    ViewBag.Title = "Empresas Participantes da Central de Compras";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="http://code.jquery.com/jquery-1.8.2.js"></script>
+<script src="http://code.jquery.com/ui/1.9.0/jquery-ui.js"></script>
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.9.0/themes/base/jquery-ui.css" />
+
+<style>
+    .HideColHead {
+        display: none
+    }
+
+    .HideCol {
+        display: none
+    }
+
+    th {
+        background-color: #CDC9C9;
+        color: white;
+    }
+
+    .status {
+        font-size: 9pt;
+    }
+
+    a:link {
+        text-decoration: none;
+    }
+</style>
+
+<div class="row">
+    <!-- BEGIN VALIDATION STATES-->
+    <div class="portlet box blue">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="fas fa-th-list"></i> Empresas Participantes da Cotação
+            </div>
+        </div>
+        <div class="portlet-body form">
+            <!-- BEGIN FORM-->
+            <form action="#" class="form-horizontal">
+                <div class="form-body">
+                    <div class="form-group" id="cabecalho" style="">
+                        <label class="col-md-2 control-label"><b>Central Compras:</b></label>
+                        <div class="col-md-4">
+                            <h5>@Model.inNomeCentralCompras</h5>
+                        </div>
+                        <label class="col-md-2 control-label"><b>Ramo Atividade:</b></label>
+                        <div class="col-md-4">
+                            <h5>@Model.inRamoAtividadeCC</h5>
+                        </div>
+                        <label class="col-md-2 control-label"><b>Administradora:</b></label>
+                        <div class="col-md-4">
+                            <h5>@Model.inNomEmpresaAdmCC</h5>
+                        </div>
+                        <label class="col-md-2 control-label"><b>Cidade:</b></label>
+                        <div class="col-md-4">
+                            <h5>@Model.inCidadeEmpresaAdmCC</h5>
+                        </div>
+                        <label class="col-md-2 control-label"><b>Usuário Resp:</b></label>
+                        <div class="col-md-4">
+                            <h5>@Model.inNomeUsuarioRespEmpresaAdmCC</h5>
+                        </div>
+                    </div>
+                    <hr />
+
+                    <div class="form-actions">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <a href="@Url.Action("VisualizarResponderCotacao", "CotacoesRecebidas", new { Area = "Company", cCC = @Model.cCC, iCM = Model.iCM, iCCF = Model.iCCF })" class="btn default button-previous">
+                                    <i class="fas fa-arrow-left"></i> Voltar
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <hr />
+
+                    <div class="form-group">
+                        <!-- BEGIN SAMPLE TABLE PORTLET-->
+                        <div class="portlet-body flip-scroll col-md-12">
+                            <table id="empresasCC" class="table table-bordered table-striped table-condensed flip-content">
+                                <thead class="flip-content">
+                                    <tr>
+                                        <th data-column-id="NOME_FANTASIA_EMPRESA" data-width="25%" data-formatter="link1">Empresa</th>
+                                        <th data-column-id="enderecoCompletoDaEmpresaCotante" data-width="" data-formatter="link2">Localização</th>
+                                        <th data-column-id="cidade" data-width="" data-formatter="link3">Cidade</th>
+                                        <th data-column-id="ufEstado" data-width="5%" data-formatter="link4">UF</th>
+                                        <th data-column-id="apelidoUsuario" data-width="" data-formatter="link5">Contato</th>
+                                        <th data-column-id="TELEFONE1_EMPRESA_USUARIO" data-width="10%" data-formatter="link6">Fone</th>
+                                        <th data-column-id="EMAIL1_EMPRESA" data-width="20%" data-formatter="link7">E-mail</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <!-- END FORM-->
+
+            <input type="hidden" id="inICM" value="@Model.iCM" />
+            <input type="hidden" id="inidCC" value="@Model.cCC" />
+        </div>
+    </div>
+    <!-- END VALIDATION STATES-->
+</div>
+
+<script>
+    jQuery(document).ready(function () {
+        debugger;
+
+        carregarGrid();
+
+    });
+
+    //POPULAR GRID
+    function carregarGrid() {
+        //-------------------------------------------------------------------------------
+        debugger;
+
+        //CONSULTA os DADOS e CARREGA o GRID ao entrar na página
+        var grid = $('#empresasCC').bootgrid({
+            ajax: true,
+            navigation: 0, //CABEÇALHO: 2 - Exibe só RODAPÉ
+            columnSelection: false, //SELETOR de COLUNA: True - Habilita / False - Desabilita
+            url: "/CotacoesRecebidas/EmpresasParticipantesCotantesDaCC",
+            post: function () {
+                /* PARÂMETROS a serem enviados na REQUISIÇÃO AJAX */
+                return {
+                    'iCM': $('#inICM').val(),
+                    'cCC': $('#inidCC').val()
+                };
+            },
+            selection: true,
+            multiSelect: true,
+            rowSelect: true,
+            keepSelection: true,
+            formatters: {
+
+                "link1": function (column, row) {
+                    if (row.ehEmpresaAdmDaCC == "sim") {
+                        return "<b><a href=\"#\" title=\"Empresa ADM. da Central Compras\">" + row.NOME_FANTASIA_EMPRESA + "</a></b>";
+                    }
+                    else {
+                        return "<a href=\"#\" title=\"\">" + row.NOME_FANTASIA_EMPRESA + "</a>";
+                    }
+                },
+                "link2": function (column, row) {
+                    if (row.ehEmpresaAdmDaCC == "sim") {
+                        return "<b><a href=\"#\" title=\"" + row.enderecoCompletoDaEmpresaCotante + "\">" + row.enderecoCompletoDaEmpresaCotante + "</a></b>";
+                    }
+                    else {
+                        return "<a href=\"#\" title=\"" + row.enderecoCompletoDaEmpresaCotante + "\">" + row.enderecoCompletoDaEmpresaCotante + "</a>";
+                    }
+                },
+                "link3": function (column, row) {
+                    if (row.ehEmpresaAdmDaCC == "sim") {
+                        return "<b><a href=\"#\" title=\"Empresa ADM. da Central Compras\">" + row.cidade + "</a></b>";
+                    }
+                    else {
+                        return "<a href=\"#\">" + row.cidade + "</a>";
+                    }
+                },
+                "link4": function (column, row) {
+                    if (row.ehEmpresaAdmDaCC == "sim") {
+                        return "<b><a href=\"#\" title=\"Empresa ADM. da Central Compras\">" + row.ufEstado + "</a></b>";
+                    }
+                    else {
+                        return "<a href=\"#\">" + row.ufEstado + "</a>";
+                    }
+                },
+                "link5": function (column, row) {
+                    if (row.ehEmpresaAdmDaCC == "sim") {
+                        return "<b><a href=\"#\" title=\"Empresa ADM. da Central Compras\">" + row.apelidoUsuario + "</a></b>";
+                    }
+                    else {
+                        return "<a href=\"<a href=\"#\">" + row.apelidoUsuario + "</a>";
+                    }
+                },
+                "link6": function (column, row) {
+                    if (row.ehEmpresaAdmDaCC == "sim") {
+                        return "<b><a href=\"#\" title=\"Empresa ADM. da Central Compras\">" + row.TELEFONE1_EMPRESA_USUARIO + "</a></b>";
+                    }
+                    else {
+                        return "<a href=\"\">" + row.TELEFONE1_EMPRESA_USUARIO + "</a>";
+                    }
+                },
+                "link7": function (column, row) {
+                    if (row.ehEmpresaAdmDaCC == "sim") {
+                        return "<b><a href=\"#\" title=\"Empresa ADM. da Central Compras\">" + row.EMAIL1_EMPRESA + "</a></b>";
+                    }
+                    else {
+                        return "<a href=\"<a href=\"#\">" + row.EMAIL1_EMPRESA + "</a>";
+                    }
+                },
+            }
+        }).on("selected.rs.jquery.bootgrid", function (e, rows) {
+            //var rowIds = [];
+
+            //for (var i = 0; i < rows.length; i++)
+            //{
+            //    rowIds.push(rows[i].idEmpresa);
+            //}
+
+            //alert("Select: " + rowIds.join(","));
+
+        }).on("deselected.rs.jquery.bootgrid", function (e, rows) {
+            //var rowIds = [];
+
+            //for (var i = 0; i < rows.length; i++)
+            //{
+            //    rowIds.push(rows[i].idEmpresa);
+            //}
+
+            //alert("Deselect: " + rowIds.join(","));
+
+        }).on("loaded.rs.jquery.bootgrid", function () {
+            /* Executa depois que os dados são carregados e renderizados */
+
+            //var quantRegistros = grid.bootgrid("getTotalRowCount");
+            //if (parseInt(quantRegistros) > 0) {
+            //    $('#btn-enviarConvites').show(); //HABILITA botão CONVITE
+            //}
+
+            //grid.find(".command-delete").on("click", function (e) {
+            //    $(this).closest('tr').remove();
+            //});
+        });
+        //-------------------------------------------------------------------------------
+    }
+</script>
+

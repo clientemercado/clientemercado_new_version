@@ -1,0 +1,54 @@
+﻿@*<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    <link href="~/Content/jquery-ui.css" rel="stylesheet" />
+    <link href="@Url.Content("~/Content/Estilos_internas.css")" rel="stylesheet" type="text/css" />
+    <link href="~/Content/jquery.alerts.css" rel="stylesheet" /> <!-- Nova linha -->
+
+    <script src="~/Scripts/jquery-2.1.3.js"></script>
+    <script src="~/Scripts/jquery-2.1.3.min.js"></script>
+    <script src="~/Scripts/jquery-ui.js"></script>
+    <script src="~/Scripts/jquery-ui.min.js"></script>
+    <script src="~/Scripts/validacoes.js"></script>
+    <script src="~/Scripts/jquery.alerts.js"></script> <!-- Nova linha -->
+
+</head>
+  <body onKeyDown="javascript:return (event.keyCode != 116);">
+        <div id="container">
+            <div id="header">
+                <div id="toplogo">
+                    <img src='@Url.Content("~/Content/images/logo_branca.png")' style='margin-left: 20px; margin-top: 12px; border: none;' />
+                </div>
+                <div id="topbar">
+                    <div id="barra_cinza_superior"></div>
+                    <div id="empresa_logada">@ViewBag.nomeUsuarioLogado<span id="texto_normal">&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;</span>@ViewBag.nomeEmpresaLogado</div>
+                </div>
+            </div>
+            <div id="header2">
+                <div id="barra_cinza_inferior"></div>
+                <div id="logout">@Html.ActionLink("Sair", "LogOut", "Login")</div>
+            </div>
+
+            <div id="conteudo">
+                @RenderBody()
+            </div>
+            <br/>
+            <div id="barra_verm_rodape"></div>
+            <div id="barra_branca_rodape"></div>
+            <div id="footer">
+                <div id="rodapelogo">
+                    <img src='@Url.Content("~/Content/images/logo_cliente_rodape.png")' style='margin-left: 20px; margin-top: 12px; border: none;' />
+                    <div id="texto1_rodape">&#169; 2015&nbsp;&nbsp;ClienteMercado.com.br</div>
+                </div>*@
+                @*<div id="texto_contato_quem_somos">@Html.ActionLink("C O N T A T O", "Contato", "Contato")<span id="texto_normal">&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;</span>@Html.ActionLink("Q U E M  S O M O S", "Somos", "Home")</div>*@
+                @*<div id="texto1_rodape">&#169; 2015&nbsp;&nbsp;ClienteMercado.com.br</div>*@
+            @*</div>
+        </div>*@
+
+        @*        @Scripts.Render("~/bundles/jquery")*@
+        @*@RenderSection("scripts", required: false)
+    </body>
+</html>*@

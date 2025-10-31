@@ -1,0 +1,325 @@
+﻿@model ClienteMercado.Models.CadastroUsuarioCotante
+
+@{
+ViewBag.Title = "ClienteMercado";
+    Layout = "~/Views/Shared/_Layout-Others-Home.cshtml";
+}
+
+<div id="label_titulo_paginas_contato" class="label_paginas">&nbsp;&nbsp;Cadastro do Usuário Cotante - Etapa 2 de 2</div>
+
+<div id="container_cadastro_usuario">
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true)
+
+        <div id="campos_cadastro_empresa" class="campos_cadastro_nova_empresa_usuario">
+            <div id="loading" class="carregando"></div>
+            <div id="mensagem_retorno" class="formata_msg_retorno_operacao">
+                <h4>@TempData["mensagem"]</h4>
+            </div>
+
+            <div id="secao_cnpj_cpf" class="formata_campos_cadastro">
+                <div id="label_cnpj_cpf" class="formata_label">
+                    @Html.LabelFor(m => m.CPF_USUARIO_COTANTE)
+                </div>
+                <div id="campo_cnpj_cpf" class="">
+                    @Html.TextBoxFor(m => m.CPF_USUARIO_COTANTE, new { style = "font-family: 'Verdana', Geneva, sans-serif; width: 160px;", maxlength = 14, @id = "CPF_USUARIO_COTANTE", @onClick="limparCampoCPF();", @onKeyDown="FormataCPF(this, event);", @tabindex = "1" })
+                    <span id="mensagemErroCpf2" class="texto_menor_erro">@Html.ValidationMessageFor(m => m.CPF_USUARIO_COTANTE, String.Empty)</span>
+                    <img style="margin-left:20px; margin-top:0px;" id="img_load_direcionada1" src="@Url.Content("~/Content/images/ajax-loader_.gif")">
+                </div>
+            </div>
+            <div id="secao_nome_usuario" class="formata_campos_cadastro">
+                <div id="label_nome_usuario" class="formata_label">
+                    @Html.LabelFor(m => m.NOME_USUARIO_COTANTE)
+                </div>
+                <div id="campo_nome_usuario" class="">
+                    @Html.TextBoxFor(m => m.NOME_USUARIO_COTANTE, new { style = "font-family: 'Verdana', Geneva, sans-serif; width: 500px;", maxlength = 100, @tabindex = "2" })
+                    <span id="mensagemErroNome" class="texto_menor_erro">@Html.ValidationMessageFor(m => m.NOME_USUARIO_COTANTE, String.Empty)</span>
+                </div>
+            </div>
+            <div id="secao_nick_name" class="formata_campos_cadastro">
+                <div id="label_nick_name" class="formata_label">
+                    @Html.LabelFor(m => m.NICK_NAME_USUARIO_COTANTE)
+                </div>
+                <div id="campo_nick_name" class="">
+                    @Html.TextBoxFor(m => m.NICK_NAME_USUARIO_COTANTE, new { style = "font-family: 'Verdana', Geneva, sans-serif; width: 330px;", maxlength = 30, @tabindex = "3" })
+                    <span id="mensagemErroNick" class="texto_menor_erro">@Html.ValidationMessageFor(m => m.NICK_NAME_USUARIO_COTANTE, String.Empty)</span>
+                </div>
+            </div>
+            <div id="secao_email1" class="formata_campos_cadastro">
+                <div id="label_email1" class="formata_label">
+                    @Html.LabelFor(m => m.EMAIL1_USUARIO)
+                </div>
+                <div id="campo_email1" class="">
+                    @Html.TextBoxFor(m => m.EMAIL1_USUARIO, new { style = "font-family: 'Verdana', Geneva, sans-serif; width: 330px;", maxlength = 50, @id = "EMAIL1_USUARIO", @onClick="limparCampoEmail(2);", @tabindex = "4" })
+                    <span id="mensagemErroEmail2" class="texto_menor_erro">@Html.ValidationMessageFor(m => m.EMAIL1_USUARIO, String.Empty)</span>
+                    <img style="margin-left:20px; margin-top:0px;" id="img_load_direcionada2" src="@Url.Content("~/Content/images/ajax-loader_.gif")">
+                </div>
+            </div>
+            <div id="secao_telefone1" class="formata_campos_cadastro">
+                <div id="label_telefone1" class="formata_label">
+                    @Html.LabelFor(m => m.TELEFONE1_USUARIO_COTANTE)
+                </div>
+                <div id="campo_telefone1" class="">
+                    @Html.TextBoxFor(m => m.TELEFONE1_USUARIO_COTANTE, new { style = "font-family: 'Verdana', Geneva, sans-serif; width: 120px;", maxlength = 15, @tabindex = "5" })
+                    <span id="mensagemErroFone1" class="texto_menor_erro">@Html.ValidationMessageFor(m => m.TELEFONE1_USUARIO_COTANTE, String.Empty)</span>
+                </div>
+            </div>
+            <div id="secao_login" class="formata_campos_cadastro">
+                <div id="label_login" class="formata_label">
+                    @Html.LabelFor(m => m.LOGIN_USUARIO_COTANTE_LOGINS)
+                </div>
+                <div id="campo_login" class="">
+                    @Html.TextBoxFor(m => m.LOGIN_USUARIO_COTANTE_LOGINS, new { style = "font-family: 'Verdana', Geneva, sans-serif; width: 160px;", maxlength = 31, @size = 30, @tabindex = "6" })
+                    <span id="mensagemErroLogin2" class="texto_menor_erro">@Html.ValidationMessageFor(m => m.LOGIN_USUARIO_COTANTE_LOGINS, String.Empty)</span>
+                    <img style="margin-left:20px; margin-top:0px;" id="img_load_direcionada3" src="@Url.Content("~/Content/images/ajax-loader_.gif")">
+                </div>
+            </div>
+            <div id="secao_senha1" class="formata_campos_cadastro">
+                <div id="label_senha1" class="formata_label">
+                    @Html.LabelFor(m => m.SENHA_USUARIO_COTANTE_LOGINS)
+                </div>
+                <div id="campo_senha1" class="">
+                    @Html.TextBoxFor(m => m.SENHA_USUARIO_COTANTE_LOGINS, new { style = "font-family: 'Verdana', Geneva, sans-serif; width: 160px;", maxlength = 31, @size = 30, @type = "password", @tabindex = "7" })
+                    <span id="mensagemErroLogin" class="texto_menor_erro">@Html.ValidationMessageFor(m => m.SENHA_USUARIO_COTANTE_LOGINS, String.Empty)</span>
+                </div>
+            </div>
+            <div id="secao_senha2" class="formata_campos_cadastro">
+                <div id="label_senha2" class="formata_label">
+                    @Html.LabelFor(m => m.CONFIRMAR_SENHA_USUARIO_COTANTE_LOGINS)
+                </div>
+                <div id="campo_senha2" class="">
+                    @Html.TextBoxFor(m => m.CONFIRMAR_SENHA_USUARIO_COTANTE_LOGINS, new { style = "font-family: 'Verdana', Geneva, sans-serif; width: 160px;", maxlength = 31, @size = 30, @type = "password", @tabindex = "8" })
+                    <span id="mensagemErroConfirmar" class="texto_menor_erro">@Html.ValidationMessageFor(m => m.CONFIRMAR_SENHA_USUARIO_COTANTE_LOGINS, String.Empty)</span>
+                </div>
+            </div>
+            <div id="secao_localizacao1" class="formata_campos_cadastro">
+                <div id="label_pais" class="formata_label">
+                    @Html.LabelFor(m => m.PAIS_USUARIO_COTANTE)
+                </div>
+                <div id="campo_pais" class="formata_label">
+                    @Html.DropDownList("PAIS_USUARIO_COTANTE", Model.ListagemPaises, new { style = "font-family: 'Verdana', Geneva, sans-serif; width: 100px;", @tabindex = "9" }) 
+                    <span id="mensagemErroPais" class="texto_menor_erro">@Html.ValidationMessageFor(m => m.PAIS_USUARIO_COTANTE, String.Empty)</span>
+                </div>
+                <div id="label_cep" class="formata_label_2">
+                    @Html.LabelFor(m => m.CEP_SEQUENCIAL_ENDERECO , new { style = "margin-left:38px;"})
+                </div>
+                <div id="campo_cep" class="">
+                    @Html.TextBoxFor(m => m.CEP_SEQUENCIAL_ENDERECO, new { style = "font-family: 'Verdana', Geneva, sans-serif; width: 80px; margin-left:58px;", maxlength = 9, @id="CEP_SEQUENCIAL_ENDERECO",  @onClick="limparCampoCEP();", @onkeypress="return MM_formtCep(event,this,'#####-###');", @tabindex = "10" })
+                    <span id="mensagemErroCep2" class="texto_menor_erro">@Html.ValidationMessageFor(m => m.CEP_SEQUENCIAL_ENDERECO, String.Empty)</span>
+                    <img style="margin-left:20px; margin-top:0px;" id="img_load_direcionada4" src="@Url.Content("~/Content/images/ajax-loader_.gif")">
+                </div>
+            </div>
+            <div id="secao_localizacao2" class="formata_campos_cadastro">
+                <div id="label_endereco" class="formata_label">
+                    @Html.LabelFor(m => m.ENDERECO_USUARIO_COTANTE)
+                </div>
+                <div id="campo_endereco" class="">
+                    @Html.TextBoxFor(m => m.ENDERECO_USUARIO_COTANTE, new { style = "font-family: 'Verdana', Geneva, sans-serif; width: 500px;", maxlength = 100, @tabindex = "11" })
+                    <span id="mensagemErroEndereco" class="texto_menor_erro">@Html.ValidationMessageFor(m => m.ENDERECO_USUARIO_COTANTE, String.Empty)</span>
+                </div>
+            </div>
+            <div id="secao_localizacao3" class="formata_campos_cadastro">
+                <div id="label_complemento" class="formata_label">
+                    @Html.LabelFor(m => m.COMPLEMENTO_ENDERECO_USUARIO_COTANTE)
+                </div>
+                <div id="campo_complemento" class="">
+                    @Html.TextBoxFor(m => m.COMPLEMENTO_ENDERECO_USUARIO_COTANTE, new { style = "font-family: 'Verdana', Geneva, sans-serif; width: 500px;", maxlength = 50, @tabindex = "12" })
+                    <span id="mensagemErroComplemento" class="texto_menor_erro">@Html.ValidationMessageFor(m => m.COMPLEMENTO_ENDERECO_USUARIO_COTANTE, String.Empty)</span>
+                </div>
+            </div>
+            <div id="secao_localizacao4" class="formata_campos_cadastro">
+                <div id="label_estado" class="formata_label">
+                    @Html.LabelFor(m => m.NOME_ESTADO_USUARIO_COTANTE)
+                </div>
+                <div id="campo_estado" class="">
+                    @Html.DropDownList("NOME_ESTADO_USUARIO_COTANTE", Model.ListagemEstados, new { style = "font-family: 'Verdana', Geneva, sans-serif; width: 100px;", @tabindex = "13" })
+                    <span id="mensagemErroUf" class="texto_menor_erro">@Html.ValidationMessageFor(m => m.NOME_ESTADO_USUARIO_COTANTE, String.Empty)</span>
+                </div>
+            </div>
+            <div id="secao_localizacao5" class="formata_campos_cadastro">
+                <div id="label_cidade" class="formata_label">
+                    @Html.LabelFor(m => m.NOME_CIDADE_USUARIO_COTANTE)
+                </div>
+                <div id="campo_cidade" class="formata_label">
+                    @Html.TextBoxFor(m => m.NOME_CIDADE_USUARIO_COTANTE, new { style = "font-family: 'Verdana', Geneva, sans-serif; width: 200px;", maxlength = 50, @tabindex = "14" })
+                    <span id="mensagemErroCidade" class="texto_menor_erro">@Html.ValidationMessageFor(m => m.NOME_CIDADE_USUARIO_COTANTE, String.Empty)</span>
+                </div>
+                <div id="label_bairro" class="formata_label">
+                    @Html.LabelFor(m => m.NOME_BAIRRO_USUARIO_COTANTE, new { style = "margin-left:80px;"})
+                </div>
+                <div id="campo_bairro" class="">
+                    @Html.TextBoxFor(m => m.NOME_BAIRRO_USUARIO_COTANTE, new { style = "font-family: 'Verdana', Geneva, sans-serif; width: 200px; margin-left:10px;", maxlength = 50, @tabindex = "15" })
+                    <span id="mensagemErroBairro" class="texto_menor_erro">@Html.ValidationMessageFor(m => m.NOME_BAIRRO_USUARIO_COTANTE, String.Empty)</span>
+                </div>
+            </div>
+ 
+            @Html.HiddenFor(m => m.RECEBER_EMAILS_USUARIO_COTANTE)           
+            @Html.HiddenFor(m => m.ID_CODIGO_TIPO_EMPRESA_USUARIO)
+            @Html.HiddenFor(m => m.ID_CODIGO_ENDERECO_EMPRESA_USUARIO)
+            @Html.HiddenFor(m => m.ID_CODIGO_PROFISSAO)
+            @Html.HiddenFor(m => m.DATA_CADASTRO_USUARIO_COTANTE)
+            @Html.HiddenFor(m => m.DATA_ULTIMA_ATUALIZACAO_USUARIO_COTANTE)
+            @Html.HiddenFor(m => m.ATIVA_INATIVO_USUARIO_COTANTE)
+
+            <br/>
+            <div id="bt_submit" class="formata_campos_cadastro_button">
+                <input type="submit" id="btn_cadastro" value="Cadastrar" class="i2Style"/>
+            </div>
+        </div>
+    }
+        
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script type="text/javascript">
+        jQuery(function ($) {
+            //Posiciona o cursor  no primeiro campo da página
+            $("input[type=text]").first().focus();
+
+            //Atribui valores a alguns campos desta View
+            $('#PAIS_USUARIO_COTANTE').val(4); //Setando país como Brasil. OBS: Ver depois como setar dinâmicamente de acordo com o país q se conectar.
+            $("#RECEBER_EMAILS_USUARIO_COTANTE").attr("checked", true);
+            $("#ID_CODIGO_TIPO_EMPRESA_USUARIO").val(2); //Valor 2 -> Indica que é Usuário pessoa física
+            $("#ID_CODIGO_PROFISSAO").val(1);   //Cadastra sempre como profissão Usuário. Depois, no momento de completar o cadastro, ele poderá alterar.
+            $("#ATIVA_INATIVO_USUARIO_COTANTE").val(true);
+
+            $("#img_load_direcionada1").hide();
+            $("#img_load_direcionada2").hide();
+            $('#img_load_direcionada3').hide();
+            $('#img_load_direcionada4').hide();
+
+            $("#CPF_USUARIO_COTANTE").click(function () {
+                if ($("#CPF_USUARIO_COTANTE").val() != '') {
+                    $("#CPF_USUARIO_COTANTE").val('');
+                }
+            });
+
+            //Ajax - Consulta CPF
+            $("#CPF_USUARIO_COTANTE").blur(function () {
+                if ($("#CPF_USUARIO_COTANTE").val() != '') {
+                    $('#img_load_direcionada1').show();
+
+                    $.ajax({
+                        type: 'POST',
+                        url: '/CadastroUsuarioCotante/VerificaSeCPFExisteNoBanco', //Caminho Controler/Action
+                        dataType: 'json', //Tipo de dados
+                        data: { 'cpfDigitado': $("#CPF_USUARIO_COTANTE").val() }, //Valor passado por parâmetro
+                        success: function (result) {
+                            $('#img_load_direcionada1').hide();
+
+                            //Retorno Json
+                            $("#mensagemErroCpf2").html('');
+
+                            //Desabilita/Habilita botão submit
+                            if (result != true) {
+                                $("#mensagemErroCpf2").html(result).css("color", "#FF0000");
+                                $('#btn_cadastro').attr('disabled', 'disabled');
+                                $('#CPF_USUARIO_COTANTE').focus();
+
+                            } else {
+                                $('#btn_cadastro').removeAttr('disabled');
+                            }
+                        }
+                    });
+                }
+            });
+
+            //Ajax - Consulta E-Mail
+            $("#EMAIL1_USUARIO").blur(function () {
+                if ($("#EMAIL1_USUARIO").val() != '') {
+                    $('#img_load_direcionada2').show();
+
+                    $.ajax({
+                        type: 'POST',
+                        url: '/CadastroUsuarioCotante/VerificaSeEmailExisteNoBanco', //Caminho Controler/Action
+                        dataType: 'json', //Tipo de dados
+                        data: { 'emailDigitado': $("#EMAIL1_USUARIO").val() }, //Valor passado por parâmetro
+                        success: function (result) {
+                            $('#img_load_direcionada2').hide();
+
+                            //Retorno Json
+                            $("#mensagemErroEmail2").html('');
+
+                            //Desabilita/Habilita botão submit
+                            if (result != true) {
+                                $("#mensagemErroEmail2").html(result).css("color", "#FF0000");
+                                $('#btn_cadastro').attr('disabled', 'disabled');
+                                $('#EMAIL1_USUARIO').focus();
+
+                            } else {
+                                $('#btn_cadastro').removeAttr('disabled');
+                            }
+                        }
+                    });
+                }
+            });
+
+            //---------------------------------------------------------------------------
+            //Ajax - Consulta o Login
+            $("#LOGIN_USUARIO_COTANTE_LOGINS").blur(function () {
+                if ($("#LOGIN_USUARIO_COTANTE_LOGINS").val() != '') {
+                    $('#img_load_direcionada3').show();
+
+                    $.ajax({
+                        type: 'POST',
+                        url: '/CadastroUsuarioCotante/VerificaSeLoginJaExisteNoBanco', //Caminho Controler/Action
+                        dataType: 'json', //Tipo de dados
+                        data: { 'loginDigitado': $("#LOGIN_USUARIO_COTANTE_LOGINS").val() }, //Valor passado por parâmetro
+                        success: function (result) {
+                            $('#img_load_direcionada3').hide();
+
+                            //Retorno Json
+                            $("#mensagemErroLogin2").html('');
+
+                            //Desabilita/Habilita botão submit
+                            if (result != true) {
+                                $("#mensagemErroLogin2").html(result).css("color", "#FF0000");
+                                $('#btn_cadastro').attr('disabled', 'disabled');
+                                $('#LOGIN_USUARIO_COTANTE_LOGINS').focus();
+
+                            } else {
+                                $('#btn_cadastro').removeAttr('disabled');
+                            }
+                        }
+                    });
+                }
+            });
+            //---------------------------------------------------------------------------
+
+            //Ajax - Consulta o CEP (Usando Action do CadastroEmpresaUsuarioController)
+            $("#CEP_SEQUENCIAL_ENDERECO").change(function () {
+                if ($("#CEP_SEQUENCIAL_ENDERECO").val() != '') {
+                    $('#img_load_direcionada4').show();
+
+                    $.ajax({
+                        type: 'POST',
+                        url: '/CadastroUsuarioCotante/BuscaEndereco', //Caminho Controler/Action
+                        dataType: 'json', //Tipo de dados
+                        data: { 'cepDigitado': $("#CEP_SEQUENCIAL_ENDERECO").val() }, //Valor passado por parâmetro
+                        success: function (result) {
+                            $('#img_load_direcionada4').hide();
+
+                            if (result == false) {
+                                $("#mensagemErroCep2").html("* Dígitos insuficientes! Entre com o CEP completo.").css("color", "#FF0000");
+                            } else {
+                                //Retorno Json e posicionamento dos valores em seus campos.
+                                $("#mensagemErroCep2").html('');
+                                $("#ID_CODIGO_ENDERECO_EMPRESA_USUARIO").val(result.id_endereco);
+                                $("#ENDERECO_USUARIO_COTANTE").val(result.endereco);
+                                $("#NOME_ESTADO_USUARIO_COTANTE").val(result.estado);
+                                $("#NOME_CIDADE_USUARIO_COTANTE").val(result.cidade);
+                                $("#NOME_BAIRRO_USUARIO_COTANTE").val(result.bairro);
+                            }
+
+                        }
+                    });
+                }
+            });
+
+        });
+    </script>
+}

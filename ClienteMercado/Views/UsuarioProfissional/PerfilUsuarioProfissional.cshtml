@@ -1,0 +1,361 @@
+﻿@{
+    ViewBag.Title = "ClienteMercado";
+    //Layout = "~/Views/Shared/_Layout_internas.cshtml";
+    Layout = "~/Views/Shared/_Layout_internas2.cshtml";
+}
+
+@*<div id="container_perfil">
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true)*@
+
+        @*<ul class="nav nav-tabs">
+            <li id="opcao_cadastrais1" class="active"><a href="#abaCadastro-1" data-toggle="tab"><b>Ramos de Atividade - Prof. Serviços</b></a></li>
+            <li id="opcao_cadastrais2" class="disabled"><a href="#abaCadastro-2" data-toggle="tab"><b>Planos Assinatura</b></a></li>
+            <li id="opcao_cotar" class="disabled"><a href="#abaCadastro-3" data-toggle="tab"><b>Forma Pagamento</b></a></li>
+        </ul>
+
+        <div id="semprelivre" class="tab-content">
+            <div id="abaCadastro-1" class="tab-pane active" style="background-color: #E8E8E8">
+                <div id="container_cadastro_empresa" class="container_cadastros">
+                    <div id="campos_cadastro_empresa" class="campos_cadastro_nova_empresa_usuario">
+                        <div id="label_tipo1" class="formata_mensagem_cadastro2">
+                             @Html.LabelFor(m => m.RAMOS_ATIVIDADES_EMPRESA)
+                            SELECIONE OS SERVIÇOS PRESTADOS POR VOCÊ:
+                        </div>
+                        <br/>
+                        <div id="bt_submit" class="formata_campos_cadastro_button">
+                            <input type="submit" id="btn_cadastro" value="Continuar >>" class="i2Style"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="abaCadastro-2" class="tab-pane" style="background-color: #E8E8E8">
+                <div id="container_cadastro_assinatura" class="container_cadastros">
+                    <div id="campos_cadastro_plano_assinatura" class="campos_cadastro_nova_empresa_usuario">
+                        <div id="label_tipo2" class="formata_mensagem_cadastro2">
+                            @Html.LabelFor(m => m.PLANOS_DE_ASSINATURA)
+                            ESCOLHA SEU PLANO DE ASSINATURA:
+                        </div>
+                    </div>
+                </div>   
+            </div>
+
+            <div id="abaCadastro-3" class="tab-pane" style="background-color: #E8E8E8">
+                <div id="container_cadastro_pagamento" class="container_cadastros">
+                    <div id="campos_cadastro_forma_pagamento" class="campos_cadastro_nova_empresa_usuario">
+                        <div id="label_tipo3" class="formata_mensagem_cadastro2">
+                            @Html.LabelFor(m => m.MEIOS_DE_PAGAMENTO)
+                            ESCOLHA A FORMA DE PAGAMENTO:
+                        </div>
+                    </div>
+                </div> 
+            </div>
+                    <div id="opcao4" class="tab-pane"></div>
+        </div>*@
+    @*}
+</div>*@
+
+<div id="tools-bar">
+    <div class="container-fluid">
+        <div class="caixa-botoes pull-left" id="caixa-botoes">
+            @*<a href="#menu-toggle" class="btn btn-default" id="menu-toggle"><i class="fa fa-bars"></i></a>
+                <a href="#" class="btn btn-primary btn-padrao"><i class="fa fa-plus-square"></i></a>
+                <a href="#" class="btn btn-primary btn-padrao"><i class="fa fa-pencil-square-o"></i></a>*@
+            <a href="#" class="btn btn-danger btn-padrao"><i class="fa fa-trash-o"></i></a>
+            @*<a href="#" class="btn btn-warning btn-padrao"><i class="fa fa-ban"></i></a>
+                <a href="#" class="btn btn-success btn-padrao"><i class="fa fa-check-square"></i></a>*@
+            <a href="#" class="btn btn-info btn-padrao"><i class="fa fa-print"></i></a>
+        </div>
+        <div class="caixa-botoes pull-right" id="caixa-botoes">
+            <b>@Html.ActionLink("Sair", "LogOut", "Login")</b>
+        </div>
+
+        @*<div class="breadcrumb pull-right">
+                <p>Você está em: <a href="#">Usuário</a> > <span>Dados do usuário</span></p>
+            </div>*@
+    </div>
+</div> <!-- FIM DA BARRA DE FERRAMENTAS -->
+<!-- Menu Lateral -->
+<div id="sidebar-wrapper">
+    <div class="corpo-menu">
+        <div class="divider"></div>
+        <ul id="menu-content" class="menu-content">
+            @*<li><a href="index.html"><i class="fa fa-home"></i> Home</a></li>
+                <li><a href="formulario.html"><i class="fa fa-file-text-o"></i> Formulários</a></li>
+                <li><a href="listas.html"><i class="fa fa-sort-alpha-asc"></i> Listas</a></li>
+                <li class="active"><a href="tabs.html"><i class="fa fa-folder-open"></i> Tabs</a></li>
+                <li><a href="docs.html"><i class="fa fa-file-code-o"></i> Docs</a></li>*@
+            <li data-toggle="collapse" data-target="#home" class="collapsed">
+                <a href="#"><i class="fa fa-users"></i> Home <i class="fa fa-angle-right pull-right"></i></a>
+            </li>
+            <li class="separador"></li>
+            <li data-toggle="collapse" data-target="#cotacao_direcionada" class="collapsed">
+                <a href="#"><i class="fa fa-users"></i> Cotação Direcionada <i class="fa fa-angle-right pull-right"></i></a>
+            </li>
+            <li class="separador"></li>
+            <li data-toggle="collapse" data-target="#cotacao_avulsa" class="collapsed">
+                <a href="#"><i class="fa fa-users"></i> Cotação Avulsa <i class="fa fa-angle-right pull-right"></i></a>
+            </li>
+            <li class="separador"></li>
+            <li data-toggle="collapse" data-target="#central_compras" class="collapsed">
+                <a href="#"><i class="fa fa-users"></i> Central de Compras <i class="fa fa-angle-right pull-right"></i></a>
+            </li>
+            <li class="separador"></li>
+            @*<li data-toggle="collapse" data-target="#buscar_profissional" class="collapsed">
+                    <a href="#"><i class="fa fa-users"></i> Buscar Profissional <i class="fa fa-angle-right pull-right"></i></a>
+                </li>
+                <li class="separador"></li>*@
+            <li data-toggle="collapse" data-target="#configuracoes" class="collapsed">
+                <a href="#"><i class="fa fa-gear"></i> Configurações <i class="fa fa-angle-right pull-right"></i></a>
+            </li>
+
+
+            @*<ul class="sub-menu collapse" id="usuario">
+                    <li data-toggle="collapse" data-target="#dadosUsuario" class="collapsed"><a href="#">Dados do Usuário <i class="fa fa-angle-right pull-right"></i></a></li>
+
+                    <ul class="sub-menu2 collapse" id="dadosUsuario">
+                        <li class="active"><a href="#">Redes Sociais</a></li>
+                        <li><a href="#">Curriculo Lattes</a></li>
+                        <li><a href="#">Excluir atual</a></li>
+                    </ul>
+
+                    <li><a href="#">Outros Usuários</a></li>
+                    <li><a href="#">Dados da Empresa</a></li>
+                </ul>
+
+                <li data-toggle="collapse" data-target="#fornecedor" class="collapsed">
+                    <a href="#"><i class="fa fa-truck"></i> Fornecedor <i class="fa fa-angle-right pull-right"></i></a>
+                </li>
+                <ul class="sub-menu collapse" id="fornecedor">
+                    <li><a href="#">Coletas</a></li>
+                    <li><a href="#">Pedidos</a></li>
+                    <li><a href="#">Qualificações</a></li>
+                </ul>
+
+                <li data-toggle="collapse" data-target="#agenda" class="collapsed">
+                    <a href="#"><i class="fa fa-calendar"></i> Agenda <i class="fa fa-angle-right pull-right"></i></a>
+                </li>
+                <ul class="sub-menu collapse" id="agenda">
+                    <li><a href="#">Atributo Ficha</a></li>
+                    <li><a href="#">Ficha Atendimento</a></li>
+                    <li><a href="#">Cliente</a></li>
+                    <li><a href="#">Agenda</a></li>
+                </ul>
+
+                <li><a href="#"><i class="fa fa-user"></i> Meus detalhes</a></li>
+                <li><a href="#"><i class="fa fa-gear"></i> Configurações</a></li>*@
+            @*<div class="divider"></div>*@
+        </ul>
+        <div id="logo-clientemercado">
+            <img src="@Url.Content("~/Content/images/logo_branca.png")" alt="">
+            <p>2015 &copy; Todos os direitos reservados.</p>
+        </div>
+    </div>
+</div>
+<!-- /#sidebar-wrapper -->
+<!-- Conteudo -->
+<div id="page-content-wrapper">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+
+                <div role="tabpanel" class="panel">
+                    <!-- Nav tabs -->
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li role="presentation" class="active"><a href="#listas" aria-controls="listas" role="tab" data-toggle="tab">Cotações Realizadas</a></li>
+                        <li role="presentation"><a href="#formulario" aria-controls="formulario" role="tab" data-toggle="tab">Cotação Direcionada</a></li>
+                        <li role="presentation"><a href="#messages1" aria-controls="messages" role="tab" data-toggle="tab">Cotação Avulsa</a></li>
+
+                        <li role="presentation"><a href="#messages2" aria-controls="messages" role="tab" data-toggle="tab">Central de Compras</a></li>
+                        @*<li role="presentation"><a href="#messages3" aria-controls="messages" role="tab" data-toggle="tab">Buscar Profissional</a></li>*@
+                        <li role="presentation"><a href="#messages4" aria-controls="messages" role="tab" data-toggle="tab">Configurações</a></li>
+                    </ul>
+
+                    <!-- Painéis Tab -->
+                    <div class="tab-content">
+                        <div role="tabpanel" class="tab-pane  active" id="listas">
+                            <table class="table table-striped table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Campo 01</th>
+                                        <th>Campo 02</th>
+                                        <th>Campo 03</th>
+                                        <th>Campo 04</th>
+                                    </tr>
+                                </thead>
+                                <tr>
+                                    <td>01</td>
+                                    <td>Lorem ipsum dolor sit amet</td>
+                                    <td>Consectetur adipiscing elit</td>
+                                    <td>Duis consectetur pharetra purus</td>
+                                    <td>In venenatis ex eu diam blandit</td>
+                                </tr>
+                                <tr>
+                                    <td>02</td>
+                                    <td>Lorem ipsum dolor sit amet</td>
+                                    <td>Consectetur adipiscing elit</td>
+                                    <td>Duis consectetur pharetra purus</td>
+                                    <td>In venenatis ex eu diam blandit</td>
+                                </tr>
+                                <tr>
+                                    <td>03</td>
+                                    <td>Lorem ipsum dolor sit amet</td>
+                                    <td>Consectetur adipiscing elit</td>
+                                    <td>Duis consectetur pharetra purus</td>
+                                    <td>In venenatis ex eu diam blandit</td>
+                                </tr>
+                                <tr>
+                                    <td>04</td>
+                                    <td>Lorem ipsum dolor sit amet</td>
+                                    <td>Consectetur adipiscing elit</td>
+                                    <td>Duis consectetur pharetra purus</td>
+                                    <td>In venenatis ex eu diam blandit</td>
+                                </tr>
+                                <tr>
+                                    <td>05</td>
+                                    <td>Lorem ipsum dolor sit amet</td>
+                                    <td>Consectetur adipiscing elit</td>
+                                    <td>Duis consectetur pharetra purus</td>
+                                    <td>In venenatis ex eu diam blandit</td>
+                                </tr>
+                                <tr>
+                                    <td>06</td>
+                                    <td>Lorem ipsum dolor sit amet</td>
+                                    <td>Consectetur adipiscing elit</td>
+                                    <td>Duis consectetur pharetra purus</td>
+                                    <td>In venenatis ex eu diam blandit</td>
+                                </tr>
+                                <tr>
+                                    <td>07</td>
+                                    <td>Lorem ipsum dolor sit amet</td>
+                                    <td>Consectetur adipiscing elit</td>
+                                    <td>Duis consectetur pharetra purus</td>
+                                    <td>In venenatis ex eu diam blandit</td>
+                                </tr>
+                                <tr>
+                                    <td>08</td>
+                                    <td>Lorem ipsum dolor sit amet</td>
+                                    <td>Consectetur adipiscing elit</td>
+                                    <td>Duis consectetur pharetra purus</td>
+                                    <td>In venenatis ex eu diam blandit</td>
+                                </tr>
+                                <tr>
+                                    <td>09</td>
+                                    <td>Lorem ipsum dolor sit amet</td>
+                                    <td>Consectetur adipiscing elit</td>
+                                    <td>Duis consectetur pharetra purus</td>
+                                    <td>In venenatis ex eu diam blandit</td>
+                                </tr>
+                                <tr>
+                                    <td>10</td>
+                                    <td>Lorem ipsum dolor sit amet</td>
+                                    <td>Consectetur adipiscing elit</td>
+                                    <td>Duis consectetur pharetra purus</td>
+                                    <td>In venenatis ex eu diam blandit</td>
+                                </tr>
+                            </table>
+                            <nav>
+                                <ul class="pagination">
+                                    <li>
+                                        <a href="#" aria-label="Previous">
+                                            <i class="fa fa-angle-left"></i>
+                                        </a>
+                                    </li>
+                                    <li class="active"><a href="#">1</a></li>
+                                    <li><a href="#">2</a></li>
+                                    <li><a href="#">3</a></li>
+                                    <li><a href="#">4</a></li>
+                                    <li><a href="#">5</a></li>
+                                    <li>
+                                        <a href="#" aria-label="Next">
+                                            <i class="fa fa-angle-right"></i>
+                                        </a>
+                                    </li>
+                                </ul>
+
+                                <ul class="pagination pull-right">
+                                    <li class="active"><a href="#">10</a></li>
+                                    <li><a href="#">25</a></li>
+                                    <li><a href="#">50</a></li>
+                                    <li><a href="#">100</a></li>
+                                </ul>
+                            </nav>
+                        </div>
+
+                        <div role="tabpanel" class="tab-pane" id="formulario">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <label for="">Nome</label>
+                                    <input class="form-control" type="text" placeholder="Nome completo">
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="">Telefone</label>
+                                    <input class="form-control" type="text" placeholder="(xx) xxxx-xxxx">
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="">Email</label>
+                                    <input class="form-control" type="text" placeholder="nome@dominio.com.br">
+                                </div>
+                                <div class="col-md-12">
+                                    <label for="">Endereço </label>
+                                    <input class="form-control" type="text" placeholder="Logradouro">
+                                    <a href="" class="btn btn-danger"><i class="fa fa-ban"></i> Cancelar</a>
+                                    <a href="" class="btn btn-success"><i class="fa fa-check"></i> Salvar</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div role="tabpanel" class="tab-pane" id="messages1">
+                            <p>Lorem ipsum 1 dolor sit amet, consectetur adipiscing elit. Fusce venenatis tristique tellus non dignissim. Proin vitae sodales mauris, sit amet imperdiet ligula. Mauris et rhoncus magna, eu ullamcorper purus. Pellentesque commodo augue id libero rhoncus elementum. Proin commodo sodales nunc. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec volutpat a magna in elementum. Suspendisse at justo et lectus tincidunt tincidunt. Sed convallis ac ligula id congue. Duis malesuada tellus eu ipsum porttitor elementum. Etiam mollis elit nec augue lobortis, quis efficitur tortor molestie. Nam a dui sit amet eros interdum bibendum.</p>
+                            <p>Duis consectetur pharetra purus eget accumsan. Duis feugiat sit amet dui et aliquet. In venenatis ex eu diam blandit, at viverra nibh tincidunt. Vestibulum pharetra mattis augue quis pellentesque. Aliquam eu suscipit risus. Phasellus et dolor eu elit volutpat blandit rutrum vel enim. Sed a venenatis risus. Praesent a orci sed mauris posuere hendrerit. Curabitur id leo sed sapien accumsan cursus. Nam interdum metus sed sapien fringilla, quis rutrum massa consequat. Pellentesque quis rhoncus tellus.</p>
+                        </div>
+
+                        <div role="tabpanel" class="tab-pane" id="messages2">
+                            <p>Lorem ipsum 2 dolor sit amet, consectetur adipiscing elit. Fusce venenatis tristique tellus non dignissim. Proin vitae sodales mauris, sit amet imperdiet ligula. Mauris et rhoncus magna, eu ullamcorper purus. Pellentesque commodo augue id libero rhoncus elementum. Proin commodo sodales nunc. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec volutpat a magna in elementum. Suspendisse at justo et lectus tincidunt tincidunt. Sed convallis ac ligula id congue. Duis malesuada tellus eu ipsum porttitor elementum. Etiam mollis elit nec augue lobortis, quis efficitur tortor molestie. Nam a dui sit amet eros interdum bibendum.</p>
+                            <p>Duis consectetur pharetra purus eget accumsan. Duis feugiat sit amet dui et aliquet. In venenatis ex eu diam blandit, at viverra nibh tincidunt. Vestibulum pharetra mattis augue quis pellentesque. Aliquam eu suscipit risus. Phasellus et dolor eu elit volutpat blandit rutrum vel enim. Sed a venenatis risus. Praesent a orci sed mauris posuere hendrerit. Curabitur id leo sed sapien accumsan cursus. Nam interdum metus sed sapien fringilla, quis rutrum massa consequat. Pellentesque quis rhoncus tellus.</p>
+                        </div>
+
+                        @*<div role="tabpanel" class="tab-pane" id="messages3">
+                                <p>Lorem ipsum 3 dolor sit amet, consectetur adipiscing elit. Fusce venenatis tristique tellus non dignissim. Proin vitae sodales mauris, sit amet imperdiet ligula. Mauris et rhoncus magna, eu ullamcorper purus. Pellentesque commodo augue id libero rhoncus elementum. Proin commodo sodales nunc. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec volutpat a magna in elementum. Suspendisse at justo et lectus tincidunt tincidunt. Sed convallis ac ligula id congue. Duis malesuada tellus eu ipsum porttitor elementum. Etiam mollis elit nec augue lobortis, quis efficitur tortor molestie. Nam a dui sit amet eros interdum bibendum.</p>
+                                <p>Duis consectetur pharetra purus eget accumsan. Duis feugiat sit amet dui et aliquet. In venenatis ex eu diam blandit, at viverra nibh tincidunt. Vestibulum pharetra mattis augue quis pellentesque. Aliquam eu suscipit risus. Phasellus et dolor eu elit volutpat blandit rutrum vel enim. Sed a venenatis risus. Praesent a orci sed mauris posuere hendrerit. Curabitur id leo sed sapien accumsan cursus. Nam interdum metus sed sapien fringilla, quis rutrum massa consequat. Pellentesque quis rhoncus tellus.</p>
+                            </div>*@
+
+                        <div role="tabpanel" class="tab-pane" id="messages4">
+                            <p>Lorem ipsum 4 dolor sit amet, consectetur adipiscing elit. Fusce venenatis tristique tellus non dignissim. Proin vitae sodales mauris, sit amet imperdiet ligula. Mauris et rhoncus magna, eu ullamcorper purus. Pellentesque commodo augue id libero rhoncus elementum. Proin commodo sodales nunc. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec volutpat a magna in elementum. Suspendisse at justo et lectus tincidunt tincidunt. Sed convallis ac ligula id congue. Duis malesuada tellus eu ipsum porttitor elementum. Etiam mollis elit nec augue lobortis, quis efficitur tortor molestie. Nam a dui sit amet eros interdum bibendum.</p>
+                            <p>Duis consectetur pharetra purus eget accumsan. Duis feugiat sit amet dui et aliquet. In venenatis ex eu diam blandit, at viverra nibh tincidunt. Vestibulum pharetra mattis augue quis pellentesque. Aliquam eu suscipit risus. Phasellus et dolor eu elit volutpat blandit rutrum vel enim. Sed a venenatis risus. Praesent a orci sed mauris posuere hendrerit. Curabitur id leo sed sapien accumsan cursus. Nam interdum metus sed sapien fringilla, quis rutrum massa consequat. Pellentesque quis rhoncus tellus.</p>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /#page-content-wrapper -->
+<!-- /#wrapper -->
+<!-- jQuery (necessário para os plugins do Bootstrap) -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+<script>
+      $("#menu-toggle").click(function(e) {
+        e.preventDefault();
+        $("#wrapper").toggleClass("toggled");
+        $("#caixa-botoes").toggleClass("toggled");
+      });
+</script>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script>
+        $("#menu-toggle").click(function (e) {
+            e.preventDefault();
+            $("#wrapper").toggleClass("toggled");
+            $("#caixa-botoes").toggleClass("toggled");
+        });
+    </script>
+}

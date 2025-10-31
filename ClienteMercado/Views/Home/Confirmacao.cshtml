@@ -1,0 +1,20 @@
+﻿@{
+    ViewBag.Title = "Confirmacao";
+    Layout = "~/Views/Shared/_Layout-Others-Home-Confirmacao.cshtml";
+}
+
+<div id="container_form_confirmacao">
+    <div id="confirmacao_agradecimento" class="alinha_texto_confirmacao">
+        <h3>Obrigado por entrar em contato!</h3>
+        <h5>Sua mensagem foi enviada com sucesso.</h5>
+    </div>
+    <br/>
+    <div id="confirmacao_protocolo" class="alinha_texto_confirmacao">
+        <h3>Seu protocolo de contato é: </h3>
+        <h5>Por favor, utilize-o em comunicações futuras conosco.</h5>
+    </div>
+    <br/>
+    <div id="confirmacao_imprimir">
+        <a href='@Url.Action("Index", "Home")'><img src='@Url.Content("~/Content/images/mini_impressora.png")' style='margin-left: 170px; margin-top: 30px; border: none;' /><span id="texto_imprimir">Imprimir</span></a>
+    </div>
+</div>

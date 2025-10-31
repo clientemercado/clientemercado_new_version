@@ -1,0 +1,200 @@
+﻿@{
+    ViewBag.Title = "Visualizar Cotacao Enviada";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    @*<div class="col-md-12">*@
+    <!-- BEGIN VALIDATION STATES-->
+    <div class="portlet box blue">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="far fa-edit"></i> Visualizando Cotação Enviada
+            </div>
+        </div>
+        <div class="portlet-body form">
+            <!-- BEGIN FORM-->
+            <form action="#" class="form-horizontal">
+                <div class="form-body">
+                    <div class="form-group" id="cabecalho" style="">
+                        <label class="col-md-2 control-label"><b>Empresa:</b></label>
+                        <div class="col-md-4">
+                            <h5>ABC Materiais de Construção Ltda.</h5>
+                        </div>
+                        @*<label class="col-md-2 control-label"><b>Cidade:</b></label>
+                        <div class="col-md-4">
+                            <h5>Vitória-ES</h5>
+                        </div>*@
+                        <label class="col-md-2 control-label"><b>Usuário Resp:</b></label>
+                        <div class="col-md-4">
+                            <h5>Manoelino Maia</h5>
+                        </div>
+                        <label class="col-md-2 control-label"><b>Central Compras:</b></label>
+                        <div class="col-md-4">
+                            <h5>0001 - GRUPO de COMPRAS NOVEMBRO/2020</h5>
+                        </div>
+                        <label class="col-md-2 control-label"><b>Ramo Atividade:</b></label>
+                        <div class="col-md-4">
+                            <h5>Materiais de Construção / Construção Civil</h5>
+                        </div>
+                    </div>
+                    <hr />
+
+                    <div class="form-actions">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <a href="@Url.Action("Index", "CotacoesEnviadas", new { Area = "Company" })" class="btn default button-previous">
+                                    <i class="fas fa-arrow-left"></i> Voltar
+                                </a>
+                                @*<a href="javascript:;" class="btn blue button-submit">*@
+                                @*<a href="" class="btn  blue button-submit">
+                                    Gravar Alterações <i class="far fa-save"></i>
+                                </a>*@
+                            </div>
+                        </div>
+                    </div>
+
+                    @*<div class="form-group">
+                        <div class="col-md-12">
+                            <div class="col-md-12"><b>Tipo Cotação:</b></div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="col-md-3">
+                                <select class="form-control" name="select">
+                                    <option value="">Selecione...</option>
+                                    <option value="1">Direcionada</option>
+                                    <option value="2">Avulsa</option>
+                                </select>
+                            </div>
+                            <div class="col-md-9">
+                                &nbsp;
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <div class="col-md-4"><b>Produto a Cotar:</b></div>
+                            <div class="col-md-2"><b>Quant:</b></div>
+                            <div class="col-md-2"><b>Unid.:</b></div>
+                            <div class="col-md-3"><b>Marca / Fabricante:</b></div>
+                            <div class="col-md-1">&nbsp;</div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="col-md-4">
+                                <input type="text" name="name" id="inNomeProdutoCotacao" data-required="1" size="10" class="form-control" placeholder="Produto..." />
+                            </div>
+                            <div class="col-md-2">
+                                <input type="text" name="name" id="inQuantidadeProdutoCotacao" data-required="1" size="8" class="form-control" placeholder="0,00" />
+                            </div>
+                            <div class="col-md-2">
+                                <select class="form-control" name="select">
+                                    <option value="">Selecione Unid...</option>
+                                    <option value="1">Unidade</option>
+                                    <option value="2">Peça</option>
+                                    <option value="3">Pessoas</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <input type="text" name="name" id="inMarcaFabricanteDoProduto" data-required="1" size="10" class="form-control" placeholder="digite..." />
+                            </div>
+                            <div class="col-md-1">&nbsp;</div>
+                        </div>
+                    </div>*@
+                    <hr />
+
+                    <div class="form-group">
+                        <!-- BEGIN SAMPLE TABLE PORTLET-->
+                        @*<div class="portlet box green">*@
+                        <div class="portlet-body flip-scroll col-md-12">
+                            <table class="table table-bordered table-striped table-condensed flip-content">
+                                <thead class="flip-content">
+                                    <tr>
+                                        <th width="20%">
+                                            Produto
+                                        </th>
+                                        <th>
+                                            Marca
+                                        </th>
+                                        <th class="numeric">
+                                            Quant.
+                                        </th>
+                                        <th class="numeric">
+                                            Unid.
+                                        </th>
+                                        <th class="numeric">
+                                            R$ Valor
+                                        </th>
+                                        <th class="numeric">
+
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            Açúcar Cristal
+                                        </td>
+                                        <td>
+                                            qualquer
+                                        </td>
+                                        <td class="numeric">
+                                            1.000,00
+                                        </td>
+                                        <td class="numeric">
+                                            Kg
+                                        </td>
+                                        <td class="numeric">
+                                            0.00
+                                        </td>
+                                        <td class="numeric"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            Arroz Tipo 1
+                                        </td>
+                                        <td>
+                                            qualquer
+                                        </td>
+                                        <td class="numeric">
+                                            1.000,00
+                                        </td>
+                                        <td class="numeric">
+                                            Kg
+                                        </td>
+                                        <td class="numeric">
+                                            0.00
+                                        </td>
+                                        <td class="numeric"></td>
+                                    </tr>
+                                    <tr>
+                                    <tr>
+                                        <td>
+                                            Feijão Marrom
+                                        </td>
+                                        <td>
+                                            qualquer
+                                        </td>
+                                        <td class="numeric">
+                                            500,00
+                                        </td>
+                                        <td class="numeric">
+                                            Kg
+                                        </td>
+                                        <td class="numeric">
+                                            0.00
+                                        </td>
+                                        <td class="numeric"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        @*</div>*@
+                    </div>
+                </div>
+            </form>
+            <!-- END FORM-->
+        </div>
+    </div>
+    <!-- END VALIDATION STATES-->
+    @*</div>*@
+</div>

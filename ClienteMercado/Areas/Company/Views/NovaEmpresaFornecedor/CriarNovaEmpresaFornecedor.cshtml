@@ -1,0 +1,383 @@
+﻿@model  ClienteMercado.UI.Core.ViewModel.NovaCentralDeComprasViewModel
+
+@{
+    ViewBag.Title = "NovaEmpresaFornecedor";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="http://code.jquery.com/jquery-1.8.2.js"></script>
+<script src="http://code.jquery.com/ui/1.9.0/jquery-ui.js"></script>
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.9.0/themes/base/jquery-ui.css" />
+
+<!-- FIM DA BARRA DE FERRAMENTAS -->
+<div class="row">
+    <!-- BEGIN VALIDATION STATES-->
+    <div class="portlet box blue">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="far fa-file-alt"></i>Nova Empresa Fornecedora - <span class="step-title">
+                    Etapa 1 de 2
+                </span>
+            </div>
+        </div>
+
+        <div class="portlet-body form">
+            <div class="form-actions">
+                <div class="row">
+                    <div class="col-md-4">
+                        <button id="btn-novo" class="btn btn-primary btn-padrao" title="" style=""><i class="fa fa-file-o"></i>&nbsp;Novo</button>&nbsp;&nbsp;
+                        <button id="btn-continuar" class="btn btn-primary btn-padrao" title="" style=""><i class="fa fa-floppy-o"></i>&nbsp;Gravar</button>
+                    </div>
+                    <div class="col-md-8">&nbsp;</div>
+                </div>
+            </div>
+            <!-- BEGIN FORM-->
+            <form class="form-horizontal">
+                <div class="form-body">
+                    <div class="form-group" id="cabecalho_1">
+                        <label class="col-md-2 control-label"><font color="#3297E0"><b>Administradora:</b></font></label>
+                        <div class="col-md-4">
+                            <h5>@Model.NOME_FANTASIA_EMPRESA</h5>
+                        </div>
+                        <label class="col-md-2 control-label"><font color="#3297E0"><b>Ramo Atividade:</b></font></label>
+                        <div class="col-md-4">
+                            <h5>@Model.inRamoAtividadeEmpresaAdm</h5>
+                        </div>
+                        <label class="col-md-2 control-label"><font color="#3297E0"><b>Cidade:</b></font></label>
+                        <div class="col-md-4">
+                            <h5>@Model.inCidadeEmpresaAdmCC</h5>
+                        </div>
+                        <label class="col-md-2 control-label"><font color="#3297E0"><b>Usuário Resp:</b></font></label>
+                        <div class="col-md-4">
+                            <h5>@Model.NOME_USUARIO</h5>
+                        </div>
+                    </div>
+                    <hr />
+
+                    <div class="form-group">
+                        <!-- BEGIN SAMPLE TABLE PORTLET-->
+                        <br />
+                        <div class="portlet-body flip-scroll col-md-12">
+                            <div class="" id="tab1">
+                                <div class="form-group">
+                                    <label class="control-label col-md-3"><font color="#3297E0"><b>Data Cadastro:</b></font> <font color="red">*</font></label>
+                                    <div class="col-md-2">
+                                        <input type="text" name="name" id="inDataCadastroEmpresa" class="form-control datacalendario" size="8" value="@Model.inDataCriacaoCC" disabled />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-3"><font color="#3297E0"><b>CNPJ:</b></font> <font color="red">*</font></label>
+                                    <div class="col-md-6">
+                                        <input type="text" id="inCNPJ" placeholder="00.000.000/0000-00" maxlength="18" size="30" value="" obrigatorio="1" class="form-control" onClick="limparCampoCNPJ_New();" onKeyDown="FormataCNPJ(this, event);" onkeypress="return event.charCode >= 48 && event.charCode <= 57" />
+                                        <img style="margin-left:20px;margin-top:0px;display:none;" id="img_load_direcionada1" src="@Url.Content("~/Content/images/ajax-loader_.gif")">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-3"><font color="#3297E0"><b>Nome Fantasia Empresa:</b></font> <font color="red">*</font></label>
+                                    <div class="col-md-6">
+                                        <input type="text" id="inNomeFantasiaEmpresa" placeholder="informe Nome Fantasia..." maxlength="150" size="50" obrigatorio="1" class="form-control" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">
+                                        <font color="#3297E0"><b>Ramo de Atividade:</b></font> <font color="red">*</font>
+                                    </label>
+                                    <div class="col-md-6">
+                                        @Html.DropDownList("inListaDeRamosDeAtividade", Model.inListaDeRamosDeAtividadeParaComprasDaCC, new { @class = "form-control", @id = "inListaDeRamosDeAtividade", @obrigatorio = 1 })
+                                    </div>
+                                    <div class="col-md-3">&nbsp;</div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-3"><font color="#3297E0"><b>Endereço:</b></font> <font color="red">*</font></label>
+                                    <div class="col-md-6">
+                                        <input type="text" id="inEnderecoEmpresa" placeholder="informe Endereço..." maxlength="100" size="100" obrigatorio="1" class="form-control" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-3"><font color="#3297E0"><b>Bairro:</b></font> <font color="red">*</font></label>
+                                    <div class="col-md-6">
+                                        <input type="text" id="inBairroEmpresa" placeholder="informe Bairro..." maxlength="30" size="30" obrigatorio="1" class="form-control" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-3"><font color="#3297E0"><b>Complemento:</b></font> <font color="red">*</font></label>
+                                    <div class="col-md-6">
+                                        <input type="text" id="inCompEnderecoEmpresa" placeholder="informe Complemento de Endereço..." maxlength="30" size="30" obrigatorio="1" class="form-control" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-3"><font color="#3297E0"><b>Cep:</b></font> <font color="red">*</font></label>
+                                    <div class="col-md-6">
+                                        <input type="text" id="inCepEnderecoEmpresa" placeholder="00.000-000" maxlength="10" size="10" obrigatorio="1" class="form-control" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-3"><font color="#3297E0"><b>Cidade:</b></font> <font color="red">*</font></label>
+                                    <div class="col-md-6">
+                                        <input type="text" id="inCidadeEmpresa" placeholder="Infome a Cidade..." maxlength="50" size="50" obrigatorio="1" class="form-control" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-3"><font color="#3297E0"><b>UF:</b></font> <font color="red">*</font></label>
+                                    <div class="col-md-6">
+                                        @Html.DropDownList("inListaUFs", Model.inListaUFs, new { @class = "form-control", @id = "inListaUFs", @obrigatorio = 1 })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <!-- END FORM-->
+
+            <input type="hidden" id="inEdit" value="N" />
+            <input type="hidden" id="inDtHj" value="@Model.inDataCriacaoCC" />
+            <input type="hidden" id="inIdEmp" value="" />
+        </div>
+    </div>
+    <!-- END VALIDATION STATES-->
+</div>
+
+<script src="~/Scripts/validacoes.js"></script>
+<script>
+    jQuery(document).ready(function () {
+        $("#inCNPJ").focus();
+
+        //Botão GRAVAR
+        $(document).on("click", "#btn-continuar", function () {
+            //VALIDANDO o PREENCHIMENTO dos CAMPOS
+            debugger;
+
+            var cont = 0;
+            var msg = "";
+            var obj = {};
+            var aviso = 0;
+            var mensagem = "ATENÇÃO!!!\n\nOs CAMPOS em vermelho, são de preenchimento obrigatório!"
+
+            $("input[type=text]").each(function () {
+                $(this).css({ "border": "1px solid #ccc", "padding": "2px" });
+                var input = $(this).val();
+                console.log($(this).attr("campo") + " " + input);
+
+                if (
+                    ($("#inCNPJ").val() == "") || ($("#inNomeFantasiaEmpresa").val() == "") || (parseInt($("#inListaDeRamosDeAtividade").val()) == 0) || ($("#inEnderecoEmpresa").val() == "") ||
+                        ($("#inCompEnderecoEmpresa").val() == "") || ($("#inCepEnderecoEmpresa").val() == "") || ($("#inCidadeEmpresa").val() == "") || (parseInt($("#inListaUFs").val()) == 0)) {
+
+                    aviso = 1;
+                    if ($("#inCNPJ").val() == "") {
+                        $("#inCNPJ").css({ "border": "1px solid #F00", "padding": "2px" });
+                    }
+
+                    if ($("#inNomeFantasiaEmpresa").val() == "") {
+                        $("#inNomeFantasiaEmpresa").css({ "border": "1px solid #F00", "padding": "2px" });
+                    }
+
+                    if (($("#inListaDeRamosDeAtividade").val() == "") || (parseInt($("#inListaDeRamosDeAtividade").val()) == parseInt(0))) {
+                        $("#inListaDeRamosDeAtividade").css({ "border": "1px solid #F00", "padding": "2px" });
+                    }
+
+                    if ($("#inEnderecoEmpresa").val() == "") {
+                        $("#inEnderecoEmpresa").css({ "border": "1px solid #F00", "padding": "2px" });
+                    }
+
+                    if ($("#inBairroEmpresa").val() == "") {
+                        $("#inBairroEmpresa").css({ "border": "1px solid #F00", "padding": "2px" });
+                    }
+
+                    if ($("#inCompEnderecoEmpresa").val() == "") {
+                        $("#inCompEnderecoEmpresa").css({ "border": "1px solid #F00", "padding": "2px" });
+                    }
+
+                    if ($("#inCepEnderecoEmpresa").val() == "") {
+                        $("#inCepEnderecoEmpresa").css({ "border": "1px solid #F00", "padding": "2px" });
+                    }
+
+                    if ($("#inCidadeEmpresa").val() == "") {
+                        $("#inCidadeEmpresa").css({ "border": "1px solid #F00", "padding": "2px" });
+                    }
+
+                    if (($("#inListaUFs").val() == "") || (parseInt($("#inListaUFs").val()) == parseInt(0))) {
+                        $("#inListaUFs").css({ "border": "1px solid #F00", "padding": "2px" });
+                    }
+                }
+            });
+
+            debugger;
+
+            //VERIFICANDO CAMPOS
+            if (aviso == 1) {
+                swal({
+                    title: mensagem, type: "warning"
+                },
+                    function () {
+                        if ($("#inCNPJ").val() == "") {
+                            $("#inCNPJ").focus();
+                        }
+                        else if ($("#inNomeFantasiaEmpresa").val() == "") {
+                            $("#inNomeFantasiaEmpresa").focus();
+                        }
+                        else if (parseInt($("#inListaDeRamosDeAtividade").val()) == 0) {
+                            $("#inListaDeRamosDeAtividade").focus();
+                        }
+                        else if ($("#inEnderecoEmpresa").val() == "") {
+                            $("#inEnderecoEmpresa").focus();
+                        }
+                        else if ($("#inBairroEmpresa").val() == "") {
+                            $("#inBairroEmpresa").focus();
+                        }
+                        else if ($("#inCompEnderecoEmpresa").val() == "") {
+                            $("#inCompEnderecoEmpresa").focus();
+                        }
+                        else if ($("#inCepEnderecoEmpresa").val() == "") {
+                            $("#inCepEnderecoEmpresa").focus();
+                        }
+                        else if ($("#inCidadeEmpresa").val() == "") {
+                            $("#inCidadeEmpresa").focus();
+                        }
+                        else if (parseInt($("#inListaUFs").val()) == 0) {
+                            $("#inListaUFs").focus();
+                        }
+                    });
+            }
+            else {
+                //REGISTRAR/EDITAR NOVA EMPRESA FORNECEDORA
+                debugger;
+
+                $.ajax({
+                    type: "POST",
+                    url: "/NovaEmpresaFornecedor/RegistrarEmpresaFornecedor",
+                    dataType: 'json',
+                    data: {
+                        'cnpjEmpresa': $("#inCNPJ").val(),
+                        'nomeEmpresa': $("#inNomeFantasiaEmpresa").val(),
+                        'ramoAtividade': $("#inListaDeRamosDeAtividade").val(),
+                        'enderecoEmpresa': $("#inEnderecoEmpresa").val(),
+                        'bairroEmpresa': $("#inBairroEmpresa").val(),
+                        'compEnderecoEmpresa': $("#inCompEnderecoEmpresa").val(),
+                        'cepEmpresa': $("#inCepEnderecoEmpresa").val(),
+                        'cidadeEmpresa': $("#inCidadeEmpresa").val(),
+                        'ufEmpresa': $("#inListaUFs").val(),
+                        'tipoG': $("#inEdit").val()
+                    },
+                    success: function (data) {
+                        debugger;
+
+                        if (data.msg == "Ok") {
+                            debugger;
+
+                            msg = ($("#inEdit").val() == "N") ? "SUCESSO!\n\nA EMPRESA foi registrada com Sucesso!\n\Vocë será redirecionado para o registro do USUÁRIO responsável pela Empresa Fornecedora. " : "SUCESSO!\n\nOs dados da EMPRESA foram alterados com Sucesso!\nVocë será redirecionado para a edição dos dados do USUÁRIO, caso ache necessário.";
+
+                            swal({
+                                title: msg, type: "warning"
+                            },
+                            function () {
+                                var id = ($("#inEdit").val() == "N") ? data.id : $("#inIdEmp").val();
+                                window.location.href = "@Url.Action("CadastroUsuarioEmpresaFornecedor", "NovaEmpresaFornecedor", new { Area = "Company" })" + "?id=" + id;
+                            });
+                        }
+                        else if (data.tipoParticipacao == "NOk") {
+                            swal({
+                                title: "ATENÇÃO!\n\nOcorreu um ERRO ao tentar registrar a Empresa Fornecedora.\nTente novamente mais tarde.\n\nEquipe ClienteMercado", type: "warning"
+                            });
+                        }
+                    }
+                });
+
+                //alert("Gravando NOVA EMPREA FORNECEDORA")
+            }
+        });
+
+        $(document).on("click", "#btn-novo", function () {
+            $("#inCNPJ").val('');
+            $("#inNomeFantasiaEmpresa").val('');
+            $("#inDataCadastroEmpresa").val($("#inDtHj").val());
+            $("#inListaDeRamosDeAtividade").val(0),
+            $("#inListaDeRamosDeAtividadeParaComprasDaCC").val(0);
+            $("#inEnderecoEmpresa").val('');
+            $("#inCompEnderecoEmpresa").val('');
+            $("#inCepEnderecoEmpresa").val('');
+            $("#inCidadeEmpresa").val('');
+            $("#inListaUFs").val('');
+            $("#inBairroEmpresa").val('');
+            $("#inEdit").val('N');
+            $("#inCNPJ").focus();
+        });
+
+        //DEFINIR RAMO ATIVIDADE
+        $(document).on("click", ".ramoatividade", function () {
+            if ($(".ramoatividade").is(":checked")) {
+                $('#inListaDeRamosDeAtividade').val($('#inMeuRamoAtividades').val());
+            }
+            else {
+                $('#inListaDeRamosDeAtividade').val(0);
+            }
+        });
+
+        //Ajax - Consulta CNPJ
+        $("#inCNPJ").blur(function () {
+            if ($("#inCNPJ").val() != '') {
+                $('#img_load_direcionada1').show();
+
+                $.ajax({
+                    type: 'POST',
+                    url: '/Registration_company/VerificaSeCNPJExisteNoBancoNew', //Caminho Controler/Action
+                    dataType: 'json', //Tipo de dados
+                    data: { 'cnpjDigitado': $("#inCNPJ").val() }, //Valor passado por parâmetro
+                    success: function (result) {
+                        $('#img_load_direcionada1').hide();
+                        debugger;
+
+                        if (result.validacaoCNPJ == 'cnpjjacadastrado') {
+                            //Se CNPJ já cadastrado, exibe dados identificadores da Empresa
+                            $("#inIdEmp").val(result.idEmpresa);
+                            $("#inNomeFantasiaEmpresa").val(result.nomeFantasia);
+                            $("#inDataCadastroEmpresa").val(result.dataCadastro);
+                            $("#inListaDeRamosDeAtividade").val(result.ramoAtividade),
+                            $("#inListaDeRamosDeAtividadeParaComprasDaCC").val(result.ramoAtividade);
+                            $("#inEnderecoEmpresa").val(result.endereco);
+                            $("#inCompEnderecoEmpresa").val(result.complemento);
+                            $("#inCepEnderecoEmpresa").val(result.cep);
+                            $("#inCidadeEmpresa").val(result.cidade);
+                            $("#inListaUFs").val(result.uf);
+                            $("#inBairroEmpresa").val(result.bairro);
+                            $("#inEdit").val('E');
+                            swal({
+                                title: "ATENÇÃO!!!\n\nEMPRESA já CADASTRADA!", type: "warning"
+                            },
+                                function () {
+                                    $("#inCNPJ").attr("disabled", true);
+                                });
+                        }
+                        else if (result.validacaoCNPJ == 'cnpjinvalido') {
+                            //Se CNPJ for INVÁLIDO
+                            swal({
+                                title: "ATENÇÃO!!!\n\nCNPJ INVÁLIDO!", type: "warning"
+                            },
+                                function () {
+                                    $('#inCNPJ').val('').focus();
+                                });
+                        }
+                    }
+                });
+            }
+        });
+    });
+
+    //LIMPAR CAMPO CNPJ
+    function limparCampoCNPJ_New() {
+        $('#inCNPJ').val('');
+        $("#inNomeFantasiaEmpresa").val('');
+        $("#inDataCadastroEmpresa").val($("#inDtHj").val());
+        $("#inListaDeRamosDeAtividade").val(0),
+        $("#inListaDeRamosDeAtividadeParaComprasDaCC").val(0);
+        $("#inEnderecoEmpresa").val('');
+        $("#inCompEnderecoEmpresa").val('');
+        $("#inCepEnderecoEmpresa").val('');
+        $("#inCidadeEmpresa").val('');
+        $("#inListaUFs").val('');
+        $("#inBairroEmpresa").val('');
+        $("#inEdit").val('N');
+        $("#inCNPJ").focus();
+    }
+
+</script>

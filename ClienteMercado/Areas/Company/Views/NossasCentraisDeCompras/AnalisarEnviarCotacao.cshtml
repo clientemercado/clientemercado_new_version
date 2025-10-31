@@ -1,0 +1,711 @@
+﻿@model  ClienteMercado.UI.Core.ViewModel.NossasCentraisDeComprasViewModel
+
+@{
+    ViewBag.Title = "AnalisarEnviarCotacao";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="http://code.jquery.com/jquery-1.8.2.js"></script>
+<script src="http://code.jquery.com/ui/1.9.0/jquery-ui.js"></script>
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.9.0/themes/base/jquery-ui.css" />
+
+<style>
+    .HideColHead {
+        display: none
+    }
+
+    .HideCol {
+        display: none
+    }
+
+    th {
+        background-color: #CDC9C9;
+        color: white;
+    }
+
+    .status {
+        font-size: 9pt;
+    }
+
+    a:link {
+        text-decoration: none;
+    }
+</style>
+
+<div class="row">
+    @*<div class="col-md-12">*@
+    <!-- BEGIN VALIDATION STATES-->
+    <div class="portlet box blue">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="fas fa-share-square"></i> Analisar / Enviar Cotação: <font color="black"><b>@Model.nomeCotacaoMaster</b></font>
+            </div>
+        </div>
+        <div class="portlet-body form">
+            <!-- BEGIN FORM-->
+            <form action="#" class="form-horizontal">
+                <div class="form-body">
+                    <div class="form-group" id="cabecalho" style="">
+                        <label class="col-md-2 control-label"><font color="#3297E0"><b>Central Compras:</b></font></label>
+                        <div class="col-md-4">
+                            <h5>@Model.inNomeCentralCompras</h5>
+                        </div>
+                        <label class="col-md-2 control-label"><font color="#3297E0"><b>Ramo Atividade:</b></font></label>
+                        <div class="col-md-4">
+                            <h5>@Model.inRamoAtividadeCC</h5>
+                        </div>
+                        <label class="col-md-2 control-label"><font color="#3297E0"><b>Administradora:</b></font></label>
+                        <div class="col-md-4">
+                            <h5>@Model.inEmpresaLogadaAdmCC</h5>
+                        </div>
+                        <label class="col-md-2 control-label"><font color="#3297E0"><b>Cidade:</b></font></label>
+                        <div class="col-md-4">
+                            <h5>@Model.inCidadeEmpresaAdmCC</h5>
+                        </div>
+                        <label class="col-md-2 control-label"><font color="#3297E0"><b>Usuário Resp:</b></font></label>
+                        <div class="col-md-4">
+                            <h5>@Model.inNomeUsuarioRespEmpresaAdmCC</h5>
+                        </div>
+                        <label class="col-md-2 control-label"><font color="#3297E0"><b>Telefone:</b></font></label>
+                        <div class="col-md-4">
+                            <h5>@Model.telefoneContato</h5>
+                        </div>
+                        <div class="col-md-12" id="mensagemFaltamDias">
+                            @{
+                                if (Model.inCotacaoMasterEnviada == "nao")
+                                {
+                                    <label class="col-md-7 control-label"><font color="#3297E0" size="3"><b>Falta(m):</b></font> <font color="red" size="3"><b>@Model.quantosDiasFaltam</b></font><font color="#3297E0" size="3">&nbsp;dia(s) pra enviar a Cotação</font></label>
+                                }
+                            }
+                        </div>
+                    </div>
+                    <hr />
+
+                    <div class="form-actions">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <a href="#" id="inVoltarPagina" class="btn default button-previous"><i class="fas fa-arrow-left"></i> Voltar</a>
+                                &nbsp;
+                                <a href="#" id="inEnviarCotacao" class="btn btn-success button-submit" style="display:none;"><i class="far fa-paper-plane"></i> Enviar Cotação</a>
+                                &nbsp;
+                                <a href="#" id="inEnviarAvisosParticipantes" class="btn btn-danger" style="display:none;"><i class="fas fa-exclamation-triangle"></i> Alertar</a>
+                            </div>
+                            <div class="col-md-3">
+                                @{
+                                    if (Model.inCotacaoMasterEnviada == "nao")
+                                    {
+                                        <font color="#3297E0" size="3"><b>Empresas Participantes:</b>&nbsp;&nbsp;</font><font size="3"><b>@Model.quantidadeEmpresasParticipantesDaCC</b></font>
+                                    }
+                                    else
+                                    {
+                                        if (Model.inCotacaoAnexada == "sim")
+                                        {
+                                            <font color="#3297E0" size="3"><b>Empresas Participantes:</b>&nbsp;&nbsp;</font><font size="3"><b>@Model.quantidadeEmpresasParticipantesDaCC</b></font>
+                                        }
+                                        else
+                                        {
+                                            <font color="#3297E0" size="3"><b>Anexaram Cotação:</b>&nbsp;&nbsp;</font><font color="@Model.corStatusDaQuantidadeAnexada" size="3"><b>@Model.quantidadeEmpresasJahAnexaramCotacao</b></font>
+                                        }
+                                    }
+                                }
+                            </div>
+                            <div class="col-md-3">
+                                @{
+                                    if (Model.inCotacaoMasterEnviada == "nao")
+                                    {
+                                        <font color="#3297E0" size="3"><b>Já Anexaram Cotação:</b>&nbsp;&nbsp;</font><font color="@Model.corStatusDaQuantidadeAnexada" size="3"><b>@Model.quantidadeEmpresasJahAnexaramCotacao</b></font>
+                                    }
+                                    else
+                                    {
+                                        if (Model.inCotacaoAnexada == "sim")
+                                        {
+                                            <font color="#3297E0" size="3"><b>Anexaram Cotação:</b>&nbsp;&nbsp;</font><font color="@Model.corStatusDaQuantidadeAnexada" size="3"><b>@Model.quantidadeEmpresasJahAnexaramCotacao</b></font>
+                                        }
+                                        else
+                                        {
+                                            <font color="#FF0000" size="3"><b>VOCÊ NÃO PARTICIPOU</b></font>
+                                        }
+                                    }
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <hr />
+
+                    <div class="form-group">
+                        <!-- BEGIN SAMPLE TABLE PORTLET-->
+                        <div class="portlet-body flip-scroll col-md-12">
+                            <table id="gridItensDaCotacaoAgrupadaASerEnviada" class="table table-bordered table-striped table-condensed flip-content">
+                                <thead class="flip-content">
+                                    <tr>
+                                        <th data-column-id="numeroItem" data-header-align="center" data-align="center" data-width="4%">Nº</th>
+                                        <th data-column-id="descricaoProdutoCotacaoIndividual" data-width="18%">Produto</th>
+                                        <th data-column-id="marcaFabricanteProdutoCotacaoIndividual" data-width="10%">Marca</th>
+                                        <th data-column-id="quantidadeDoProdutoEmbalagem" data-align="right" data-width="7%">Quant.</th>
+                                        <th data-column-id="unidadeProdutoCotacaoIndividual" data-align="right" data-width="7%">Unid.</th>
+                                        <th data-column-id="embalagemProdutoCotacaoIndividual" data-align="right" data-width="11%">Embalagem</th>
+                                        <th data-formatter="commands" data-align="center" data-width="30%">&nbsp;</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <hr />
+
+                    <div class="form-group">
+                        @{
+                                <!-- BEGIN SAMPLE TABLE PORTLET-->
+                                <div class="portlet-body flip-scroll col-md-12">
+                                    <table id="gridFiltroFornecedores" class="table table-bordered table-striped table-condensed flip-content">
+                                        <thead class="flip-content">
+                                            <tr style="background-color: #e8e8e8;">
+                                                <th align="center" colspan="7">
+                                                    @*<strong><font color="#190707"><i class="fas fa-briefcase"></i> FORNECEDORES:</font> </strong>*@
+                                                    <strong><font color="#0000FF"><i class="fas fa-briefcase"></i></font><font color="#190707"> FORNECEDORES:</font> </strong>
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                    <div class="form-group" style="" id="div1Filtro">
+                                        <label class="control-label col-md-2"><font color="#3297E0"><b>Ramo de Atividade:</b></font></label>
+                                        <div class="col-md-6">
+                                            @Html.DropDownList("inListaDeRamosDeAtividade", Model.inListaDeRamosDeAtividadeParaComprasDaCC, new { @class = "form-control", @id = "inListaDeRamosDeAtividade", @obrigatorio = 1 })
+                                        </div>
+                                        <label class="col-md-2 control-label"><font color="#3297E0"><b>Qtd. Fornecedores:</b></font></label>
+                                        <div class="col-md-2">
+                                            @Html.DropDownList("inQuantosFornecedores", Model.inQuantosFornecedores, new { @class = "form-control", @id = "inQuantosFornecedores", @style = "width:70px;" })
+                                        </div>
+                                    </div>
+                                    <div class="form-group" style="" id="div2Filtro">
+                                        <label class="col-md-2 control-label"><font color="#3297E0"><b>Localização:</b></font></label>
+                                        <div class="col-md-2">
+                                            <label class="radio-inline">@Html.RadioButton("localizacao1", 1, true, new { @class = "radio0", @id = "localizacao1" })&nbsp;<font color="#3297E0">Meu Estado</font></label>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label class="radio-inline">@Html.RadioButton("localizacao1", 2, new { @class = "radio0", @id = "localizacao2" })&nbsp;<font color="#3297E0">Outro Estado</font></label>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label class="radio-inline">@Html.RadioButton("localizacao1", 3, new { @class = "radio0", @id = "localizacao3" })&nbsp;<font color="#3297E0">Todo País</font></label>
+                                        </div>
+                                        <div class="col-md-2">
+                                            @Html.DropDownList("inListaDeUFs", Model.inListaDeUFs, new { @class = "form-control", @id = "inListaDeUFs", @style = "display: none; width:150px;" })
+                                        </div>
+                                        <div class="col-md-2">
+                                            <a href="javascript:;" id="btn-pesquisar" class="btn blue button-submit" style="">Pesquisar <i class="fas fa-search"></i></a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="portlet-body flip-scroll col-md-12">
+                                    <table id="gridFornecedoresSelecionados" class="table table-bordered table-striped table-condensed flip-content">
+                                        <thead class="flip-content">
+                                            <tr>
+                                                <th data-column-id="idEmpresa" data-type="numeric" data-identifier="true" data-visible="false" data-width="4%">&nbsp;</th>
+                                                <th data-column-id="numeroItem" data-align="center" data-width="4%"></th>
+                                                <th data-column-id="nomeEmpresa" data-width="30%"><font color="#190707">Empresa</font></th>
+                                                <th data-column-id="cidadeEmpresa" data-header-align="center" data-width="20%"><font color="#190707">Cidade</font></th>
+                                                <th data-column-id="ufEmpresa" data-header-align="center" data-align="center" data-width="5%"><font color="#190707">UF</font></th>
+                                                <th data-column-id="usuarioContatoEmpresa" data-header-align="center" data-align="left" data-width="25%"><font color="#190707">Vendedor</font></th>
+                                                <th data-formatter="commands" data-align="center" data-width="5%">&nbsp;</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+
+                                    <table id="gridFornecedoresSelecionadosCotacaoJahEnviada" class="table table-bordered table-striped table-condensed flip-content" style="display:none;">
+                                        <thead class="flip-content">
+                                            <tr>
+                                                <th data-column-id="numeroItem" data-align="center" data-width="4%"></th>
+                                                <th data-column-id="nomeEmpresa" data-width="30%"><font color="#190707">Empresa</font></th>
+                                                <th data-column-id="cidadeEmpresa" data-header-align="center" data-width="20%"><font color="#190707">Cidade</font></th>
+                                                <th data-column-id="ufEmpresa" data-header-align="center" data-align="center" data-width="5%"><font color="#190707">UF</font></th>
+                                                <th data-column-id="usuarioContatoEmpresa" data-header-align="center" data-align="left" data-width="34%"><font color="#190707">Vendedor</font></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+                        }
+                    </div>
+                </div>
+            </form>
+            <!-- END FORM-->
+
+            <input type="hidden" id="inCCC" value="@Model.cCC" />
+            <input type="hidden" id="ineA" value="@Model.ineACriptografado" />
+            <input type="hidden" id="inAceitouConvite" value="@Model.inConviteAceitoCC" />
+            <input type="hidden" id="inUsuarioLogado" value="@Model.inNomeUsuarioLogado" />
+            <input type="hidden" id="inNomeCC" value="@Model.inNomeCentralCompras" />
+            <input type="hidden" id="inNomeUsuarioRespEmpresaAdm" value="@Model.inNomeUsuarioRespEmpresaAdmCC" />
+            <input type="hidden" id="inQuantidadeEmpresasDaCC" value="@ViewBag.quantasEmpresas" />
+            <input type="hidden" id="inCodigoEmpresaAdmCC" value="@Model.inCodEmpresaADM" />
+            <input type="hidden" id="inCodigoEmpresaLogada" value="@Model.inCodEmpresaLogada" />
+            <input type="hidden" id="inIdUFADM" value="@Model.inIDUFEmpresaUsuario" />
+            <input type="hidden" id="inICM" value="@Model.iCM" />
+            <input type="hidden" id="inRecarregaGrid" value="0" />
+            <input type="hidden" id="inLocalBusca" value="1" />
+            <input type="hidden" id="inQuantasLinhasGridFornecedores" value="" />
+            <input type="hidden" id="inCotacaoMasterEnviada" value="@Model.inCotacaoMasterEnviada" />
+            <input type="hidden" id="inStatusAlerta" value="@Model.statusAlerta" />
+            <input type="hidden" id="inQuantosFaltamAnexar" value="@Model.quantosFaltamAnexar" />
+        </div>
+    </div>
+    <!-- END VALIDATION STATES-->
+    @*</div>*@
+</div>
+
+<script>
+    jQuery(document).ready(function () {
+
+        $('#inListaDeUFs').val($('#inIdUFADM').val());
+
+        //if ($('#inCotacaoMasterEnviada').val() == "sim") {
+        //    $('#mensagemFaltamDias').hide();
+        //    $('#mensagemEmCotacao').show();
+        //}
+
+        if (($('#inStatusAlerta').val() == 'sim') && ($('#inCodigoEmpresaLogada').val() == $('#inCodigoEmpresaAdmCC').val())) {
+            $('#inEnviarAvisosParticipantes').show();
+        }
+
+        if (($('#inCodigoEmpresaLogada').val() == $('#inCodigoEmpresaAdmCC').val()) && ($('#inCotacaoMasterEnviada').val() == "nao")) {
+            $('#inEnviarCotacao').show();
+        }
+
+        //BOTÃO VOLTAR PÁGINA ANTERIOR
+        $(document).on("click", "#inVoltarPagina", function () {
+            debugger;
+
+            window.location.href = "@Url.Action("CotacoesDaCentralDeCompras", "NossasCentraisDeCompras", new { Area = "Company" })" + "?cCC=" + $('#inCCC').val();
+        });
+
+        //CONSULTA os DADOS e CARREGA o GRID ao entrar na página
+        var grid = $('#gridItensDaCotacaoAgrupadaASerEnviada').bootgrid({
+            ajax: true,
+            navigation: 0, //CABEÇALHO: 2 - Exibe só RODAPÉ
+            columnSelection: false, //SELETOR de COLUNA: True - Habilita / False - Desabilita
+            url: "/NossasCentraisDeCompras/BuscarListaDeItensAgrupadosDaCotacaoDaCentral",
+            post: function () {
+                /* PARÂMETROS a serem enviados na REQUISIÇÃO AJAX */
+                return {
+                    'iCM': $('#inICM').val()
+                };
+            },
+            selection: true,
+            multiSelect: true,
+            rowSelect: true,
+            keepSelection: true,
+            formatters: {
+                "commands": function (column, row) {
+                    var value = row.msgCotacaoEnviada;
+
+                    if ((value != "") && (value != null)) {
+                        return "<font color=\"#0000FF\"><span><b>" + row.msgCotacaoEnviada + "</b></span></font>";
+                    }
+                }
+            }
+        }).on("loaded.rs.jquery.bootgrid", function () {  //Método EXECUTADO após o carregamento do GRID
+
+            var quantRegistros = grid.bootgrid("getTotalRowCount");
+
+            if ($('#inCotacaoMasterEnviada').val() == "nao") {
+                debugger;
+
+                if ($('#inCodigoEmpresaLogada').val() == $('#inCodigoEmpresaAdmCC').val())
+                {
+                    $('#inEnviarCotacao').show();
+                }
+
+                $('#gridFornecedoresSelecionados').show();
+
+                if ($('#inCodigoEmpresaLogada').val() != $('#inCodigoEmpresaAdmCC').val())
+                {
+                    $('#div1Filtro').hide();
+                    $('#div2Filtro').hide();
+                }
+
+                $('#gridFornecedoresSelecionadosCotacaoJahEnviada').hide();
+            }
+            else {
+                $('#inEnviarCotacao').hide();
+                $('#gridFornecedoresSelecionados').hide();
+                $('#div1Filtro').hide();
+                $('#div2Filtro').hide();
+                $('#gridFornecedoresSelecionadosCotacaoJahEnviada').show()
+                $('#gridFornecedoresSelecionadosCotacaoJahEnviada').bootgrid('reload');
+            }
+        });
+
+        var grid2 = $('#gridFornecedoresSelecionados').bootgrid({
+            ajax: true,
+            navigation: 0, //CABEÇALHO: 2 - Exibe só RODAPÉ
+            columnSelection: false, //SELETOR de COLUNA: True - Habilita / False - Desabilita
+            url: "/NossasCentraisDeCompras/BuscarFornecedores",
+            post: function () {
+                /* PARÂMETROS a serem enviados na REQUISIÇÃO AJAX */
+                return {
+                    'codRamoAtividade': $("#inListaDeRamosDeAtividade").val(),
+                    'quantosFornecedores': $("#inQuantosFornecedores").val(),
+                    'localBusca': $('#inLocalBusca').val(),
+                    'uFSelecionada': $('#inListaDeUFs').val(),
+                    'codEAdmDaCC': $('#inCodigoEmpresaAdmCC').val(),
+                    'cCC': $('#inCCC').val()
+                };
+            },
+            selection: true,
+            multiSelect: true,
+            rowSelect: true,
+            keepSelection: true,
+            formatters: {
+                "commands": function (column, row) {
+                    var hintTrash = "REMOVER o Fornecedor da Lista";
+                    return "<button type=\"button\" class=\"btn btn-xs btn-default command-delete\" data-row-id=\"" + row.idEmpresa + "\" title=\"" + hintTrash + "\"><font color='red'><span class=\"fa fa-trash-o\"></span></font></button>";
+                }
+            }
+        }).on("selected.rs.jquery.bootgrid", function (e, rows) {
+            //var rowIds = [];
+
+            //for (var i = 0; i < rows.length; i++)
+            //{
+            //    rowIds.push(rows[i].idEmpresa);
+            //}
+
+            //alert("Select: " + rowIds.join(","));
+
+        }).on("deselected.rs.jquery.bootgrid", function (e, rows) {
+            //var rowIds = [];
+
+            //for (var i = 0; i < rows.length; i++)
+            //{
+            //    rowIds.push(rows[i].idEmpresa);
+            //}
+
+            //alert("Deselect: " + rowIds.join(","));
+
+        }).on("loaded.rs.jquery.bootgrid", function () {  //Método EXECUTADO após o carregamento do GRID
+            debugger;
+
+            $("#inListaDeRamosDeAtividade").css({ "border": "1px solid #DCDCDC", "padding": "2px" });
+
+            grid2.find(".command-delete").on("click", function (e) {
+                $(this).closest('tr').remove();
+            });
+
+            $('#inQuantasLinhasGridFornecedores').val($("#gridFornecedoresSelecionados").bootgrid("getTotalRowCount"));
+        });
+
+        //--------------------------------------------------------------------------
+        var grid3 = $('#gridFornecedoresSelecionadosCotacaoJahEnviada').bootgrid({
+            ajax: true,
+            navigation: 0, //CABEÇALHO: 2 - Exibe só RODAPÉ
+            columnSelection: false, //SELETOR de COLUNA: True - Habilita / False - Desabilita
+            url: "/NossasCentraisDeCompras/BuscarFornecedoresQueJahReceberamACotacao",
+            post: function () {
+                /* PARÂMETROS a serem enviados na REQUISIÇÃO AJAX */
+                return {
+                    'iCM': $("#inICM").val()
+                };
+            },
+            selection: true,
+            multiSelect: true,
+            rowSelect: true,
+            keepSelection: true,
+            formatters: {
+                //"commands": function (column, row) {
+                //    var hintTrash = "REMOVER o Fornecedor da Lista";
+                //    return "<button type=\"button\" class=\"btn btn-xs btn-default command-delete\" data-row-id=\"" + row.idEmpresa + "\" title=\"" + hintTrash + "\"><font color='red'><span class=\"fa fa-trash-o\"></span></font></button>";
+                //}
+            }
+        }).on("loaded.rs.jquery.bootgrid", function () {  //Método EXECUTADO após o carregamento do GRID
+            //debugger;
+
+            //$("#inListaDeRamosDeAtividade").css({ "border": "1px solid #DCDCDC", "padding": "2px" });
+
+            //grid2.find(".command-delete").on("click", function (e) {
+            //    $(this).closest('tr').remove();
+            //});
+
+            $('#inQuantasLinhasGridFornecedores').val($("#gridFornecedoresSelecionados").bootgrid("getTotalRowCount"));
+        });
+        //--------------------------------------------------------------------------
+
+        //-----------------------------------------------------------------------------
+        //BOTÕES de RÁDIO
+        $(document).on("click", ".radio0", function () {
+            var tipo = $(this).attr("id");
+
+            if (tipo == "localizacao1") {
+                $('#inLocalBusca').val(1);
+                $('#inListaDeUFs').val($('#inIdUFADM').val());
+                $('#inListaDeUFs').hide("slow");
+            }
+            else if (tipo == "localizacao2") {
+                $('#inLocalBusca').val(2);
+                $('#inListaDeUFs').val(0);
+                $('#inListaDeUFs').show("slow");
+            }
+            else if (tipo == "localizacao3") {
+                $('#inLocalBusca').val(3);
+                $('#inListaDeUFs').hide("slow");
+                $('#inListaDeUFs').val($('#inIdUFADM').val());
+            }
+        });
+
+        //BOTÃO PESQUISAR FORNECEDORES
+        $(document).on("click", "#btn-pesquisar", function () {
+            //VALIDANDO o PREENCHIMENTO do CAMPO
+            debugger;
+
+            var cont = 0;
+            var msg = "";
+            var obj = {};
+            var aviso = 0;
+            var mensagem = "ATENÇÃO!!!\n\nOs CAMPOS em vermelho, são de preenchimento obrigatório!"
+
+            $("input[type=text]").each(function () {
+                debugger;
+
+                $(this).css({ "border": "1px solid #ccc", "padding": "2px" });
+                var input = $(this).val();
+                console.log($(this).attr("campo") + " " + input);
+
+                if ((parseInt($("#inListaDeRamosDeAtividade").val()) == parseInt(0)) || ((parseInt($('#inListaDeUFs').val()) == 0))) {
+                    aviso = 1;
+
+                    if (($("#inListaDeRamosDeAtividade").val() == "") || (parseInt($("#inListaDeRamosDeAtividade").val()) == parseInt(0))) {
+                        $("#inListaDeRamosDeAtividade").css({ "border": "1px solid #F00", "padding": "2px" });
+                    }
+                    else {
+                        $("#inListaDeRamosDeAtividade").css({ "border": "1px solid #ccc", "padding": "2px" });
+                    }
+
+                    if (parseInt($('#inListaDeUFs').val()) == 0) {
+                        $("#inListaDeUFs").css({ "border": "1px solid #F00", "padding": "2px" });
+                    }
+                    else {
+                        $("#inListaDeUFs").css({ "border": "1px solid #ccc", "padding": "2px" });
+                    }
+                }
+                else if (($(this).val() != ""))
+                    obj[$(this).attr("id")] = $(this).val();
+            });
+
+            //VERIFICANDO CAMPOS
+            if (aviso == 1) {
+                swal({
+                    title: mensagem, type: "warning"
+                },
+                    function () {
+                        if ($("#inListaDeRamosDeAtividade").val() == "") {
+                            $("#inListaDeRamosDeAtividade").focus();
+                        }
+                });
+            }
+            else {
+                //BUSCAR FORNECEDORES (Conforme FILTRO)
+                debugger;
+
+                $("#inListaDeRamosDeAtividade").css({ "border": "1px solid #DCDCDC", "padding": "2px" });
+                $("#inListaDeUFs").css({ "border": "1px solid #DCDCDC", "padding": "2px" });
+
+                $('#gridFornecedoresSelecionados').bootgrid('reload');
+            }
+        });
+
+        //DISPARAR ALERTA para as EMPRESAS PARTICIPANTES ANEXAREM suas COTAÇÕES
+        $(document).on("click", "#inEnviarAvisosParticipantes", function () {
+            //--------------------------------------------------------------------------
+            $.ajax({
+                type: "POST",
+                url: "/NossasCentraisDeCompras/EnviarAvisoDeAlertaDeProximidadeDeEnvioDeCotacao",
+                dataType: 'json',
+                data: {
+                    'cCC': $('#inCCC').val(),
+                    'eA': $('#ineA').val(),
+                    'iCM': $('#inICM').val()
+                },
+                success: function (data) {
+                    debugger;
+
+                    if (data.avisosAnexarCotacoesEnviados == "Ok") {
+                        swal({
+                            title: "Caro " + $('#inNomeUsuarioRespEmpresaAdm').val() + ",\n\nAs EMPRESAS PARCEIRAS da Central de Compras foram alertadas sobre o prazo final para ANEXAREM suas Cotações.\nO prazo se encerrará no dia " + data.dataPrazoFinalEncerramento + ".\n\nEquipe\nCliente & Mercado.", type: "warning"
+                        },
+                        function () {
+                            debugger;
+
+                            //$("#inListaDeRamosDeAtividade").val(0);
+                            //$("#inQuantosFornecedores").val(5)
+                            //$('#inLocalBusca').val(1)
+                            //$('#inListaDeUFs').val(0)
+                            //$('#inListaDeUFs').hide("slow");
+                            //$('#inCotacaoMasterEnviada').val(data.avisosCotacoesEnviadas);
+
+                            //$('#inCotacaoMasterEnviada').val('sim');
+                            //$('#inEnviarCotacao').hide();
+                            //$('#gridFornecedoresSelecionados').hide();
+                            //$('#div1Filtro').hide();
+                            //$('#div2Filtro').hide();
+                            //$('#gridFornecedoresSelecionadosCotacaoJahEnviada').show();
+
+                            //$('#gridItensDaCotacaoAgrupadaASerEnviada').bootgrid('reload');
+                            //$('#gridFornecedoresSelecionadosCotacaoJahEnviada').bootgrid('reload');
+                        });
+                    }
+                }
+            });
+            //--------------------------------------------------------------------------
+
+        });
+
+        //BOTÃO ENVIAR COTAÇÃO
+        $(document).on("click", "#inEnviarCotacao", function () {
+            debugger;
+
+            if ($('#inCodigoEmpresaLogada').val() == $('#inCodigoEmpresaAdmCC').val()) {
+
+                var empresasFornecedorasSelecionadas = new Array();
+
+                $(".select-box:checked").each(function () {
+                    if ($(this).val() != "all") {
+                        empresasFornecedorasSelecionadas.push($(this).val());
+                    }
+                })
+
+                //ENVIAR COTAÇÃO
+                if (parseInt(empresasFornecedorasSelecionadas.length) > 0)
+                {
+                    jQuery.ajaxSettings.traditional = true;
+
+                    if ($('#inStatusAlerta').val() == "sim") {
+                        //SE MENOS de 80% TIVER ANEXADO a COTAÇÃO INDIVIDUAL
+                        swal({
+                            title: "ATENÇÃO!!\n\n",
+                            text: "Ainda faltam <font color='red'><b>" + $('#inQuantosFaltamAnexar').val() + "</b></font> empresas parceiras desta Central de Compras ANEXAREM suas cotações individuais!<br><br>Deseja ENVIAR a cotação aos FORNECEDORES mesmo assim?",
+                            type: "warning",
+                            showCancelButton: true,
+                            confirmButtonColor: "#337ab7",
+                            confirmButtonText: "Sim",
+                            cancelButtonText: "Não",
+                            closeOnConfirm: true,
+                            html: true
+                        },
+                        function (isConfirm) {
+                            if (isConfirm) {
+                                debugger;
+
+                                $.ajax({
+                                    type: "POST",
+                                    url: "/NossasCentraisDeCompras/EnviarACotacaoParaOsFornecedores",
+                                    dataType: 'json',
+                                    data: {
+                                        'cCC': $('#inCCC').val(),
+                                        'eA': $('#ineA').val(),
+                                        'iCM': $('#inICM').val(),
+                                        'empresasFornecedorasSelecionadas': empresasFornecedorasSelecionadas,
+                                        'avisarParceirosNaoCotantes': "sim"
+                                    },
+                                    success: function (data) {
+                                        debugger;
+
+                                        if (data.avisosCotacoesEnviadas == "Ok") {
+                                            swal({
+                                                title: "Caro " + $('#inNomeUsuarioRespEmpresaAdm').val() + ",\n\nA COTAÇÃO foi enviada com SUCESSO para as empresas fornecedoras selecionadas.\nVocê será avisado a medida que os fornecedores forem respondendo.\n\nLhe desejamos sucesso e bons negócios em suas negociações de compras.\n\nEquipe\nCliente & Mercado.", type: "warning"
+                                            },
+                                            function () {
+                                                debugger;
+
+                                                //$('#mensagemFaltamDias').hide();
+                                                //$('#inEnviarAvisosParticipantes').hide();
+                                                //$("#inListaDeRamosDeAtividade").val(0);
+                                                //$("#inQuantosFornecedores").val(5)
+                                                //$('#inLocalBusca').val(1)
+                                                //$('#inListaDeUFs').val(0)
+                                                //$('#inListaDeUFs').hide("slow");
+
+                                                //$('#inCotacaoMasterEnviada').val('sim');
+                                                //$('#inEnviarCotacao').hide();
+                                                //$('#gridFornecedoresSelecionados').hide();
+                                                //$('#div1Filtro').hide();
+                                                //$('#div2Filtro').hide();
+                                                //$('#gridFornecedoresSelecionadosCotacaoJahEnviada').show();
+
+                                                //$('#gridItensDaCotacaoAgrupadaASerEnviada').bootgrid('reload');
+                                                //$('#gridFornecedoresSelecionadosCotacaoJahEnviada').bootgrid('reload');
+
+                                                window.location.href = "@Url.Action("AnalisarEnviarCotacao", "NossasCentraisDeCompras", new { Area = "Company" })" + "?iCM=" + $('#inICM').val() + "&cCC=" + $('#inCCC').val() + "&lib=s";
+                                            });
+                                        }
+                                    }
+                                });
+                            }
+                            else {
+                                debugger;
+
+                                //$('#gridFornecedoresSelecionados').bootgrid('reload');
+                                //$("#btn-pesquisar").trigger('click');
+                            }
+                        });
+                    }
+                    else {
+                        //SE 80% ou mais JÁ TIVER ANEXADO a COTAÇÃO INDIVIDUAL
+                        $.ajax({
+                            type: "POST",
+                            url: "/NossasCentraisDeCompras/EnviarACotacaoParaOsFornecedores",
+                            dataType: 'json',
+                            data: {
+                                'cCC': $('#inCCC').val(),
+                                'eA': $('#ineA').val(),
+                                'iCM': $('#inICM').val(),
+                                'empresasFornecedorasSelecionadas': empresasFornecedorasSelecionadas,
+                                'avisarParceirosNaoCotantes': "nao"
+                            },
+                            success: function (data) {
+                                debugger;
+
+                                if (data.avisosCotacoesEnviadas == "Ok") {
+                                    swal({
+                                        title: "Caro " + $('#inNomeUsuarioRespEmpresaAdm').val() + ",\n\nA COTAÇÃO foi enviada com SUCESSO para as empresas fornecedoras selecionadas.\nVocê será avisado a medida que os fornecedores forem respondendo.\n\nLhe desejamos sucesso e bons negócios em suas negociações de compras.\n\nEquipe\nCliente & Mercado.", type: "warning"
+                                    },
+                                    function () {
+                                        debugger;
+
+                                        //$('#mensagemFaltamDias').hide();
+                                        //$('#inEnviarAvisosParticipantes').hide();
+                                        //$("#inListaDeRamosDeAtividade").val(0);
+                                        //$("#inQuantosFornecedores").val(5)
+                                        //$('#inLocalBusca').val(1)
+                                        //$('#inListaDeUFs').val(0)
+                                        //$('#inListaDeUFs').hide("slow");
+                                        //$('#inCotacaoMasterEnviada').val(data.avisosCotacoesEnviadas);
+
+                                        //$('#inCotacaoMasterEnviada').val('sim');
+                                        //$('#inEnviarCotacao').hide();
+                                        //$('#gridFornecedoresSelecionados').hide();
+                                        //$('#div1Filtro').hide();
+                                        //$('#div2Filtro').hide();
+                                        //$('#gridFornecedoresSelecionadosCotacaoJahEnviada').show();
+
+                                        //$('#gridItensDaCotacaoAgrupadaASerEnviada').bootgrid('reload');
+                                        //$('#gridFornecedoresSelecionadosCotacaoJahEnviada').bootgrid('reload');
+
+                                        window.location.href = "@Url.Action("AnalisarEnviarCotacao", "NossasCentraisDeCompras", new { Area = "Company" })" + "?iCM=" + $('#inICM').val() + "&cCC=" + $('#inCCC').val() + "&lib=s";
+                                    });
+                                }
+                            }
+                        });
+                    }
+                }
+                else {
+                    swal({ title: "ATENÇÃO:\n\nNenhum FORNECEDOR selecionado!\n\nSelecione os FORNECEDORES para os quais deseja encaminhar a COTAÇÃO.", type: "warning", confirmButtonColor: "#337ab7" });
+
+                    //App.scrollTo($("#gridFornecedoresSelecionados"), (($("#gridFornecedoresSelecionados").offset().top / 2) - 120) * -1); //PERGUNTAR AO WAGNER COMO ESSE POSICIONADOR FUNCIONA...
+                }
+            }
+            else {
+                swal({ title: "ATENÇÃO:\n\nSomente a EMPRESA ADMINISTRADORA desta Central De Compras, pode ENVIAR a COTAÇÃO para os FORNECEDORES.", type: "warning", confirmButtonColor: "#337ab7" });
+            }
+        });
+
+    });
+</script>

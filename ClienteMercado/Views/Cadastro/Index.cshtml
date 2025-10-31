@@ -1,0 +1,51 @@
+﻿@using ClienteMercado.Models
+@model ClienteMercado.Models.OpcoesCadastro
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div id="label_cadastre_aqui_etapa1"><h2>Cadastre-se aqui</h2></div>
+<br/>
+
+<div id="container_opcoes_cadastro">
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true)
+
+        <div id="campos_para_cadastro_etapa1" class="campos_cadastro_etapa1">
+            <div id="mensagem_retorno" class="formata_campos_etapa1">
+                <h4>@TempData["mensagem"]</h4>
+            </div>
+
+            <div id="mensagem_apresentacao" class="formata_msg_etapa1">
+                Para iniciar seu cadastro, informe o que você é:
+            </div>
+            <br/>
+
+            <div id="radio_opcao1" class="formata_msg_etapa1">
+                @Html.RadioButtonFor(m => m.TIPO_CADASTRO,1,true) EMPRESA (Pessoa Jurídica)
+                @Html.RadioButtonFor(m => m.TIPO_CADASTRO,2,false) USUÁRIO (Pessoa Física)
+            </div>
+
+            <br/><br/>
+            <div id="bt_submit" class="formata_campos_etapa1">
+                <input type="submit" value="Iniciar Cadastro" class="i2Style"/>
+            </div>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    @* Posiciona o cursor  no primeiro campo*@
+    <script type="text/javascript">
+        $(function() {
+            $("input[type=text]").first().focus();
+        });
+    </script>
+}
+

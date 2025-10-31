@@ -1,0 +1,43 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    <link href="@Url.Content("~/Content/estilos.css")" rel="stylesheet" type="text/css" />
+</head>
+    <body>
+        <div id="container">
+          <div id="header">
+              <div id="toplogo">
+                  <a href='@Url.Action("Index", "Home")'><img src='@Url.Content("~/Content/images/logo_cliente.png")' style='margin-left: 50px; margin-top: 15px; width: 141px; height: 141px; border: none;' /></a>
+              </div>
+
+              <div id="topbar">
+                  <div id="barra_verm_superior">
+                      <div id="texto_bem_vindo">Seja bem-vindo! <span id="texto_normal">faça seu </span><span id="texto_login_cadastre_se">login</span><span id="texto_normal"> ou </span><span id="texto_login_cadastre_se">cadastre-se</span><span id="texto_normal"> !</span><span id="texto_apps_iphone">IPHONE</span><span id="barra_apps">|</span><span id="texto_apps_android">ANDROID</span><span id="barra_apps">|</span><span id="texto_apps_winPhone">WINDOWS PHONE</span></div>
+                  </div>
+                  <div id="barra_branca_superior"></div>
+                  <div id="barra_cinza_superior"></div>
+              </div>
+          </div>
+
+          <div id="conteudo2">
+            @RenderBody()
+          </div>
+
+          <div id="barra_verm_rodape"></div>
+          <div id="barra_branca_rodape"></div>
+          <div id="footer">
+              <a href='@Url.Action("Index", "Home")'><img src='@Url.Content("~/Content/images/logo_branca.png")' style='margin-left: 25px; margin-top: 35px; border: none;' /></a>
+              <div id="texto_contato_quem_somos">@Html.ActionLink("C O N T A T O", "Contato", "Home")<span id="texto_normal">&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;</span>@Html.ActionLink("Q U E M  S O M O S", "Somos", "Home")</div>
+              <div id="texto1_rodape">&#169; 2014&nbsp;&nbsp;Cliente&Mercado.com.br Ltda.</div>
+              <div id="texto2_rodape">NOVA MÍDIA - CNPJ/MF 86.570.306/0001-07 / Av. Vitória, 000 - Centro - Vitória-ES</div>
+              <div id="texto3_rodape">CEP 29.041-370</div>
+          </div>
+        </div>
+
+        @Scripts.Render("~/bundles/jquery")
+        @RenderSection("scripts", required: false)
+    </body>
+</html>

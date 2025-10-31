@@ -1,0 +1,403 @@
+﻿@model ClienteMercado.UI.Core.ViewModel.CadastroEmpresaViewModel
+
+@{
+    ViewBag.Title = "Configurações";
+    Layout = "~/Views/Shared/_Layout_configuration.cshtml";
+}
+
+<script src="http://code.jquery.com/jquery-1.8.2.js"></script>
+<script src="http://code.jquery.com/ui/1.9.0/jquery-ui.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pnotify/3.2.1/pnotify.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pnotify/3.2.1/pnotify.buttons.js"></script>
+<script src="~/Scripts/validacoes.js"></script>
+
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.9.0/themes/base/jquery-ui.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pnotify/3.2.1/pnotify.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pnotify/3.2.1/pnotify.buttons.css" />
+
+<style>
+    .ui-pnotify {
+        top: 100px; /*Replace the 25px with the top that you need*/
+        right: 25px;
+        position: absolute;
+        height: auto;
+        z-index: 9999
+    }
+
+        .ui-pnotify.customsuccess .ui-pnotify-container {
+            background-color: #337ab7 !important;
+        }
+
+        .ui-pnotify.customsuccess .ui-pnotify-text {
+            font-size: 11px
+        }
+
+        .ui-pnotify.customsuccess .ui-pnotify-title,
+        .ui-pnotify.customsuccess .ui-pnotify-text,
+        .ui-pnotify.customsuccess .ui-pnotify-icon,
+        .ui-pnotify.customsuccess .ui-pnotify-sticker,
+        .ui-pnotify.customsuccess .ui-pnotify-closer {
+            color: #FFF !important;
+        }
+</style>
+
+<!-- FIM DA BARRA DE FERRAMENTAS -->
+<div class="row">
+    <!-- BEGIN VALIDATION STATES-->
+    <div class="portlet box blue">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="fas fa-cogs"></i>Configurações - Dados Empresa / Usuário - Etapa 1 de 3
+            </div>
+        </div>
+
+        <div class="portlet-body form">
+            <!-- BEGIN FORM-->
+            <form class="form-horizontal">
+                <div class="form-body">
+                    <h4><b><font color="#3297E0">Dados Empresa:</font></b></h4>
+                    <hr />
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <div class="col-md-3"><font color="#3297E0">CNPJ:</font></div>
+                            <div class="col-md-5"><font color="#3297E0">Razão Social:</font></div>
+                            <div class="col-md-4"><font color="#3297E0">Nome Fantasia:</font></div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="col-md-3">
+                                <input type="text" id="inCNPJEmpresa" data-required="1" size="10" class="form-control cadastro" placeholder="Informe CNPJ..." value="@Model.CNPJ_CPF_EMPRESA_USUARIO" readonly/>
+                            </div>
+                            <div class="col-md-5">
+                                <input type="text" id="inRazaoSocialEmpresa" data-required="1" size="10" class="form-control cadastro" placeholder="Informe Razão Social..." value="@Model.RAZAO_SOCIAL_EMPRESA" />
+                            </div>
+                            <div class="col-md-4">
+                                <input type="text" id="inNomeFantasiaEmpresa" data-required="1" size="10" class="form-control cadastro" placeholder="Informe Nome Fantasia..." value="@Model.NOME_FANTASIA_EMPRESA" />
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="col-md-4"><font color="#3297E0">E-mail 1:</font></div>
+                            <div class="col-md-2"><font color="#3297E0">Telefone 1:</font></div>
+                            <div class="col-md-3"><font color="#3297E0">País:</font></div>
+                            <div class="col-md-3"><font color="#3297E0">Cep:</font></div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="col-md-4">
+                                <input type="text" id="inEmail1Empresa" data-required="1" size="10" class="form-control cadastro" placeholder="Informe E-mail..." value="@Model.EMAIL1_EMPRESA" />
+                            </div>
+                            <div class="col-md-2">
+                                <input type="tel" id="inTelefone1Empresa" data-required="1" size="10" class="form-control cadastro telefone" placeholder="Informe Telefone..." pattern="\([0-9]{2}\)[\s][0-9]{4}-[0-9]{4,5}" value="@Model.TELEFONE1_EMPRESA_USUARIO" />
+                            </div>
+                            <div class="col-md-3">
+                                @Html.DropDownList("inListaDePaises", Model.ListagemPaises, new { @class = "form-control cadastro", @id = "inListaDePaises", style = "", @tabindex = "" })
+                            </div>
+                            <div class="col-md-3">
+                                <input type="text" id="inCepEmpresa" data-required="1" size="10" maxlength="9" class="form-control cadastro" placeholder="Informe CEP..." value="@Model.CEP_SEQUENCIAL_ENDERECO" onClick="limparCampoCEP();" onkeypress="return MM_formtCep(event,this,'#####-###');"/>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="col-md-5"><font color="#3297E0">Endereço:</font></div>
+                            <div class="col-md-4"><font color="#3297E0">Complemento:</font></div>
+                            <div class="col-md-3"><font color="#3297E0">Bairro:</font></div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="col-md-5">
+                                <input type="text" id="inEnderecoEmpresa" data-required="1" size="10" class="form-control cadastro" placeholder="Informe Endereço..." value="@Model.ENDERECO_EMPRESA_USUARIO"  />
+                            </div>
+                            <div class="col-md-4">
+                                <input type="text" id="inComplementoEndEmpresa" data-required="1" size="10" class="form-control" placeholder="Complemento..." value="@Model.COMPLEMENTO_ENDERECO_EMPRESA_USUARIO"  />
+                            </div>
+                            <div class="col-md-3">
+                                <input type="text" id="inBairroEmpresa" data-required="1" size="10" class="form-control cadastro" placeholder="Informe Bairro..." value="@Model.NOME_BAIRRO_EMPRESA_USUARIO"  />
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="col-md-5"><font color="#3297E0">Cidade:</font></div>
+                            <div class="col-md-2"><font color="#3297E0">UF:</font></div>
+                            <div class="col-md-5">&nbsp;</div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="col-md-5">
+                                <input type="text" id="inCidadeEmpresa" data-required="1" size="10" class="form-control cadastro" placeholder="Informe Cidade..." value="@Model.NOME_CIDADE_EMPRESA_USUARIO"  />
+                            </div>
+                            <div class="col-md-2">
+                                @Html.DropDownList("inListaDeEstados", Model.ListagemEstados, new { @class = "form-control cadastro", @id = "inListaDeEstados", style = "", @tabindex = "" })
+                            </div>
+                            <div class="col-md-5">&nbsp;</div>
+                        </div>
+                    </div>
+                    <h4><b><font color="#3297E0">Dados Usuário:</font></b></h4><div id="msg-erro-cpf-1" class="alert alert-danger" role="alert" style="text-align:center;display:none;"><h4><font color="red">CNPJ Inválido</font></h4></div>
+                    <hr />
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <div class="col-md-2"><font color="#3297E0">CPF:</font></div>
+                            <div class="col-md-4"><font color="#3297E0">Nome:</font></div>
+                            <div class="col-md-2"><font color="#3297E0">Me chamem por:</font></div>
+                            <div class="col-md-4"><font color="#3297E0">E-mail:</font></div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="col-md-2">
+                                <input type="text" id="inCPFUsuario" data-required="1" size="10" maxlength="14" class="form-control cadastro" placeholder="Informe CPF..." value="@Model.CPF_USUARIO" onKeyDown="FormataCPF(this, event);" onkeypress="return event.charCode >= 48 && event.charCode <= 57"/>
+                            </div>
+                            <div class="col-md-4">
+                                <input type="text" id="inNomeUsuario" data-required="1" size="10" class="form-control cadastro" placeholder="Informe Nome Usuário..." value="@Model.NOME_USUARIO" />
+                            </div>
+                            <div class="col-md-2">
+                                <input type="text" id="inApelidoUsuario" data-required="1" size="10" class="form-control cadastro" placeholder="Informe Nome..."  value="@Model.APELIDO_USUARIO" />
+                            </div>
+                            <div class="col-md-4">
+                                <input type="text" id="inEmai1lUsuario" data-required="1" size="10" class="form-control cadastro" placeholder="Informe E-mail..." value="@Model.EMAIL1_USUARIO" />
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="col-md-2"><font color="#3297E0">Telefone 1:</font></div>
+                            <div class="col-md-2"><font color="#3297E0">Telefone 2:</font></div>
+                            <div class="col-md-2">&nbsp;</div>
+                            <div class="col-md-6">&nbsp;</div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="col-md-2">
+                                <input type="text" id="inTelefone1Usuario" data-required="1" size="10" class="form-control cadastro telefone" placeholder="Informe Telefone 1..." value="@Model.TELEFONE1_USUARIO_EMPRESA" />
+                            </div>
+                            <div class="col-md-2">
+                                <input type="text" id="inTelefone2Usuario" data-required="1" size="10" class="form-control telefone" placeholder="Informe Telefone 2..." value="@Model.TELEFONE2_USUARIO_EMPRESA" />
+                            </div>
+                            <div class="col-md-4">
+                                <input type="checkbox" id="inReceberEmailsEmpresa" checked> Aceito receber E-mails da ClienteMercado
+                                <br />
+                                &nbsp;&nbsp;
+                                <span class="texto_normal">Leia os</span>&nbsp;@Html.ActionLink("Termos de Uso", "Termos", "Configuration_registry", new { @class = "linkdois" })&nbsp;<span class="texto_normal">e</span>&nbsp;@Html.ActionLink("Política de Privacidade", "Politica", "CadastroEmpresaUsuario", new { @class = "linkdois" })
+                            </div>
+                            <div class="col-md-4" style="text-align:right;"> <!-- CONTINUAR AQUI: CONFERIR CARREGAMENTO AUTOMÁTICO do CEP (VER CARREGGAMENTO A PARTIR DOS CORREIOS - VER CÓDIGO ADALINE NO SOX) -->
+                                <button type="button" id="btn-continuar" class="btn btn-primary btn-padrao" title="" style="">Continue <i class="fas fa-arrow-right"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <!-- END FORM-->
+
+            <input type="hidden" id="inMeuRamoAtividades" value="@ViewBag.codRamoAtividadeEmpresaAdm" />
+            <input type="hidden" id="inIdPais" value="@Model.PAIS_EMPRESA_USUARIO" />
+            <input type="hidden" id="inIdEndereco" value="@Model.ID_CODIGO_ENDERECO_EMPRESA_USUARIO" />
+            <input type="hidden" id="inIdEstado" value="@Model.ID_ESTADOS_EMPRESA_USUARIO" />
+            <input type="hidden" id="inDocLogado" value="@Model.CPF_USUARIO" />
+            <input type="hidden" id="inPrimeiroAcesso" value="@ViewBag.primeiroAcesso" />
+        </div>
+    </div>
+    <!-- END VALIDATION STATES-->
+</div>
+
+<script>
+    jQuery(document).ready(function () {
+        debugger;
+
+        $('#inListaDePaises').val($('#inIdPais').val());
+        $('#inListaDeEstados').val($('#inIdEstado').val());
+
+        //MÁSCARA TELEFONE
+        $(".telefone").keydown(function () {
+            $(".telefone").mask("(00) 0000-00009");
+        });
+
+        //DESABILITAR CAMPO CPF
+        if ($('#inDocLogado').val() != "") {
+            $("#inCPFUsuario").attr("disabled", true);
+            $('#inDocLogado').val('');
+        }
+
+        //COLORE A BORDA DE VERMELHO DOS CAMPOS ESSENCIAIS
+        $(".cadastro").each(function (index) {
+            debugger;
+
+            if ($(this).val() == "") {
+                $(this).css({ "border": "1px solid #F00", "padding": "2px" });
+            }
+        });
+
+        //CHAMA ATENÇÃO PARA O PREENCHIMENTO DOS CAMPOS EM VERMELHO
+        if ($('#inPrimeiroAcesso').val() == "S") {
+            swal({ title: "ATENÇÃO:\n\nComplete os campos em vermelho.\nSão necessários, para que você tenha uma melhor experiência nessa plataforma.\n\nAtenciosamente,\nEquipe ClienteMercado", type: "warning", confirmButtonColor: "#337ab7" });
+        }
+
+        //VERIFICA OS CAMPOS
+        $(".cadastro").blur(function () {
+            if ($(this).val() == "") {
+                $(this).css({ "border": "1px solid #F00", "padding": "2px" });
+            }
+            else {
+                $(this).css({ "border": "1px solid #DCDCDC", "padding": "2px" });
+            }
+        });
+
+        //Ajax - Consulta o CEP
+        $("#inCepEmpresa").change(function () {
+            if ($("#inCepEmpresa").val() != '') {
+                //$('#img_load_direcionada3').show();
+
+                $.ajax({
+                    type: 'POST',
+                    url: '/Configuration_registry/BuscaEndereco', //Caminho Controler/Action
+                    dataType: 'json', //Tipo de dados
+                    data: { 'cepDigitado': $("#inCepEmpresa").val() },
+                    success: function (result) {
+                        debugger;
+
+                        if (parseInt(result.id_endereco) > 0) {
+                            $("#inIdEndereco").val(result.id_endereco);
+                            $("#inIdEstado").val(result.estado);
+                            $("#inEnderecoEmpresa").val(result.endereco);
+                            $("#inListaDeEstados").val(result.estado);
+                            $("#inCidadeEmpresa").val(result.cidade);
+                            $("#inBairroEmpresa").val(result.bairro);
+                        }
+                    }
+                });
+            }
+        });
+
+        //GRAVAR DADOS CADASTRAIS
+        $("#btn-continuar").click(function () {
+            debugger;
+
+            var msg = "";
+
+            $(".cadastro").each(function (index) {
+                debugger;
+
+                if ($(this).val() == "") {
+                    $(this).css({ "border": "1px solid #F00", "padding": "2px" });
+
+                    msg = "ATENÇÃO:\n\nComplete os campos em vermelho.\nSão necessários, para que você tenha uma melhor experiência nessa plataforma.\n\nAtenciosamente,\n\nEquipe ClienteMercado";
+                }
+            });
+
+            if (msg != "") {
+                swal({ title: msg, type: "warning", confirmButtonColor: "#337ab7" });
+            }
+            else {
+                debugger;
+
+                $(".cadastro").each(function (index) {
+                    debugger;
+
+                    if ($(this).val() != "") {
+                        $(this).css({ "border": "1px solid #DCDCDC", "padding": "2px" });
+                    }
+                });
+
+                $.ajax({
+                    type: 'POST',
+                    url: '/Configuration_registry/CompletarDadosEmpresaEUsuario',
+                    dataType: 'json', //Tipo de dados
+                    data: {
+                        'cnpjEmpresa': $('#inCNPJEmpresa').val(),
+                        'razaoSocialEmpresa': $('#inRazaoSocialEmpresa').val(),
+                        'nomeFantasiaEmpresa': $('#inNomeFantasiaEmpresa').val(),
+                        'email1Empresa': $('#inEmail1Empresa').val(),
+                        'telefone1Empresa': $('#inTelefone1Empresa').val(),
+                        'idPais': $('#inListaDePaises').val(),
+                        'idEnderecoEmpresa': $('#inIdEndereco').val(),
+                        'complementoEndEmpresa': $('#inComplementoEndEmpresa').val(),
+                        'cpfUsuario': $('#inCPFUsuario').val(),
+                        'nomeUsuario': $('#inNomeUsuario').val(),
+                        'apelidoUsuario': $('#inApelidoUsuario').val(),
+                        'emai1lUsuario': $('#inEmai1lUsuario').val(),
+                        'telefone1Usuario': $('#inTelefone1Usuario').val(),
+                        'telefone2Usuario': $('#inTelefone2Usuario').val(),
+                        'receberEmailsEmpresa': $('#inReceberEmailsEmpresa').val()
+                    },
+                    success: function (result) {
+                        debugger;
+
+                        if (result.dadosAtualizados = "Ok") {
+                            swal.close(); //FECHA SWAL MSG
+
+                            //EXIBE MSG LATERAL À DIREITA SUPERIOR
+                            new PNotify({
+                                title: 'Sucesso!',
+                                text: 'Dados EMPRESA e do USUÁRIO atualizados com SUCESSO!',
+                                type: 'success',
+                                styling: 'bootstrap3',
+                                icons: 'bootstrap3',
+                                addclass: 'customsuccess',
+                                animateSpeed: 'fast',
+                                mouseReset: true,
+                                Buttons: {
+                                    closer: true
+                                }
+                            });
+
+                            //DESVIAR PARA PÁGINA DA ETAPA 2
+                            window.location.href = "@Url.Action("DataLocation", "Configuration_registry")";
+                        }
+                    }
+                });
+            }
+        });
+
+        //Ajax - Consulta CPF
+        $("#inCPFUsuario").blur(function () {
+            if ($("#inCPFUsuario").val() != '') {
+                $('#img_load_direcionada1').show();
+
+                $.ajax({
+                    type: 'POST',
+                    url: '/Configuration_registry/ValidacaoDoCPF',
+                    dataType: 'json', //Tipo de dados
+                    data: { 'cpfDigitado': $("#inCPFUsuario").val() },
+                    success: function (result) {
+                        $('#img_load_direcionada1').hide();
+
+                        if (result.cpfValido == "nOk") {
+                            $('#inCPFUsuario').css({ "border": "1px solid #F00", "padding": "2px" });
+                            $('#msg-erro-cpf-1').show();
+                        }
+                        else {
+                            $('#msg-erro-cpf-1').hide();
+                        }
+                    }
+                });
+            }
+        });
+
+        //LIMPAR CAMPO CPF
+        $("#inCPFUsuario").focus(function () {
+            $('#inCPFUsuario').val('');
+            $('#msg-erro-cpf-1').hide();
+        });
+
+    });
+
+    //LIMPAR CAMPO CEP
+    function limparCampoCEP() {
+        document.getElementById('inCepEmpresa').value = '';
+        document.getElementById('inCepEmpresa').focus();
+    }
+
+    /*Formatação CEP */
+    function MM_formtCep(e, src, mask) {
+        if (window.event) { _TXT = e.keyCode; }
+        else if (e.which) { _TXT = e.which; }
+        if (_TXT > 47 && _TXT < 58) {
+            var i = src.value.length;
+            var saida = mask.substring(0, 1);
+            var texto = mask.substring(i);
+
+            if (texto.substring(0, 1) != saida) {
+                src.value += texto.substring(0, 1);
+            }
+
+            return true;
+        }
+        else {
+            if (_TXT != 8) {
+                return false;
+            } else {
+                return true;
+            }
+        }
+    }
+
+</script>
+

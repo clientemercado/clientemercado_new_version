@@ -1,0 +1,44 @@
+﻿
+@{
+ViewBag.Title = "ClienteMercado";
+Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div id="label_titulo_paginas" class="label_paginas">&nbsp;&nbsp;Cadastre-se aqui - Etapa 1</div>
+
+<div id="container_opcoes_cadastro">
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true)
+
+        <div id="campos_para_cadastro_etapa1" class="campos_cadastro_etapa1">
+            <div id="mensagem_apresentacao" class="formata_msg">
+                Clique no tipo de cadastro:
+            </div>
+            <br/>
+            <div id="opcoes_cadastro" class="formata_opcoes_cadastro">
+                <a href='@Url.Action("CadastroEmpresa", "CadastroEmpresaUsuario")'><img src='@Url.Content("~/Content/images/empresa.png")' style='border: solid 1px; border-color:black;'/></a>
+                <a href='@Url.Action("CadastroProfissional", "CadastroProfissionalUsuario")'><img src='@Url.Content("~/Content/images/profissionais.png")' style='margin-left:30%; border: solid 1px; border-color:black;'/></a>
+                <a href='@Url.Action("CadastroUsuario", "CadastroUsuarioCotante")'><img src='@Url.Content("~/Content/images/usuario.png")' style='margin-left:30%; border: solid 1px; border-color:black;'/></a>
+            </div>
+            <div>
+                <a href='@Url.Action("CadastroEmpresa", "CadastroEmpresaUsuario")'><span id="texto_opcoes_cadastro1">Empresa</span></a>
+                <a href='@Url.Action("CadastroProfissional", "CadastroProfissionalUsuario")'><span id="texto_opcoes_cadastro2">Profissional</span></a> 
+                <a href='@Url.Action("CadastroUsuario", "CadastroUsuarioCotante")'><span id="texto_opcoes_cadastro3">Usuário</span></a> 
+            </div>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    @* Posiciona o cursor  no primeiro campo*@
+@*    <script type="text/javascript">
+        $(function() {
+            $("input[type=text]").first().focus();
+        });
+    </script>*@
+}
+

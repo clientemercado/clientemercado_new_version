@@ -1,0 +1,226 @@
+﻿@model  ClienteMercado.UI.Core.ViewModel.NovaCentralDeComprasViewModel
+
+@{
+    ViewBag.Title = "CriarCentralDeCompras2";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="http://code.jquery.com/jquery-1.8.2.js"></script>
+<script src="http://code.jquery.com/ui/1.9.0/jquery-ui.js"></script>
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.9.0/themes/base/jquery-ui.css" />
+
+<!-- FIM DA BARRA DE FERRAMENTAS -->
+<div class="row">
+    <!-- BEGIN VALIDATION STATES-->
+    <div class="portlet box blue">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="far fa-file-alt"></i>Nova Central de Compras - <span class="step-title">
+                    Etapa 1 de 2
+                </span>
+            </div>
+        </div>
+
+        <div class="portlet-body form">
+            <div class="form-actions">
+                <div class="row">
+                    <div class="col-md-12">
+                        <button id="btn-continuar" class="btn btn-primary btn-padrao" title="" style="">Continue <i class="fas fa-arrow-right"></i></button>
+                    </div>
+                </div>
+            </div>
+            <!-- BEGIN FORM-->
+            <form class="form-horizontal">
+                <div class="form-body">
+                    <div class="form-group" id="cabecalho_1">
+                        <label class="col-md-2 control-label"><font color="#3297E0"><b>Administradora:</b></font></label>
+                        <div class="col-md-4">
+                            <h5>@Model.inEmpresaLogadaAdmCC</h5>
+                        </div>
+                        <label class="col-md-2 control-label"><font color="#3297E0"><b>Ramo Atividade:</b></font></label>
+                        <div class="col-md-4">
+                            <h5>@Model.inRamoAtividadeEmpresaAdm</h5>
+                        </div>
+                        <label class="col-md-2 control-label"><font color="#3297E0"><b>Cidade:</b></font></label>
+                        <div class="col-md-4">
+                            <h5>@Model.inCidadeEmpresaAdmCC</h5>
+                        </div>
+                        <label class="col-md-2 control-label"><font color="#3297E0"><b>Usuário Resp:</b></font></label>
+                        <div class="col-md-4">
+                            <h5>@Model.inNomeUsuarioRespEmpresaAdmCC</h5>
+                        </div>
+                    </div>
+                    <hr />
+
+                    <div class="form-group">
+                        <!-- BEGIN SAMPLE TABLE PORTLET-->
+                        <br />
+                        <div class="portlet-body flip-scroll col-md-12">
+                            <div class="" id="tab1">
+                                <div class="form-group">
+                                    <label class="control-label col-md-3"><font color="#3297E0"><b>Nome Central de Compras:</b></font> <font color="red">*</font></label>
+                                    <div class="col-md-6">
+                                        <input type="text" id="inNomeCentralDeCompras" size="50" obrigatorio="1" class="form-control" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-3"><font color="#3297E0"><b>Data Criação:</b></font> <font color="red">*</font></label>
+                                    <div class="col-md-2">
+                                        <input type="text" name="name" id="inDataCriacaoCentralDeCompras" class="form-control datacalendario" size="8" value="@Model.inDataCriacaoCC" disabled />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">
+                                        <font color="#3297E0"><b>Área Atuação/Ramo de Atividade:</b></font> <font color="red">*</font>
+                                    </label>
+                                    <div class="col-md-6">
+                                        @Html.DropDownList("inListaDeRamosDeAtividade", Model.inListaDeRamosDeAtividadeParaComprasDaCC, new { @class = "form-control", @id = "inListaDeRamosDeAtividade", @obrigatorio = 1 })
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label>
+                                            <input id="inTipoRamoAtividade" type="checkbox" name="checkbox" value="" class="ramoatividade" /> <font color="#3297E0"><b> Meu Ramo Atividade</b></font>
+                                        </label>
+                                    </div>
+                                </div>
+                                @*<div class="form-group">
+                                    <label class="control-label col-md-4"><b>Tipo Cotação a Enviar:</b> *</label>
+                                    <div class="col-md-8">
+                                        <label>
+                                            <input type="checkbox" name="checkbox" value="1" class="tipocotacao"/> Direcionada
+                                        </label>
+                                        <label>
+                                            <input type="checkbox" name="checkbox" value="2" class="tipocotacao"/> Avulsa
+                                        </label>
+                                    </div>
+                                </div>*@
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <!-- END FORM-->
+
+            <input type="hidden" id="inMeuRamoAtividades" value="@ViewBag.codRamoAtividadeEmpresaAdm" />
+        </div>
+    </div>
+    <!-- END VALIDATION STATES-->
+</div>
+
+<script>
+    jQuery(document).ready(function () {
+        //Botão GRAVAR
+        $(document).on("click", "#btn-continuar", function () {
+            //VALIDANDO o PREENCHIMENTO dos CAMPOS
+            debugger;
+
+            var cont = 0;
+            var msg = "";
+            var obj = {};
+            var aviso = 0;
+            var mensagem = "ATENÇÃO!!!\n\nOs CAMPOS em vermelho, são de preenchimento obrigatório!"
+
+            $("input[type=text]").each(function () {
+                debugger;
+
+                $(this).css({ "border": "1px solid #ccc", "padding": "2px" });
+                var input = $(this).val();
+                console.log($(this).attr("campo") + " " + input);
+
+                if (($("#inNomeCentralDeCompras").val() == "") || (parseInt($("#inListaDeRamosDeAtividade").val()) == parseInt(0))) {
+                    aviso = 1;
+
+                    //if ($(this).hasClass('validacao'))
+                    //    msg += $(this).attr("campo") + "\n";
+
+                    if ($("#inNomeCentralDeCompras").val() == "") {
+                        $("#inNomeCentralDeCompras").css({ "border": "1px solid #F00", "padding": "2px" });
+                    }
+
+                    if (($("#inListaDeRamosDeAtividade").val() == "") || (parseInt($("#inListaDeRamosDeAtividade").val()) == parseInt(0))) {
+                        $("#inListaDeRamosDeAtividade").css({ "border": "1px solid #F00", "padding": "2px" });
+                    }
+                }
+                else if (($(this).val() != ""))
+                    obj[$(this).attr("id")] = $(this).val();
+            });
+
+            //VERIFICANDO CAMPOS
+            if (aviso == 1) {
+                swal({
+                    title: mensagem, type: "warning"
+                },
+                    function () {
+                        if ($("#inNomeCentralDeCompras").val() == "") {
+                            $("#inNomeCentralDeCompras").focus();
+                        }
+                        else if ($("#inListaDeRamosDeAtividade").val() == "") {
+                            $("#inListaDeRamosDeAtividade").focus();
+                        }
+                    });
+            }
+            else {
+                //-----------------------------------------------
+                //REGISTRAR CENTRAL de COMPRAS
+                debugger;
+
+                //var tiposCotacao = new Array();
+
+                //$(".tipocotacao:checked").each(function () {
+                //    tiposCotacao.push($(this).val());
+                //});
+
+                //var jsonString = JSON.stringify(tiposCotacao);
+
+                $.ajax({
+                    type: "POST",
+                    url: "/NovaCentralDeCompras/RegistrarCentralDeCompras",
+                    dataType: 'json',
+                    data: {
+                        'nomeCentralDeCompras': $("#inNomeCentralDeCompras").val(),
+                        'ramoAtividade': $("#inListaDeRamosDeAtividade").val(),
+                        'tipoDeCotacaoDaCentral': ''
+                    },
+                    success: function (data) {
+                        if ((data.tipoParticipacao == "partic") || (data.tipoParticipacao == "admin")) {
+                            debugger;
+
+                            swal({
+                                title: data.mensagemRetorno, type: "warning"
+                            },
+                            function () {
+                                debugger;
+
+                                //LIMPAR CAMPOS
+                                //$('#inNomeCentralDeCompras').val('');
+                                $('#inListaDeRamosDeAtividade').val(0);
+                            });
+
+                            $(".ramoatividade").prop('checked', false);
+                        }
+                        else if (data.tipoParticipacao == "criado") {
+                            swal({
+                                title: data.mensagemRetorno, type: "warning"
+                            },
+                            function () {
+                                window.location.href = "@Url.Action("ConvidarEmpresasCentralDeCompras", "NovaCentralDeCompras")?cCC=" + data.idCCCriptografado + "&eA=" + data.idEmpresaAdmCriptografado; 
+                            });
+                        }
+                    }
+                });
+                //-----------------------------------------------
+            }
+        });
+
+        //DEFINIR RAMO ATIVIDADE
+        $(document).on("click", ".ramoatividade", function () {
+            if ($(".ramoatividade").is(":checked")) {
+                $('#inListaDeRamosDeAtividade').val($('#inMeuRamoAtividades').val());
+            }
+            else {
+                $('#inListaDeRamosDeAtividade').val(0);
+            }
+        });
+
+    });
+
+</script>

@@ -1,0 +1,16 @@
+﻿@{
+ViewBag.Title = "ClienteMercado";
+    Layout = "~/Views/Shared/_Layout-Others-Home.cshtml";
+}
+
+<div id="container_form_confirmacao_cadastro">
+    <div id="confirmacao_agradecimento" class="alinha_texto_confirmacao3">
+        <h3>Parabéns!</h3> 
+        <h3>Seu cadastro foi efetuado com sucesso!</h3>
+        <h5>Acesse o e-mail informado no cadastro e clique no link que lhe enviamos, para confirmar o cadastro!</h5>
+    </div>
+    <br/>
+    <div id="confirmacao_imprimir">
+        <a href='@Url.Action("Index", "Home")'><img src='@Url.Content("~/Content/images/home.png")' style='margin-left: 255px; margin-top: 30px; border: none;' /><span id="texto_redirect">Início</span></a>
+    </div>
+</div>

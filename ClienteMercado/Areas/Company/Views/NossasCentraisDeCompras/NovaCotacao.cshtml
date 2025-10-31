@@ -1,0 +1,943 @@
+﻿@model  ClienteMercado.UI.Core.ViewModel.NossasCentraisDeComprasViewModel
+
+@{
+    ViewBag.Title = "Nova Cotacao";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="http://code.jquery.com/jquery-1.8.2.js"></script>
+<script src="http://code.jquery.com/ui/1.9.0/jquery-ui.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pnotify/3.2.1/pnotify.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pnotify/3.2.1/pnotify.buttons.js"></script>
+
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.9.0/themes/base/jquery-ui.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pnotify/3.2.1/pnotify.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pnotify/3.2.1/pnotify.buttons.css" />
+
+<style>
+    .HideColHead {
+        display: none
+    }
+
+    .HideCol {
+        display: none
+    }
+
+    th {
+        background-color: #CDC9C9;
+        color: white;
+    }
+
+    .status {
+        font-size: 9pt;
+    }
+
+    a:link {
+        text-decoration: none;
+    }
+
+    .sweet-alert button.cancel {
+        background-color: #337ab7;
+        color: white;
+    }
+
+        .sweet-alert button.cancel:hover {
+            background-color: #337ab7;
+            color: white;
+        }
+
+    .ui-pnotify {
+        top: 100px;
+        right: 25px;
+        position: absolute;
+        height: auto;
+        z-index: 9999
+    }
+
+        .ui-pnotify.customsuccess .ui-pnotify-container {
+            background-color: #337ab7 !important;
+        }
+
+        .ui-pnotify.customsuccess .ui-pnotify-text {
+            font-size: 11px
+        }
+
+        .ui-pnotify.customsuccess .ui-pnotify-title,
+        .ui-pnotify.customsuccess .ui-pnotify-text,
+        .ui-pnotify.customsuccess .ui-pnotify-icon,
+        .ui-pnotify.customsuccess .ui-pnotify-sticker,
+        .ui-pnotify.customsuccess .ui-pnotify-closer {
+            color: #FFF !important;
+        }
+</style>
+
+<div class="row">
+@*<div class="col-md-12">*@
+<!-- BEGIN VALIDATION STATES-->
+<div class="portlet box blue">
+    <div class="portlet-title">
+        <div id="novaCotacao" class="caption" style="display:none">
+            <i class="far fa-file"></i> Nova Cotação
+        </div>
+        <div id="anexarCotacao" class="caption" style="display:none">
+            <i class="fa fa-list-ul"></i> Cotação: <font color="black"><b>@Model.nomeCotacaoMaster</b></font> | Anexar Cotação
+        </div>
+    </div>
+    <div class="portlet-body form">
+        <!-- BEGIN FORM-->
+        <form action="#" class="form-horizontal">
+            <div class="form-body">
+                <div class="form-group" id="cabecalho" style="">
+                    <label class="col-md-2 control-label"><font color="#3297E0"><b>Central Compras:</b></font></label>
+                    <div class="col-md-4">
+                        <h5>@Model.inNomeCentralCompras</h5>
+                    </div>
+                    <label class="col-md-2 control-label"><font color="#3297E0"><b>Ramo Atividade:</b></font></label>
+                    <div class="col-md-4">
+                        <h5>@Model.inRamoAtividadeCC</h5>
+                    </div>
+                    <label class="col-md-2 control-label"><font color="#3297E0"><b>Administradora:</b></font></label>
+                    <div class="col-md-4">
+                        <h5>@Model.inEmpresaLogadaAdmCC</h5>
+                    </div>
+                    <label class="col-md-2 control-label"><font color="#3297E0"><b>Cidade:</b></font></label>
+                    <div class="col-md-4">
+                        <h5>@Model.inCidadeEmpresaAdmCC</h5>
+                    </div>
+                    <label class="col-md-2 control-label"><font color="#3297E0"><b>Usuário Resp:</b></font></label>
+                    <div class="col-md-4">
+                        <h5>@Model.inNomeUsuarioRespEmpresaAdmCC</h5>
+                    </div>
+                    <div class="col-md-12" id="">
+                        @{
+                            if ((Model.inCotacaoMasterEnviada == "sim") && (Model.inCotacaoAnexada == "nao"))
+                            {
+                                <label class="col-md-8 control-label"><font color="#FF0000" size="3"><b>VOCÊ NÃO PARTICIPOU DESTA COTAÇÃO</b></font></label>
+                            }
+                        }
+                    </div>
+                </div>
+                <hr />
+
+                <div class="form-actions">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <a href="#" id="inVoltarCotacoesCC" class="btn default button-previous"><i class="fas fa-arrow-left"></i> Voltar</a>
+                            <a href="#" id="inBtnAdicionar" class="btn blue button-submit" style="display:none;" title="Adicionar Produto na Cotação"><i class="fas fa-plus"></i> Adicionar Produto</a>
+                            &nbsp;&nbsp;
+                            <a href="#" id="inDescartarProdutosCotados" class="btn btn-warning btn-large" style="display:none;">Limpar Cotação <i class="fa fa-refresh"></i></a>
+                            <a href="#" id="inAnexarMinhaCotacaoCC" class="btn btn-success" style="display:none;"><i class="fas fa-paperclip"></i> Anexar Minha Cotação na Central</a>
+                            <a href="#" id="inDesaAnexarMinhaCotacaoCC" class="btn btn-danger" style="display:none;"><i class="fas fa-paperclip"></i> Desanexar Minha Cotação da Central</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group master" id="inDadosCotacaoMaster" style="display:none">
+                    <div class="col-md-12">
+                        <div class="col-md-6"><font color="#3297E0"><b>Nome da Cotação:</b></font></div>
+                        <div class="col-md-2"><font color="#3297E0"><b>Dt. Encerramento:</b></font></div>
+                        <div class="col-md-4"><font color="#3297E0"><b>Tipo Cotação:</b></font></div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="col-md-6">
+                            <input id="inNomeCotacao" type="text" data-required="1" size="30" class="form-control campo" obrigatorio=1 placeholder="Nome..." />
+                        </div>
+                        <div class="col-md-2">
+                            <input id="inDataEncerramento" type="text" data-required="1" size="10" class="form-control campo data" obrigatorio=1 placeholder="DD/MM/AAAA" />
+                        </div>
+                        <div class="col-md-3">
+                            <select id="inTipoDeCotacao" class="form-control" name="select" obrigatorio=1>
+                                <option value="0">Selecione...</option>
+                                <option value="1">Direcionada</option>
+                                <option value="2">Avulsa</option>
+                            </select>
+                        </div>
+                        <div class="col-md-1">
+                            <a href="javascript:;" id="inGravarCotacaoMaster" title="Gravar/Criar a Nova Cotação" class="btn btn-primary"><i class="far fa-save"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <div class="col-md-4"><font color="#3297E0"><b>Produto a Cotar:</b></font></div>
+                        <div class="col-md-2"><font color="#3297E0"><b>Quant:</b></font></div>
+                        <div class="col-md-2"><font color="#3297E0"><b>Unid.:</b></font></div>
+                        <div class="col-md-2"><font color="#3297E0"><b>Embalagem:</b></font></div>
+                        <div class="col-md-2"><font color="#3297E0"><b>Marca / Fabricante:</b></font></div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="col-md-4">
+                            <input type="text" id="inNomeProdutoCotacao" data-required="1" size="10" class="form-control cotacao" placeholder="Produto..." />
+                            <input type="hidden" id="inNomeProdutoNoBanco" value="" />
+                            <input type="hidden" id="inCodProdutoSelecionado" value="" />
+                        </div>
+                        <div class="col-md-2">
+                            <input type="text" name="name" id="inQuantidadeProdutoCotacao" data-required="1" size="8" class="form-control cotacao monetario" placeholder="0,00" />
+                        </div>
+                        <div class="col-md-2">
+                            @Html.DropDownList("inListaUnidadesProdutosACotar", Model.inListaUnidadesProdutosACotar, new { @class = "form-control cotacao", @id = "inListaUnidadesProdutosACotar" })
+                        </div>
+                        <div class="col-md-2">
+                            <input type="text" name="name" id="inEmbalagem" data-required="1" size="8" class="form-control cotacao" placeholder="digite..." />
+                            <input type="hidden" id="inNomeEmbalagemNoBanco" value="" />
+                            <input type="hidden" id="inCodEmbalagem" value="" />
+                        </div>
+                        <div class="col-md-2">
+                            <input type="text" id="inMarcaFabricanteDoProduto" data-required="1" size="10" class="form-control cotacao" placeholder="digite..." />
+                            <input type="hidden" id="inMarcaFabricanteNoBanco" value="" />
+                            <input type="hidden" id="inCodMarcaFabricante" value="" />
+                        </div>
+                    </div>
+                </div>
+                <hr />
+
+                <div class="form-group">
+                    <!-- BEGIN SAMPLE TABLE PORTLET-->
+                    <div class="portlet-body flip-scroll col-md-12">
+                        <table id="gridItensDaCotacaoIndividual" class="table table-bordered table-striped table-condensed flip-content">
+                            <thead class="flip-content">
+                                <tr>
+                                    <th data-column-id="descricaoProdutoCotado" data-width="25%">Produto</th>
+                                    <th data-column-id="marcaProdutoCotado" data-width="10%">Marca</th>
+                                    <th data-column-id="quantidadeProdutoCotado" data-width="5%" data-align="right">Quant.</th>
+                                    <th data-column-id="unidadeProdutoCotado" data-width="5%">Unid.</th>
+                                    <th data-column-id="embalagemProduto" data-align="right" data-width="7%">Embalagem</th>
+                                    <th data-column-id="valorDoProdutoCotado" data-width="5%" data-align="right">R$ Valor</th>
+                                    <th data-formatter="commands" data-align="center" data-width="8%">&nbsp;</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <!-- END FORM-->
+
+        <input type="hidden" id="inCCC" value="@Model.cCC" />
+        <input type="hidden" id="inICM" value="@Model.iCM" />
+        <input type="hidden" id="inICI" value="@Model.iCI" />
+        <input type="hidden" id="inIPCC" value="@Model.iPCC" />
+        <input type="hidden" id="inCotacaoAnexada" value="@Model.inCotacaoAnexada" /> 
+        <input type="hidden" id="inEmpresaLogada" value="@Model.inCodEmpresaLogada" />
+        <input type="hidden" id="inEmpresaAdmCC" value="@Model.inCodEmpresaADM" />
+        <input type="hidden" id="inCodRamoAtividade" value="@Model.inCodRamoAtividadeCC" />
+        <input type="hidden" id="inTipoAcao" value="@Model.inTipo" />
+        <input type="hidden" id="inDataSugeridaTermino" value="@Model.inDataSugeridaEncerramentoCotacao" />
+        <input type="hidden" id="inDataMinimaEncerramento" value="@Model.inDataMinimaEncerramentoCotacao" />
+        <input type="hidden" id="inDataMaximaEncerramento" value="@Model.inDataMaximaEncerramentoCotacao" />
+        <input type="hidden" id="inRecarregaGrid" value="0" />
+        <input type="hidden" id="inCotacaoMasterEnviada" value="@Model.inCotacaoMasterEnviada" />
+    </div>
+</div>
+<!-- END VALIDATION STATES-->
+@*</div>*@
+</div>
+
+<script>
+    jQuery(document).ready(function () {
+        debugger;
+
+        $('#inDataEncerramento').val($('#inDataSugeridaTermino').val());
+
+        $(".data").mask("99/99/9999");
+        $(".cotacao").prop("disabled", true);
+        $('.monetario').mask('000.000.000.000.000,00', { reverse: true });
+
+        //EXIBE CAMPO tipoCotacao se a EMPRESA LOGADA for a ADM da CC em questão...
+        if (($("#inEmpresaLogada").val() == $("#inEmpresaAdmCC").val()) && ($('#inTipoAcao').val() == "nw")) {
+            $("#novaCotacao").show();
+            $("#inDadosCotacaoMaster").show();
+        }
+        else {
+            if ($('#inCotacaoMasterEnviada').val() == "nao") {
+                $(".cotacao").prop("disabled", false);
+
+                $("#inBtnAdicionar").show();
+                $("#anexarCotacao").show();
+                $("#inNomeProdutoCotacao").focus();
+            }
+        }
+
+        //if ($('#inCotacaoAnexada').val() == "nao") {
+        //    $("#inBtnAdicionar").attr("disabled", false);
+        //    $(".cotacao").prop("disabled", false);
+        //} else {
+        //    $("#inBtnAdicionar").attr("disabled", true);
+        //    $(".cotacao").prop("disabled", true);
+        //} 
+
+        //CONSULTA os DADOS e CARREGA o GRID ao entrar na página
+        var grid = $('#gridItensDaCotacaoIndividual').bootgrid({
+            ajax: true,
+            navigation: 0, //CABEÇALHO: 2 - Exibe só RODAPÉ
+            columnSelection: false, //SELETOR de COLUNA: True - Habilita / False - Desabilita
+            url: "/NossasCentraisDeCompras/BuscarListaDeItensDaCotacaoIndividual",
+            post: function () {
+                /* PARÂMETROS a serem enviados na REQUISIÇÃO AJAX */
+                return {
+                    'iCI': $('#inICI').val()
+                };
+            },
+            selection: true,
+            multiSelect: true,
+            rowSelect: true,
+            keepSelection: true,
+            formatters: {
+                "commands": function (column, row) {
+                    var hintTrash = "EXCLUIR o PRODUTO da COTAÇÃO";
+
+                    if ($('#inCotacaoMasterEnviada').val() == "nao") {
+                        if ($('#inCotacaoAnexada').val() == "nao") {
+                            return "<button type=\"button\" class=\"btn btn-xs btn-default command-delete\" data-row-id=\"" + row.idItemCotacaoIndividual + "\" title=\"" + hintTrash + "\"><font color='red'><span class=\"fa fa-trash-o\"></span></font></button>";
+                        }
+                    }
+                    else {
+                        if ($('#inCotacaoAnexada').val() == "sim") {
+                            return "<font color=\"#0000FF\"><span><b>" + row.msgCotacaoEnviada + "</b></span></font>";;
+                        }
+                        else {
+                            return "";
+                        }                        
+                    }
+                }
+            }
+        }).on("loaded.rs.jquery.bootgrid", function () {  //Método EXECUTADO após o carregamento do GRID
+            debugger;
+
+            var quantRegistros = grid.bootgrid("getTotalRowCount");
+
+            if ($('#inCotacaoMasterEnviada').val() == "nao") {
+                if ($('#inCotacaoAnexada').val() == "nao") {
+                    if (parseInt(quantRegistros) > 0) {
+                        $('#inDescartarProdutosCotados').show();
+                        $('#inAnexarMinhaCotacaoCC').show();
+                    }
+                    else {
+                        $('#inDescartarProdutosCotados').hide();
+                        $('#inAnexarMinhaCotacaoCC').hide();
+                    }
+                }
+                else {
+                    $('#inDescartarProdutosCotados').hide();
+                    $('#inDesaAnexarMinhaCotacaoCC').show();
+                }
+            }
+
+            //EXCLUIR ITEM da COTAÇÃO
+            grid.find(".command-delete").on("click", function (e) {
+                var codItemAExcluir = $(this).attr("data-row-id");
+
+                swal({
+                    title: "Este ITEM será EXCLUÍDO da COTAÇÃO!\n\nConfirma?", type: "warning"
+                },
+                function () {
+                    debugger;
+
+                    $.ajax({
+                        type: "POST",
+                        url: "/NossasCentraisDeCompras/ExcluirItemDaCotacao",
+                        dataType: 'json',
+                        data: {
+                            'codItemCotacao': codItemAExcluir,
+                            'iCM': $('#inICI').val()
+                        },
+                        success: function (data) {
+                            if (data.itemExcluidoDaCotacao = "Ok") {
+                                debugger;
+
+                                $('#gridItensDaCotacaoIndividual').bootgrid('reload');
+                            }
+                        }
+                    });
+                });
+            });
+        });
+
+        //BOTÃO VOLTAR
+        $(document).on("click", "#inVoltarCotacoesCC", function () {
+            debugger;
+
+            //REDIRECIONA PÁG. ANTERIOR
+            window.location.href = "@Url.Action("CotacoesDaCentralDeCompras", "NossasCentraisDeCompras", new { Area = "Company" })" + "?cCC=" + $("#inCCC").val();
+        });
+
+        //BOTÃO LIMPAR COTAÇÃO
+        $(document).on("click", "#inDescartarProdutosCotados", function () {
+            $.ajax({
+                type: "POST",
+                url: "/NossasCentraisDeCompras/ExcluirTodosOsProdutosNaCotacaoIndividual",
+                dataType: 'json',
+                data: {
+                    'iCI': $('#inICI').val()
+                },
+                success: function (data) {
+                    if (data.produtoAdicionadoNaCotacaoIndividual = "Ok") {
+                        debugger;
+
+                        $('#gridItensDaCotacaoIndividual').bootgrid('reload');
+                        $('#inAnexarMinhaCotacaoCC').hide();
+                        $('#inDesaAnexarMinhaCotacaoCC').hide();
+                        $("#inNomeProdutoCotacao").focus();
+                    }
+                }
+            });
+        });
+
+        //BOTÃO ANEXAR MINHA COTAÇÃO
+        $(document).on("click", "#inAnexarMinhaCotacaoCC", function () {
+            debugger;
+
+                       swal({
+                            title: "ATENÇÃO!!\n\n",
+                            text: "Ao ANEXAR sua COTAÇÃO INDIVIDUAL, ela será juntada às cotações já anexadas pelas empresas parceiras nesta Central de Compras, formando uma só cotação a ser respondida pelos FORNECEDORES.\n\nConfirma o ato de ANEXAR sua COTACÃO INDIVIDUAL?",
+                            type: "warning",
+                            showCancelButton: true,
+                            confirmButtonColor: "#337ab7",
+                            confirmButtonText: "Sim",
+                            cancelButtonText: "Não",
+                            closeOnConfirm: true,
+                       },
+                       function (isConfirm) {
+                           if (isConfirm) {
+                               debugger;
+
+                               $.ajax({
+                                   type: "POST",
+                                   url: "/NossasCentraisDeCompras/AnexarACotacaoIndividualNaCotacaoMaster",
+                                   data: {
+                                       'iPCC': $('#inIPCC').val(),
+                                       'iCM': $('#inICM').val()
+                                   },
+                                   success: function (data) {
+                                       if (data.cotacaoAnexada = "Ok") {
+                                            swal.close(); //FECHA SWAL MSG
+
+                                            //EXIBE MSG LATERAL À DIREITA SUPERIOR
+                                            new PNotify({
+                                                title: 'Sucesso!',
+                                                text: 'Sua COTAÇÃO INDIVIDUAL foi ANEXADA!',
+                                                type: 'success',
+                                                styling: 'bootstrap3',
+                                                icons: 'bootstrap3',
+                                                addclass: 'customsuccess',
+                                                animateSpeed: 'fast',
+                                                mouseReset: true,
+                                                Buttons: {
+                                                    closer: true
+                                                }
+                                            });
+
+                                            if ($('#inCotacaoMasterEnviada').val() == "nao") {
+                                                $('#inCotacaoAnexada').val('sim');
+                                                $('#inDescartarProdutosCotados').hide();
+                                                $('#inAnexarMinhaCotacaoCC').hide();
+                                                $('#inDesaAnexarMinhaCotacaoCC').show();
+                                                
+                                                $("#inBtnAdicionar").attr("disabled", true);
+                                                $(".cotacao").prop("disabled", true);
+
+                                                $('#gridItensDaCotacaoIndividual').bootgrid('reload');
+                                            }
+                                       }
+                                   }
+                               });
+                           }
+                           @*else {
+                               debugger;
+
+                               swal({
+                                   title: "Você será redirecionado para a página inicial.\n\nEquipe Cliente & Mercado.", type: "warning"
+                               },
+                               function () {
+                                   debugger;
+
+                                   //DESVIAR para PÁGINA INICIAL
+                                   window.location.href = "@Url.Action("Index", "Home", new { Area = "Company" })";
+                               });
+
+                               e.preventDefault();
+                           }*@
+                       });
+        });
+
+        //BOTÃO ANEXAR MINHA COTAÇÃO
+        $(document).on("click", "#inDesaAnexarMinhaCotacaoCC", function () {
+            debugger;
+
+            swal({
+                title: "ATENÇÃO!!\n\n",
+                text: "Ao DESANEXAR sua COTAÇÃO INDIVIDUAL, ela será desligada das cotações já anexadas pelas empresas parceiras nesta Central de Compras, e não será respondida pelos FORNECEDORES.\n\n\nConfirma o ato de DESANEXAR sua COTACÃO INDIVIDUAL?",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#337ab7",
+                confirmButtonText: "Sim",
+                cancelButtonText: "Não",
+                closeOnConfirm: true,
+            },
+            function (isConfirm) {
+                if (isConfirm) {
+                    debugger;
+
+                    $.ajax({
+                        type: "POST",
+                        url: "/NossasCentraisDeCompras/DesanexarACotacaoIndividualNaCotacaoMaster",
+                        data: {
+                            'iPCC': $('#inIPCC').val(),
+                            'iCM': $('#inICM').val()
+                        },
+                        success: function (data) {
+                            if (data.cotacaoDesanexada = "Ok") {
+                                var msgComplementoAdm = "";
+
+                                if (parseInt($('#inEmpresaLogada').val()) == parseInt($('#inEmpresaAdmCC').val())) {
+                                    msgComplementoAdm = "Como ADMINISTRADOR desta Central de Compras, caso não venha RE-ANEXAR até a data informada, esta COTAÇÃO entrará em MODO de ESPERA até que seja EXCLUÍDA ou EDITADA e ENVIADA aos Fornecedores.";
+                                }
+                                else {
+                                    msgComplementoAdm = "Após essa data, você ficará impossibilitado de PARTICIPAR desta COTAÇÃO.";
+                                }
+
+                                swal.close(); //FECHA SWAL MSG
+
+                                //EXIBE MSG LATERAL À DIREITA SUPERIOR
+                                new PNotify({
+                                    title: 'Sucesso!',
+                                    text: 'Sua COTAÇÃO INDIVIDUAL foi DESANEXADA!\n\nVocê tem até o dia ' + data.dataLimiteAnexar + ' para RE-ANEXAR.\n\n' + msgComplementoAdm,
+                                    type: 'success',
+                                    styling: 'bootstrap3',
+                                    icons: 'bootstrap3',
+                                    addclass: 'customsuccess',
+                                    animateSpeed: 'fast',
+                                    mouseReset: true,
+                                    Buttons: {
+                                        closer: true
+                                    }
+                                });
+
+                                if ($('#inCotacaoMasterEnviada').val() == "nao") {
+                                    $('#inCotacaoAnexada').val('nao');
+                                    $('#inDesaAnexarMinhaCotacaoCC').hide();
+                                    $('#inDescartarProdutosCotados').show();
+                                    $('#inAnexarMinhaCotacaoCC').show();
+
+                                    $("#inBtnAdicionar").attr("disabled", false);
+                                    $(".cotacao").prop("disabled", false);
+
+                                    $('#gridItensDaCotacaoIndividual').bootgrid('reload');
+                                }
+                            }
+                        }
+                    });
+                }
+                @*else {
+                    debugger;
+
+                swal({
+                    title: "Você será redirecionado para a página inicial.\n\nEquipe Cliente & Mercado.", type: "warning"
+                },
+                function () {
+                    debugger;
+
+                    //DESVIAR para PÁGINA INICIAL
+                    window.location.href = "@Url.Action("Index", "Home", new { Area = "Company" })";
+                });
+
+                e.preventDefault();
+            }*@
+            });
+        //----------------------------------------------------------
+        });
+
+        //CHECAR a DATA de ENCERRAMENTO da COTAÇÃO
+        $("#inDataEncerramento").blur(function () {
+            var msg = "";
+            var dataInformadaPartes = $("#inDataEncerramento").val().split("/");
+            var dataMinimaAceitaPartes = $('#inDataMinimaEncerramento').val().split("/");
+            var dataMaximaAceitaPartes = $('#inDataMaximaEncerramento').val().split("/");
+
+            var dataInformada = new Date(dataInformadaPartes[1] + "/" + dataInformadaPartes[0] + "/" + dataInformadaPartes[2]);
+            var dataMinimaAceita = new Date(dataMinimaAceitaPartes[1] + "/" + dataMinimaAceitaPartes[0] + "/" + dataMinimaAceitaPartes[2]);
+            var dataMaximaAceita = new Date(dataMaximaAceitaPartes[1] + "/" + dataMaximaAceitaPartes[0] + "/" + dataMaximaAceitaPartes[2]);
+
+            if ($("#inDataEncerramento").val() != "") {
+                if (new Date(dataInformada.getFullYear(), dataInformada.getMonth(), dataInformada.getDate()) >
+                         new Date(dataMaximaAceita.getFullYear(), dataMaximaAceita.getMonth(), dataMaximaAceita.getDate())) {
+                    msg = 'ATENÇÃO!\n\nA DATA de ENCERRAMENTO não pode ultrapassar o dia: ' + $('#inDataMaximaEncerramento').val();
+                }
+
+                if (new Date(dataInformada.getFullYear(), dataInformada.getMonth(), dataInformada.getDate()) <
+                         new Date(dataMinimaAceita.getFullYear(), dataMinimaAceita.getMonth(), dataMinimaAceita.getDate())) {
+                    msg = 'ATENÇÃO!\n\nA DATA de ENCERRAMENTO não pode ser menor que o dia: ' + $('#inDataMinimaEncerramento').val();
+                }
+            }
+            else {
+                msg = "ATENÇÃO!\n\nInforme uma DATA de ENCERRAMENTO para esta COTAÇÃO.";
+            }
+
+            if (msg != "") {
+                swal({
+                    title: msg, type: "warning"
+                },
+                function () {
+                    debugger;
+
+                    $("#inDataEncerramento").focus();
+                });
+            }
+        });
+
+        //Botão GRAVAR
+        $(document).on("click", "#inGravarCotacaoMaster", function () {
+            //VALIDANDO o PREENCHIMENTO dos CAMPOS
+            debugger;
+
+            var cont = 0;
+            var msg = "";
+            var obj = {};
+            var aviso = 0;
+            var mensagem = "ATENÇÃO!!!\n\nOs CAMPOS em vermelho, são de preenchimento obrigatório!"
+
+            $("input[type=text]").each(function () {
+                debugger;
+
+                $(this).css({ "border": "1px solid #ccc", "padding": "2px" });
+                var input = $(this).val();
+                console.log($(this).attr("campo") + " " + input);
+
+                if (($("#inNomeCotacao").val() == "") || (parseInt($("#inTipoDeCotacao").val()) == parseInt(0))) {
+                    aviso = 1;
+
+                    //if ($(this).hasClass('validacao'))
+                    //    msg += $(this).attr("campo") + "\n";
+
+                    if ($("#inNomeCotacao").val() == "") {
+                        $("#inNomeCotacao").css({ "border": "1px solid #F00", "padding": "2px" });
+                    }
+
+                    if (($("#inDataEncerramento").val() == "") || (parseInt($("#inDataEncerramento").val()) == parseInt(0))) {
+                        $("#inDataEncerramento").css({ "border": "1px solid #F00", "padding": "2px" });
+                    }
+
+                    if (($("#inTipoDeCotacao").val() == "") || (parseInt($("#inTipoDeCotacao").val()) == parseInt(0))) {
+                        $("#inTipoDeCotacao").css({ "border": "1px solid #F00", "padding": "2px" });
+                    }
+                }
+                else if (($(this).val() != ""))
+                    obj[$(this).attr("id")] = $(this).val();
+            });
+
+            //VERIFICANDO CAMPOS
+            if (aviso == 1) {
+                swal({
+                    title: mensagem, type: "warning"
+                },
+                    function () {
+                        if ($("#inNomeCotacao").val() == "") {
+                            $("#inNomeCotacao").focus();
+                        }
+                        else if ($("#inTipoDeCotacao").val() == "") {
+                            $("#inTipoDeCotacao").focus();
+                        }
+                    });
+            }
+            else {
+                //GERAR COTAÇÃO MASTER
+                debugger;
+
+                //var jsonString = JSON.stringify(tiposCotacao);
+
+                $.ajax({
+                    type: "POST",
+                    url: "/NossasCentraisDeCompras/GerarCotacaoMaster",
+                    dataType: 'json',
+                    data: {
+                        'nomeCotacao': $("#inNomeCotacao").val(),
+                        'dataEncerramento': $('#inDataEncerramento').val(),
+                        'tipoCotacao': $("#inTipoDeCotacao").val(),
+                        'cRamoAtividade': $("#inCodRamoAtividade").val(),
+                        'cCC': $('#inCCC').val(),
+                        'cadmCC': $('#inEmpresaAdmCC').val()
+                    },
+                    success: function (data) {
+                        if (data.cotacaoMasterGerada = "Ok") {
+                            debugger;
+
+                            swal({
+                                title: "A Cotação:\n\n" + $("#inNomeCotacao").val().toUpperCase() + "\n\nfoi registrada com SUCESSO!\n\nNos campos abaixo, informe os produtos que deseja cotar.\nEles serão juntados aos produtos a serem cotados pelos seus parceiros na Central de Compras e enviado aos FORNECEDORES, que retornarão seus preços.\nDesejamos a vocês uma boa negociação e excelentes compras!\n\nEquipe Cliente & Mercado ", type: "warning"
+                            },
+                            function () {
+                                debugger;
+
+                                //RECARREGA PÁG. NOVA COTAÇÃO
+                                window.location.href = "@Url.Action("NovaCotacao", "NossasCentraisDeCompras", new { Area = "Company" })" + "?cCC=" + $("#inCCC").val() + "&tP=ed" + "&iCM=" + data.iCM;
+                            });
+                        }
+                    }
+                });
+            }
+        });
+
+        //Ajax do Autocomplete dos PRODUTOS
+        $('#inNomeProdutoCotacao').autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    type: "POST",
+                    url: "/NossasCentraisDeCompras/AutoCompleteItensProdutosParaCotacoes",
+                    dataType: "json",
+                    data: {
+                        'term': $("#inNomeProdutoCotacao").val()
+                    },
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return {
+                                label: item.DESCRICAO_PRODUTO_SERVICO,
+                                value: item.ID_CODIGO_PRODUTOS_SERVICOS_EMPRESAS_PROFISSIONAIS
+                            };
+                        }));
+                    }
+                });
+            },
+            select: function (event, ui) {
+                debugger;
+
+                $("#inNomeProdutoCotacao").val(ui.item.label);
+                $("#inNomeProdutoNoBanco").val(ui.item.label);
+                $('#inCodProdutoSelecionado').val(ui.item.value);
+                $('#inQuantidadeProdutoCotacao').focus();
+
+                return false;
+            },
+            minLength: 3
+        });
+
+        //Ajax do Autocomplete dos FABRICANTES / MARCAS
+        $('#inEmbalagem').autocomplete({
+            source: function (request, response) {
+                var codProduto = 0;
+
+                if ($('#inCodProdutoSelecionado').val() != "") {
+                    codProduto = $('#inCodProdutoSelecionado').val();
+                }
+
+                $.ajax({
+                    type: "POST",
+                    url: "/NossasCentraisDeCompras/AutoCompleteProdutoEmbalagens",
+                    dataType: "json",
+                    data: {
+                        'term': $("#inEmbalagem").val(),
+                        'codProduto': codProduto
+                    },
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return {
+                                label: item.DESCRICAO_PRODUTO_EMBALAGEM,
+                                value: item.ID_EMPRESAS_PRODUTOS_EMBALAGENS
+                            };
+                        }));
+                    }
+                });
+            },
+            select: function (event, ui) {
+                $("#inEmbalagem").val(ui.item.label);
+                $("#inNomeEmbalagemNoBanco").val(ui.item.label);
+                $("#inCodEmbalagem").val(ui.item.value);
+
+                return false;
+            },
+            minLength: 2
+        });
+
+        $("#inEmbalagem").blur(function () {
+            debugger;
+
+            if ($("#inNomeEmbalagemNoBanco").val().toUpperCase() != $("#inEmbalagem").val().toUpperCase()) {
+                    $("#inNomeEmbalagemNoBanco").val('');
+                    $("#inCodEmbalagem").val('');
+            }
+        });
+
+        //Ajax do Autocomplete dos FABRICANTES / MARCAS
+        $('#inMarcaFabricanteDoProduto').autocomplete({
+            source: function (request, response) {
+                var codProduto = 0;
+
+                if ($('#inCodProdutoSelecionado').val() != "") {
+                    codProduto = $('#inCodProdutoSelecionado').val();
+                }
+
+                $.ajax({
+                    type: "POST",
+                    url: "/NossasCentraisDeCompras/AutoCompleteFabricantesEMarcas",
+                    dataType: "json",
+                    data: {
+                        'term': $("#inMarcaFabricanteDoProduto").val(),
+                        'codProduto': codProduto
+                    },
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return {
+                                label: item.DESCRICAO_EMPRESA_FABRICANTE_MARCAS,
+                                value: item.ID_CODIGO_EMPRESA_FABRICANTE_MARCAS
+                            };
+                        }));
+                    }
+                });
+            },
+            select: function (event, ui) {
+                $("#inMarcaFabricanteDoProduto").val(ui.item.label);
+                $("#inMarcaFabricanteNoBanco").val(ui.item.label);
+                $("#inCodMarcaFabricante").val(ui.item.value);
+
+                return false;
+            },
+            minLength: 3
+        });
+
+        //BOTÃO ADICIONAR ITENS na COTAÇÃO
+        $(document).on("click", "#inBtnAdicionar", function () {
+            debugger;
+
+            var cont = 0;
+            var msg = "";
+            var obj = {};
+            var aviso = 0;
+            var mensagem = "ATENÇÃO!!!\n\nOs CAMPOS em vermelho, são de preenchimento obrigatório!"
+
+            $("input[type=text]").each(function () {
+                //debugger;
+
+                $(this).css({ "border": "1px solid #ccc", "padding": "2px" });
+                var input = $(this).val();
+                console.log($(this).attr("campo") + " " + input);
+
+                if (($("#inNomeProdutoCotacao").val() == "") || (($("#inQuantidadeProdutoCotacao").val() == "") || (parseFloat($("#inQuantidadeProdutoCotacao").val()) == parseInt(0))) || (parseInt($("#inListaUnidadesProdutosACotar").val()) == parseInt(0))) {
+                    aviso = 1;
+
+                    //if ($(this).hasClass('validacao'))
+                    //    msg += $(this).attr("campo") + "\n";
+
+                    if ($("#inNomeProdutoCotacao").val() == "") {
+                        $("#inNomeProdutoCotacao").css({ "border": "1px solid #F00", "padding": "2px" });
+                    }
+
+                    if (($("#inQuantidadeProdutoCotacao").val() == "") || (parseFloat($("#inQuantidadeProdutoCotacao").val()) == parseInt(0))) {
+                        $("#inQuantidadeProdutoCotacao").css({ "border": "1px solid #F00", "padding": "2px" });
+                    }
+
+                    if (parseInt($("#inListaUnidadesProdutosACotar").val()) == parseInt(0)) {
+                        $("#inListaUnidadesProdutosACotar").css({ "border": "1px solid #F00", "padding": "2px" });
+                    }
+                }
+                else if (($(this).val() != ""))
+                    obj[$(this).attr("id")] = $(this).val();
+            });
+
+            //VERIFICANDO CAMPOS
+            if (aviso == 1) {
+                swal({
+                    title: mensagem, type: "warning"
+                },
+                    function () {
+                        if ($("#inNomeProdutoCotacao").val() == "") {
+                            $("#inNomeProdutoCotacao").focus();
+                        }
+                        else if (($("#inQuantidadeProdutoCotacao").val() == "") || (parseFloat($("#inQuantidadeProdutoCotacao").val()) == parseInt(0))) {
+                            $("#inQuantidadeProdutoCotacao").focus();
+                        }
+                        else if (parseInt($("#inListaUnidadesProdutosACotar").val()) == parseInt(0)) {
+                            $("#inListaUnidadesProdutosACotar").focus();
+                        }
+                    });
+            }
+            else {
+                //ADICIONAR / GRAVAR PRODUTO NA COTAÇÃO INDIVIDUAL da EMPRESA
+                debugger;
+
+                var codProduto = 0;
+                var codMarcaFabricante = 0;
+                var quantidadeProdutoCotacao = $('#inQuantidadeProdutoCotacao').val().replace('.', '').replace('.', '').replace(',', '.');
+                var descricaoEmbalagem = $('#inEmbalagem').val()
+                var codEmbalagem = 0;
+
+                //OBS: O campo ($("#inNomeProdutoNoBanco").val() armazena do lado do cliente, o nome original do produto no banco, caso o usuário desista do PRODUTO escolhido no AutoComplete
+                //     e insira um complemento no nome por conta propria, ou digite um novo nome para o produto. A validação abaixo corrige isso.
+                if (($('#inCodProdutoSelecionado').val() != "") && ($("#inNomeProdutoNoBanco").val().indexOf($("#inNomeProdutoCotacao").val()) != -1)) {
+                    codProduto = $('#inCodProdutoSelecionado').val();
+                }
+
+                //if ($('#inCodMarcaFabricante').val() != "") {
+                if (($('#inCodMarcaFabricante').val() != "") && ($("#inMarcaFabricanteNoBanco").val().indexOf($("#inMarcaFabricanteDoProduto").val()) != -1)) {
+                    codMarcaFabricante = $('#inCodMarcaFabricante').val();
+                }
+
+                if (($('#inCodEmbalagem').val() != null) && (parseInt($('#inCodEmbalagem').val()) > 0)) {
+                    codEmbalagem = $('#inCodEmbalagem').val();
+                }
+
+                ////var jsonString = JSON.stringify(tiposCotacao);
+
+                $.ajax({
+                    type: "POST",
+                    url: "/NossasCentraisDeCompras/AdicionarProdutosNaCotacaoIndividual",
+                    dataType: 'json',
+                    data: {
+                        'cCC': $('#inCCC').val(),
+                        'iPCC': $('#inIPCC').val(),
+                        'iCM': $('#inICM').val(),
+                        'iCI': $('#inICI').val(),
+                        'codProduto': codProduto,
+                        'codMarcaFabricante': codMarcaFabricante,
+                        'descricaoProduto': $("#inNomeProdutoCotacao").val(),
+                        'descricaoMarcaFabricante': $('#inMarcaFabricanteDoProduto').val(),
+                        'codGrupoAtividades': $('#inCodRamoAtividade').val(),
+                        'codUnidadeProduto': $('#inListaUnidadesProdutosACotar').val(),
+                        'quantidadeDoItem': quantidadeProdutoCotacao,
+                        'descricaoEmbalagem': descricaoEmbalagem,
+                        'codEmbalagem': codEmbalagem
+                    },
+                    success: function (data) {
+                        if (data.produtoAdicionadoNaCotacaoIndividual = "Ok") {
+                            debugger;
+
+                            swal.close(); //FECHA SWAL MSG
+
+                            //EXIBE MSG LATERAL À DIREITA SUPERIOR
+                            new PNotify({
+                                title: 'Sucesso!',
+                                text: 'PRODUTO ADICIONADO na COTAÇÃO!',
+                                type: 'success',
+                                styling: 'bootstrap3',
+                                icons: 'bootstrap3',
+                                addclass: 'customsuccess',
+                                animateSpeed: 'fast',
+                                mouseReset: true,
+                                Buttons: {
+                                    closer: true
+                                }
+                            });
+
+                            $("#inICI").val(data.idCotacaoIndividualEmpresa);
+
+                            $("#inNomeProdutoCotacao").val('');
+                            $("#inNomeProdutoNoBanco").val('');
+                            $("#inCodProdutoSelecionado").val('');
+                            $("#inQuantidadeProdutoCotacao").val('');
+                            $("#inListaUnidadesProdutosACotar").val(0);
+                            $("#inEmbalagem").val('');
+                            $("#inNomeEmbalagemNoBanco").val('');
+                            $("#inCodEmbalagem").val('');
+                            $("#inMarcaFabricanteDoProduto").val('');
+                            $("#inMarcaFabricanteNoBanco").val('');
+                            $("#inCodMarcaFabricante").val('');
+
+                            $('#gridItensDaCotacaoIndividual').bootgrid('reload');
+
+                            $("#inNomeProdutoCotacao").focus();
+                        }
+                    }
+                });
+            }
+        });
+
+    });
+</script>

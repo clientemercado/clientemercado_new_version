@@ -1,0 +1,30 @@
+﻿@model ClienteMercado.Models.tipo_empresa_usuario
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<fieldset>
+    <legend>tipo_empresa_usuario</legend>
+
+    <div class="display-label">ID_CODIGO_TIPO_EMPRESA_USUARIO</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.ID_CODIGO_TIPO_EMPRESA_USUARIO)
+    </div>
+
+    <div class="display-label">DESCRICAO_TIPO_EMPRESA_USUARIO</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.DESCRICAO_TIPO_EMPRESA_USUARIO)
+    </div>
+
+    <div class="display-label">FISICA_JURIDICA_EMPRESA_USUARIO</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.FISICA_JURIDICA_EMPRESA_USUARIO)
+    </div>
+</fieldset>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { /* id=Model.PrimaryKey */ }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

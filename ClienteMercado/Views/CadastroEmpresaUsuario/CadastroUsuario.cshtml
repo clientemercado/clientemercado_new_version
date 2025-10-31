@@ -1,0 +1,147 @@
+﻿@model ClienteMercado.Models.CadastroUsuarioModel
+
+@{
+    ViewBag.Title = "CadastroUsuario";
+    Layout = "~/Views/Shared/_Layout-Others-Home.cshtml";
+}
+
+<div id="label_titulo_paginas_contato" class="label_paginas">&nbsp;&nbsp;Cadastro do Usuário - Passo 3 de 3</div>
+
+<div id="container_cadastro_empresa_usuario">
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true)
+
+        <div id="campos_cadastro_empresa" class="campos_cadastro_nova_empresa_usuario">
+@*          <div id="loading" class="carregando"></div>
+
+            <div id="secao_cnpj_cpf" class="formata_campos_cadastro">
+                <div id="label_cnpj_cpf" class="formata_label">
+                    @Html.LabelFor(m => m.CNPJ_CPF_EMPRESA_USUARIO)
+                </div>
+                <div id="campo_cnpj_cpf" class="">
+                    @Html.TextBoxFor(m => m.CNPJ_CPF_EMPRESA_USUARIO, new { style = "font-family: 'Verdana', Geneva, sans-serif; width: 160px;", maxlength = 18, @id = "CNPJ_CPF_EMPRESA_USUARIO", @onClick="limparCampoCNPJ();", @onKeyDown="FormataCNPJ(this, event);", @tabindex = "1" })
+                    <div id="mensagemErroCnpj">@Html.ValidationMessageFor(m => m.CNPJ_CPF_EMPRESA_USUARIO, String.Empty)</div>
+                </div>
+            </div>
+            <div id="secao_razao_social" class="formata_campos_cadastro">
+                <div id="label_razao_social" class="formata_label">
+                    @Html.LabelFor(m => m.RAZAO_SOCIAL_EMPRESA)
+                </div>
+                <div id="campo_razao_social" class="">
+                    @Html.TextBoxFor(m => m.RAZAO_SOCIAL_EMPRESA, new { style = "font-family: 'Verdana', Geneva, sans-serif; width: 500px;", maxlength = 100, @tabindex = "2" })
+                    @Html.ValidationMessageFor(m => m.RAZAO_SOCIAL_EMPRESA, String.Empty)
+                </div>
+            </div>
+            <div id="secao_nome_fantasia" class="formata_campos_cadastro">
+                <div id="label_nome_fantasia" class="formata_label">
+                    @Html.LabelFor(m => m.NOME_FANTASIA_EMPRESA)
+                </div>
+                <div id="campo_nome_fantasia" class="">
+                    @Html.TextBoxFor(m => m.NOME_FANTASIA_EMPRESA, new { style = "font-family: 'Verdana', Geneva, sans-serif; width: 500px;", maxlength = 100, @tabindex = "3" })
+                    @Html.ValidationMessageFor(m => m.NOME_FANTASIA_EMPRESA, String.Empty)
+                </div>
+            </div>
+            <div id="secao_email1" class="formata_campos_cadastro">
+                <div id="label_email1" class="formata_label">
+                    @Html.LabelFor(m => m.EMAIL1_EMPRESA)
+                </div>
+                <div id="campo_email1" class="">
+                    @Html.TextBoxFor(m => m.EMAIL1_EMPRESA, new { style = "font-family: 'Verdana', Geneva, sans-serif; width: 330px;", maxlength = 50, @tabindex = "4" })
+                    @Html.ValidationMessageFor(m => m.EMAIL1_EMPRESA, String.Empty)
+                </div>
+            </div>
+            <div id="secao_localizacao1" class="formata_campos_cadastro">
+                <div id="label_pais" class="formata_label">
+                    @Html.LabelFor(m => m.PAIS_EMPRESA_USUARIO)
+                </div>
+                <div id="campo_pais" class="formata_label">
+                    @Html.DropDownList("PAIS_EMPRESA_USUARIO", Model.ListagemPaises, new { style = "font-family: 'Verdana', Geneva, sans-serif; width: 100px;", @tabindex = "5" }) 
+                    @Html.ValidationMessageFor(m => m.PAIS_EMPRESA_USUARIO, String.Empty)
+                </div>
+                <div id="label_cep" class="formata_label_2">
+                    @Html.LabelFor(m => m.CEP_SEQUENCIAL_ENDERECO , new { style = "margin-left:38px;"})
+                </div>
+                <div id="campo_cep" class="">
+                    @Html.TextBoxFor(m => m.CEP_SEQUENCIAL_ENDERECO, new { style = "font-family: 'Verdana', Geneva, sans-serif; width: 80px; margin-left:58px;", maxlength = 9, @id="CEP_SEQUENCIAL_ENDERECO",  @onClick="limparCampoCEP();", @onkeypress="return MM_formtCep(event,this,'#####-###');", @tabindex = "6" })
+                    @Html.HiddenFor(m => m.ID_CODIGO_ENDERECO_EMPRESA_USUARIO)
+                    <div id="mensagemErroCep">@Html.ValidationMessageFor(m => m.CEP_SEQUENCIAL_ENDERECO, String.Empty)</div>
+                </div>
+            </div>
+            <div id="secao_localizacao2" class="formata_campos_cadastro">
+                <div id="label_endereco" class="formata_label">
+                    @Html.LabelFor(m => m.ENDERECO_EMPRESA_USUARIO)
+                </div>
+                <div id="campo_endereco" class="">
+                    @Html.TextBoxFor(m => m.ENDERECO_EMPRESA_USUARIO, new { style = "font-family: 'Verdana', Geneva, sans-serif; width: 500px;", maxlength = 100, @tabindex = "7" })
+                    @Html.ValidationMessageFor(m => m.ENDERECO_EMPRESA_USUARIO, String.Empty)
+                </div>
+            </div>
+            <div id="secao_localizacao3" class="formata_campos_cadastro">
+                <div id="label_complemento" class="formata_label">
+                    @Html.LabelFor(m => m.COMPLEMENTO_ENDERECO_EMPRESA_USUARIO)
+                </div>
+                <div id="campo_complemento" class="">
+                    @Html.TextBoxFor(m => m.COMPLEMENTO_ENDERECO_EMPRESA_USUARIO, new { style = "font-family: 'Verdana', Geneva, sans-serif; width: 500px;", maxlength = 50, @tabindex = "8" })
+                    @Html.ValidationMessageFor(m => m.COMPLEMENTO_ENDERECO_EMPRESA_USUARIO, String.Empty)
+                </div>
+            </div>
+            <div id="secao_localizacao4" class="formata_campos_cadastro">
+                <div id="label_estado" class="formata_label">
+                    @Html.LabelFor(m => m.NOME_ESTADO_EMPRESA_USUARIO)
+                </div>
+                <div id="campo_estado" class="">
+                    @Html.TextBoxFor(m => m.NOME_ESTADO_EMPRESA_USUARIO, new { style = "font-family: 'Verdana', Geneva, sans-serif; width: 140px;", maxlength = 50, @tabindex = "9" })
+                    @Html.ValidationMessageFor(m => m.NOME_ESTADO_EMPRESA_USUARIO, String.Empty)
+                </div>
+            </div>
+            <div id="secao_localizacao5" class="formata_campos_cadastro">
+                <div id="label_cidade" class="formata_label">
+                    @Html.LabelFor(m => m.NOME_CIDADE_EMPRESA_USUARIO)
+                </div>
+                <div id="campo_cidade" class="">
+                    @Html.TextBoxFor(m => m.NOME_CIDADE_EMPRESA_USUARIO, new { style = "font-family: 'Verdana', Geneva, sans-serif; width: 200px;", maxlength = 50, @tabindex = "10" })
+                    @Html.ValidationMessageFor(m => m.NOME_CIDADE_EMPRESA_USUARIO, String.Empty)
+                </div>
+            </div>
+            <div id="secao_localizacao6" class="formata_campos_cadastro">
+                <div id="label_bairro" class="formata_label">
+                    @Html.LabelFor(m => m.NOME_BAIRRO_EMPRESA_USUARIO)
+                </div>
+                <div id="campo_bairro" class="">
+                    @Html.TextBoxFor(m => m.NOME_BAIRRO_EMPRESA_USUARIO, new { style = "font-family: 'Verdana', Geneva, sans-serif; width: 200px;", maxlength = 50, @tabindex = "11" })
+                    @Html.ValidationMessageFor(m => m.NOME_BAIRRO_EMPRESA_USUARIO, String.Empty)
+                </div>
+            </div>*@
+            
+@*          <div id="secao_receber_emails" class="formata_campos_cadastro_check_email">
+                <div id="campo_receber_emails" class="formata_label">
+                    @Html.CheckBoxFor(m => m.RECEBER_EMAILS_EMPRESA, new { style = "margin-left: 118px;", @id = "RECEBER_EMAILS_EMPRESA", @value = 0, @onClick="setarEmail();" })
+                </div>
+                <div id="label_receber_emails" class="">
+                    @Html.LabelFor(m => m.RECEBER_EMAILS_EMPRESA)
+                </div>
+            </div>
+            <div id="leia_termos_politica" class="formata_termo_politica">
+                <span class="texto_normal">Leia os</span>&nbsp;&nbsp;@Html.ActionLink("Termos de Uso", "Termos", "CadastroEmpresaUsuario", new { @class = "linkdois" })&nbsp;<span class="texto_normal">e</span>&nbsp;@Html.ActionLink("Política de Privacidade", "Politica", "CadastroEmpresaUsuario", new { @class = "linkdois" })
+            </div>*@
+
+            <br/>
+            <div id="bt_submit" class="formata_campos_cadastro_button">
+                <input type="submit" value="Aceitar os Termos de Uso e Cadastrar" class="i2Style"/>
+            </div>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script type="text/javascript">
+        jQuery(function ($) {
+            //Posiciona o cursor  no primeiro campo da página
+            $("input[type=text]").first().focus();
+        });
+    </script>
+}

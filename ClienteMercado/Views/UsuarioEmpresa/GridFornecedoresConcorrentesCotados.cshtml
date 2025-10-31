@@ -1,0 +1,31 @@
+﻿@model  ClienteMercado.Models.ResponderCotacaoRecebida
+
+@*<div class="row">*@
+    @{
+        <!-- Monta o Grid com a Lista de FORNECEDORES que receberam a cotação do USUÁRIO COTANTE -->
+        WebGrid grid = new WebGrid(Model.ListagemFornecedoresDaCotacao, canPage: true, rowsPerPage: 30);
+        @grid.GetHtml(
+                htmlAttributes: new { id = "gridFornecedoresDaCotacao" },
+                headerStyle: "DataGridHeader",
+                alternatingRowStyle: "DataGridAlternateItemStyle",
+                columns: grid.Columns(
+                    grid.Column("", header: "Empresa", format: @<text><i class="fa fa-caret-right"></i> <font color="#000000">@item.nome_empresa_fornecedor</font></text>),
+                    grid.Column("", header: "Cidade", format: @<text><font color="#000000">@item.cidade_empresa_fornecedor</font></text>),
+                    grid.Column("", header: "U.F.", format: @<text><font color="#000000">@item.estado_empresa_fornecedor</font></text>),
+                    grid.Column("", header: "Atendente", format: @<text>&nbsp;<font color="#000000">@item.usuario_respondendo_empresa_fornecedor</font></text>),
+                    grid.Column("", header: "Respondido", format: @<text>@if (@item.respondido_empresa_fornecedor == "SIM")
+                    {
+                        @*<div style="text-align:center;"><b><font color="#0101DF"><a href="#" style="text-decoration:none">Ver resposta</a></font></b></div>*@
+                        <div style="text-align:center;"><font color="#0101DF">Respondeu</font></div>
+                    }
+                    else
+                    {
+                        <div style="text-align:center;"><font color="red">Não respondeu</font></div>
+                    }
+                    </text>)
+           ),
+           tableStyle: "table table-striped table-hover");
+
+    }
+
+@*</div>*@

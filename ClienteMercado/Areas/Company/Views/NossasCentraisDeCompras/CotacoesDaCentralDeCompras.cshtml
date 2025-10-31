@@ -1,0 +1,405 @@
+﻿@model  ClienteMercado.UI.Core.ViewModel.NossasCentraisDeComprasViewModel
+
+@{
+    ViewBag.Title = "Cotacoes Central De Compras";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="http://code.jquery.com/jquery-1.8.2.js"></script>
+<script src="http://code.jquery.com/ui/1.9.0/jquery-ui.js"></script>
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.9.0/themes/base/jquery-ui.css" />
+
+<style>
+    .HideColHead {
+        display: none
+    }
+
+    .HideCol {
+        display: none
+    }
+
+    th {
+        background-color: #CDC9C9;
+        color: white;
+    }
+
+    .status {
+        font-size: 9pt;
+    }
+
+    a:link {
+        text-decoration: none;
+    }
+</style>
+
+<div class="row">
+    @*<div class="col-md-12">*@
+    <!-- BEGIN VALIDATION STATES-->
+    <div class="portlet box blue">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="far fa-copy"></i> Cotações da Central de Compras
+            </div>
+        </div>
+        <div class="portlet-body form">
+            <!-- BEGIN FORM-->
+            <form action="#" class="form-horizontal">
+                <div class="form-body">
+                    <div class="form-group" id="cabecalho" style="">
+                        <label class="col-md-2 control-label"><font color="#3297E0"><b>Central Compras:</b></font></label>
+                        <div class="col-md-4">
+                            <h5>@Model.inNomeCentralCompras</h5>
+                        </div>
+                        <label class="col-md-2 control-label"><font color="#3297E0"><b>Ramo Atividade:</b></font></label>
+                        <div class="col-md-4">
+                            <h5>@Model.inRamoAtividadeCC</h5>
+                        </div>
+                        <label class="col-md-2 control-label"><font color="#3297E0"><b>Administradora:</b></font></label>
+                        <div class="col-md-4">
+                            <h5>@Model.inEmpresaLogadaAdmCC</h5>
+                        </div>
+                        <label class="col-md-2 control-label"><font color="#3297E0"><b>Cidade:</b></font></label>
+                        <div class="col-md-4">
+                            <h5>@Model.inCidadeEmpresaAdmCC</h5>
+                        </div>
+                        <label class="col-md-2 control-label"><font color="#3297E0"><b>Usuário Resp:</b></font></label>
+                        <div class="col-md-4">
+                            <h5>@Model.inNomeUsuarioRespEmpresaAdmCC</h5>
+                        </div>
+                    </div>
+                    <hr />
+
+                    <div class="form-actions">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <a href="@Url.Action("Index", "NossasCentraisDeCompras")" class="btn default button-previous"><i class="fas fa-arrow-left"></i> Voltar</a>
+                                <a href="#" id="inNovaCotacaoCC" class="btn blue button-submit" style="display:none;"><i class="far fa-file"></i> Criar Nova Cotação</a>
+                                <a href="#" id="inAceitarConvite" class="btn btn-warning" style="display:none;"><i class="far fa-thumbs-up"></i> ACEITO PARTICIPAR</a>
+                                &nbsp;&nbsp;&nbsp;
+                                <a href="javascript:;" id="btn-pesquisar" class="btn blue button-submit" style="display:none;"><i class="fas fa-search"></i> Pesquisar</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <div class="col-md-12"><font color="#3297E0"><b>Cotação:</b></font></div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="col-md-9">
+                                <input type="text" name="name" id="inNomeCotacao" data-required="1" size="10" class="form-control campo" placeholder="Nome..." />
+                            </div>
+                            <div class="col-md-3">&nbsp;</div>
+                        </div>
+                    </div>
+                    <hr />
+
+                    <div class="form-group">
+                        <!-- BEGIN SAMPLE TABLE PORTLET-->
+                        <div class="portlet-body flip-scroll col-md-12">
+                            <table id="gridCotacoesDaCentralCompras" class="table table-bordered table-striped table-condensed flip-content">
+                                <thead class="flip-content">
+                                    <tr>
+                                        <th data-column-id="nomeDaCotacao" data-width="30%" data-formatter="link1">Cotação</th>
+                                        <th data-column-id="dataCriacaoDaCotacao" data-width="10%" data-formatter="link2">Dt. Envio</th>
+                                        <th data-column-id="dataEncerramentoCotacao" data-width="10%" data-formatter="link3">Dt. Encerra</th>
+                                        <th data-column-id="grupoAtividades" data-width="25%" data-formatter="link4">Ramo Atividade</th>
+                                        <th data-column-id="quantasEmpresas" data-width="7%" data-align="right" data-formatter="link5">Resp.</th>
+                                        <th data-formatter="commands" data-width="7%" data-align="center">Enviar</th>
+                                        <th data-column-id="statusCotacao" data-width="11%" data-align="center" data-formatter="status">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <!-- END FORM-->
+
+            <input type="hidden" id="inCCC" value="@Model.cCC" />
+            <input type="hidden" id="inAceitouConvite" value="@Model.inConviteAceitoCC" />
+            <input type="hidden" id="inUsuarioLogado" value="@Model.inNomeUsuarioLogado" />
+            <input type="hidden" id="inNomeCC" value="@Model.inNomeCentralCompras" />
+            <input type="hidden" id="inQuantidadeEmpresasDaCC" value="@ViewBag.quantasEmpresas" />
+            <input type="hidden" id="inCodigoEmpresaAdmCC" value="@Model.inCodEmpresaADM" />
+            <input type="hidden" id="inCodigoEmpresaLogada" value="@Model.inCodEmpresaLogada" />
+            <input type="hidden" id="inICM" value="" />
+            <input type="hidden" id="inRecarregaGrid" value="0" />
+        </div>
+    </div>
+    <!-- END VALIDATION STATES-->
+    @*</div>*@
+</div>
+<script>
+    jQuery(document).ready(function () {
+        debugger;
+
+        //-----------------------------------------------------------------------
+        if ($("#inAceitouConvite").val() == "sim") {
+            debugger;
+
+            //HABILITAR / DESABILITAR BOTÕES e CAMPOS
+            $('#btn-pesquisar').show();
+            $('#inAceitarConvite').hide();
+
+            if ($("#inCodigoEmpresaAdmCC").val() == $("#inCodigoEmpresaLogada").val()) {
+                $('#inNovaCotacaoCC').show();
+            }
+
+            $(".campo").prop("disabled", false);
+
+            //CARREGA o GRID com as COTAÇÕES
+            carregarGrid();
+        }
+        else {
+            //DESABILITAR / HABILITAR BOTÕES e CAMPOS
+            $('#inAceitarConvite').show();
+            $('#inNovaCotacaoCC').hide();
+            $('#btn-pesquisar').hide();
+
+            $(".campo").prop("disabled", true);
+
+            swal({ title: "Caro " + $('#inUsuarioLogado').val() + ",\nVocê e outra(s) " + $('#inQuantidadeEmpresasDaCC').val() + " empresa(s), foram convidados a participar da Central de Compras em grupo:\n\n" + $('#inNomeCC').val().toUpperCase() + ".\n\nParticipar, lhe permitirá ter acesso a novos FORNECEDORES e conseguir MELHORES PREÇOS nas compras em grupo, tornando sua empresa mais competitiva em seu segmento de mercado na sua região.\n\nEquipe Cliente & Mercado.", type: "warning", confirmButtonColor: "#337ab7" });
+        }
+        //-----------------------------------------------------------------------
+
+        $("#inNomeCotacao").autocomplete({
+            source: function (request, response) {
+                debugger;
+                var termo = $("#inNomeCotacao").val();
+
+                $.ajax({
+                    type: "POST",
+                    url: "/NossasCentraisDeCompras/BuscarListaDeNomesCotacaoesDaCC",
+                    dataType: "json",
+                    data: { 'term': termo },
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return {
+                                label: item.NOME_COTACAO_CENTRAL_COMPRAS,
+                                value: item.NOME_COTACAO_CENTRAL_COMPRAS
+                            };
+                        }));
+                    }
+                });
+            },
+            select: function (event, ui) {
+                debugger;
+
+                $("#inNomeCotacao").val(ui.item.value);
+                //$("#inListaDeRamosDeAtividade").val(0);
+                $('#gridCotacoesDaCentralCompras').bootgrid('reload');
+
+            }, minLength: 4,
+        });
+
+        ////CLIQUE do GRUPO de ATIVIDADES
+        //$(document).on("click", "#inListaDeRamosDeAtividade", function () {
+        //    $("#inNomeCotacao").val('');
+        //    //$('#gridCotacoesDaCentralCompras').bootgrid('reload'); //DESCOMENTAR DEPOIS que GRID e o CARREGAMENTO do mesmo estiver PRONTO...
+        //});
+
+        //BOTÃO PESQUISAR
+        $(document).on("click", "#btn-pesquisar", function () {
+            debugger;
+
+            if ($('#inNomeCotacao').val() != "") {
+                $('#gridCotacoesDaCentralCompras').bootgrid('reload');
+            }
+            else {
+                swal({ title: "ATENÇÃO:\n\nInforme um NOME de COTAÇÃO da Central de Compras para pesquisar.", type: "warning", confirmButtonColor: "#337ab7" });
+            }
+        });
+
+        //BOTÃO NOVA COTAÇÃO
+        $(document).on("click", "#inNovaCotacaoCC", function () {
+            debugger;
+
+            //REDIRECIONA para NOVA COTAÇÃO
+            window.location.href = "@Url.Action("NovaCotacao", "NossasCentraisDeCompras", new { Area = "Company" })" + "?cCC=" + $("#inCCC").val() + "&tP=nw" + "&iCM=0" ;
+        });
+
+        //BOTÃO ACEITAR CONVITE
+        $(document).on("click", "#inAceitarConvite", function () {
+            debugger;
+
+            $.ajax({
+                type: "POST",
+                url: "/NossasCentraisDeCompras/AceitarConviteCC",
+                dataType: "json",
+                data: { 'cCC': $("#inCCC").val() },
+                success: function (data) {
+                    if (data.conviteAceitoCC == "Ok") {
+                        swal({
+                            title: "O CONVITE para a Central de Compras em grupo:\n\n" + $('#inNomeCC').val().toUpperCase() + ".\n\nfoi ACEITO com SUCESSO!\nTodas as funcionalidades desta Central de Compras estão sendo liberadas para o seu uso.\nLhe desejamos sucesso em suas negociações.\n\nEquipe Cliente & Mercado.", type: "warning"
+                        },
+                        function () {
+                            debugger;
+
+                            //HABILITAR / DESABILITAR BOTÕES e CAMPOS
+                            //$('#inNovaCotacaoCC').show(); //VER ISSO AQUI MELHOR, se deve ser mantido desabilitado ou não
+                            $('#btn-pesquisar').show();
+                            $('#inAceitarConvite').hide();
+
+                            //CARREGA o GRID com as COTAÇÕES
+                            carregarGrid();
+                        });
+                    }
+                }
+            });
+        });
+
+    });
+
+    function carregarGrid() {
+        //CONSULTA os DADOS e CARREGA o GRID ao entrar na página
+        var grid = $('#gridCotacoesDaCentralCompras').bootgrid({
+            ajax: true,
+            navigation: 0, //CABEÇALHO: 2 - Exibe só RODAPÉ
+            columnSelection: false, //SELETOR de COLUNA: True - Habilita / False - Desabilita
+            url: "/NossasCentraisDeCompras/BuscarListaDeCotacoesDaCentraisDeCompras",
+            post: function () {
+                /* PARÂMETROS a serem enviados na REQUISIÇÃO AJAX */
+                return {
+                    'cCC': $('#inCCC').val(),
+                    'descricaoFiltro': $('#inNomeCotacao').val()
+                };
+            },
+            selection: true,
+            multiSelect: true,
+            rowSelect: true,
+            keepSelection: true,
+            formatters: {
+                "commands": function (column, row) {
+                    var hintCarrinho = "";
+                    var value = row.statusCotacao;
+
+                    if (value != "NOVA") {
+                        if (value == "COTANDO") {
+                            hintCarrinho = "Ver a COTAÇÃO ENVIADA";
+                            return "<button type=\"button\" class=\"btn btn-xs btn-default command-sendPrice\" data-row-id=\"" + row.ID_COTACAO_MASTER_CENTRAL_COMPRAS + "\" liberado=\"s\" title=\"" + hintCarrinho + "\"><font color=\"" + row.statusEnvioCotacao + "\"><span class=\"fas fa-search\"></span></font></button> ";
+                        }
+                        else {
+                            hintCarrinho = "ENVIAR a COTAÇÃO";
+                            return "<button type=\"button\" class=\"btn btn-xs btn-default command-sendPrice\" data-row-id=\"" + row.ID_COTACAO_MASTER_CENTRAL_COMPRAS + "\" liberado=\"s\" title=\"" + hintCarrinho + "\"><font color=\"" + row.statusEnvioCotacao + "\"><span class=\"fas fa-share-square\"></span></font></button> ";
+                        }
+                    }
+                    else {
+                        return "";
+                    }
+                },
+                "status": function (column, row) {
+                    /* Dynamically detect if it is UP or Down. */
+                    var value = row.statusCotacao;
+                    label = ((value === "NOVA") || (value === "EM ANDAMENTO") || (value === "AGUARDE") || (value === "COTANDO")) ? "success" : "danger";
+                    return "<span class='label label-" + label + "'><b>" + value + "</b></span>";
+                },
+                "link1": function(column, row)
+                {
+                    if ((row.temCotacaoAnexada == "sim") && (row.cotacaoJahEnviadaAosFornecedores == false)) {
+                        //REDIRECIONA para EDITAR a COTAÇÃO
+                        return "<a href=\"@Url.Action("VisualizarCotacao", "NossasCentraisDeCompras")?cCC=" + row.ID_CENTRAL_COMPRAS + "&tP=ed" + "&iCM=" + row.ID_COTACAO_MASTER_CENTRAL_COMPRAS + "\">" + row.nomeDaCotacao + "</a>";
+                    }
+                    else {
+                        if ((row.cotacaoJahEnviadaAosFornecedores) && (row.temCotacaoAnexada == "nao")) {
+                            return "<a href=\"@Url.Action("NovaCotacao", "NossasCentraisDeCompras")?cCC=" + row.ID_CENTRAL_COMPRAS + "&tP=ed" + "&iCM=" + row.ID_COTACAO_MASTER_CENTRAL_COMPRAS + "\" style='color: #FF0000;'>" + row.nomeDaCotacao + "</a>";
+                        }
+                        else {
+                            //REDIRECIONA para CRIAR NOVA COTAÇÃO
+                            return "<a href=\"@Url.Action("NovaCotacao", "NossasCentraisDeCompras")?cCC=" + row.ID_CENTRAL_COMPRAS + "&tP=ed" + "&iCM=" + row.ID_COTACAO_MASTER_CENTRAL_COMPRAS + "\">" + row.nomeDaCotacao + "</a>";
+                        }
+                    }
+                },
+                "link2": function (column, row) {
+                    if ((row.temCotacaoAnexada == "sim") && (row.cotacaoJahEnviadaAosFornecedores == false)) {
+                        //REDIRECIONA para EDITAR a COTAÇÃO
+                        return "<a href=\"@Url.Action("VisualizarCotacao", "NossasCentraisDeCompras")?cCC=" + row.ID_CENTRAL_COMPRAS + "&tP=ed" + "&iCM=" + row.ID_COTACAO_MASTER_CENTRAL_COMPRAS + "\">" + row.dataCriacaoDaCotacao + "</a>";
+                    }
+                    else {
+                        if ((row.cotacaoJahEnviadaAosFornecedores) && (row.temCotacaoAnexada == "nao")) {
+                            return "<a href=\"@Url.Action("NovaCotacao", "NossasCentraisDeCompras")?cCC=" + row.ID_CENTRAL_COMPRAS + "&tP=ed" + "&iCM=" + row.ID_COTACAO_MASTER_CENTRAL_COMPRAS + "\" style='color: #FF0000;'>" + row.dataCriacaoDaCotacao + "</a>";
+                        }
+                        else {
+                            //REDIRECIONA para CRIAR NOVA COTAÇÃO
+                            return "<a href=\"@Url.Action("NovaCotacao", "NossasCentraisDeCompras")?cCC=" + row.ID_CENTRAL_COMPRAS + "&tP=ed" + "&iCM=" + row.ID_COTACAO_MASTER_CENTRAL_COMPRAS + "\">" + row.dataCriacaoDaCotacao + "</a>";
+                        }
+                    }
+                },
+                "link3": function (column, row) {
+                    if ((row.temCotacaoAnexada == "sim") && (row.cotacaoJahEnviadaAosFornecedores == false)) {
+                        //REDIRECIONA para EDITAR a COTAÇÃO
+                        return "<a href=\"@Url.Action("VisualizarCotacao", "NossasCentraisDeCompras")?cCC=" + row.ID_CENTRAL_COMPRAS + "&tP=ed" + "&iCM=" + row.ID_COTACAO_MASTER_CENTRAL_COMPRAS + "\">" + row.dataEncerramentoCotacao + "</a>";
+                    }
+                    else {
+                        if ((row.cotacaoJahEnviadaAosFornecedores) && (row.temCotacaoAnexada == "nao")) {
+                            return "<a href=\"@Url.Action("NovaCotacao", "NossasCentraisDeCompras")?cCC=" + row.ID_CENTRAL_COMPRAS + "&tP=ed" + "&iCM=" + row.ID_COTACAO_MASTER_CENTRAL_COMPRAS + "\" style='color: #FF0000;'>" + row.dataEncerramentoCotacao + "</a>";
+                        }
+                        else {
+                            //REDIRECIONA para CRIAR NOVA COTAÇÃO
+                            return "<a href=\"@Url.Action("NovaCotacao", "NossasCentraisDeCompras")?cCC=" + row.ID_CENTRAL_COMPRAS + "&tP=ed" + "&iCM=" + row.ID_COTACAO_MASTER_CENTRAL_COMPRAS + "\">" + row.dataEncerramentoCotacao + "</a>";
+                        }
+                    }
+                },
+                "link4": function (column, row) {
+                    if ((row.temCotacaoAnexada == "sim") && (row.cotacaoJahEnviadaAosFornecedores == false)) {
+                        //REDIRECIONA para EDITAR a COTAÇÃO
+                        return "<a href=\"@Url.Action("VisualizarCotacao", "NossasCentraisDeCompras")?cCC=" + row.ID_CENTRAL_COMPRAS + "&tP=ed" + "&iCM=" + row.ID_COTACAO_MASTER_CENTRAL_COMPRAS + "\">" + row.grupoAtividades + "</a>";
+                    }
+                    else {
+                        if ((row.cotacaoJahEnviadaAosFornecedores) && (row.temCotacaoAnexada == "nao")) {
+                            return "<a href=\"@Url.Action("NovaCotacao", "NossasCentraisDeCompras")?cCC=" + row.ID_CENTRAL_COMPRAS + "&tP=ed" + "&iCM=" + row.ID_COTACAO_MASTER_CENTRAL_COMPRAS + "\" style='color: #FF0000;'>" + row.grupoAtividades + "</a>";
+                        }
+                        else {
+                            //REDIRECIONA para CRIAR NOVA COTAÇÃO
+                            return "<a href=\"@Url.Action("NovaCotacao", "NossasCentraisDeCompras")?cCC=" + row.ID_CENTRAL_COMPRAS + "&tP=ed" + "&iCM=" + row.ID_COTACAO_MASTER_CENTRAL_COMPRAS + "\">" + row.grupoAtividades + "</a>";
+                        }
+                    }
+                },
+                "link5": function (column, row) {
+                    if ((row.temCotacaoAnexada == "sim") && (row.cotacaoJahEnviadaAosFornecedores == false)) {
+                        //REDIRECIONA para EDITAR a COTAÇÃO
+                        return "<a href=\"@Url.Action("VisualizarCotacao", "NossasCentraisDeCompras")?cCC=" + row.ID_CENTRAL_COMPRAS + "&tP=ed" + "&iCM=" + row.ID_COTACAO_MASTER_CENTRAL_COMPRAS + "\">" + row.quantasEmpresas + "</a>";
+                    }
+                    else {
+                        if ((row.cotacaoJahEnviadaAosFornecedores) && (row.temCotacaoAnexada == "nao")) {
+                            return "<a href=\"@Url.Action("NovaCotacao", "NossasCentraisDeCompras")?cCC=" + row.ID_CENTRAL_COMPRAS + "&tP=ed" + "&iCM=" + row.ID_COTACAO_MASTER_CENTRAL_COMPRAS + "\" style='color: #FF0000;'>" + row.quantasEmpresas + "</a>";
+                        }
+                        else {
+                            //REDIRECIONA para CRIAR NOVA COTAÇÃO
+                            return "<a href=\"@Url.Action("NovaCotacao", "NossasCentraisDeCompras")?cCC=" + row.ID_CENTRAL_COMPRAS + "&tP=ed" + "&iCM=" + row.ID_COTACAO_MASTER_CENTRAL_COMPRAS + "\">" + row.quantasEmpresas + "</a>";
+                        }
+                    }
+                }
+            }
+        }).on("loaded.rs.jquery.bootgrid", function () {
+            /* Executa depois que os dados são carregados e renderizados */
+
+            //PARTICIPAR da CENTRAL de COMPRAS
+            grid.find(".command-sendPrice").on("click", function (e) {
+                debugger;
+
+                var podeEnviar = $(this).attr('liberado');
+                var codCentralCompras = $('#inCCC').val();
+                var codCotacaoMaster = $(this).attr('data-row-id');
+
+                //if (podeEnviar == "sim") {
+                    //if ($('#inCodigoEmpresaLogada').val() == $('#inCodigoEmpresaAdmCC').val()) {
+                        //REMETE para a tela de ENVIAR COTAÇÃO
+                        debugger;
+
+                        window.location.href = "@Url.Action("AnalisarEnviarCotacao", "NossasCentraisDeCompras", new { Area = "Company" })" + "?iCM=" + codCotacaoMaster + "&cCC=" + codCentralCompras + "&lib=" + podeEnviar;
+                        window.location.href = url;
+                    //}
+                    //else {
+                    //    swal({ title: "ATENÇÃO:\n\nSomente a EMPRESA ADMINISTRADORA desta Central De Compras, pode ENVIAR a COTAÇÃO para os FORNECEDORES.", type: "warning", confirmButtonColor: "#337ab7" });
+                    //}
+                //}
+                //else {
+                //    $('#gridCotacoesDaCentralCompras').bootgrid('reload');
+                //}
+            });
+        });;
+
+    }
+</script>

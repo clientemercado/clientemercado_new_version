@@ -1,0 +1,191 @@
+﻿@model  ClienteMercado.Models.ResponderCotacaoRecebida
+
+@*<div class="row">*@
+    @{
+        <!-- Monta o Grid com a Lista de COTAÇÕES enviadas pelo USUÁRIO COTANTE -->
+        WebGrid grid = new WebGrid(Model.ListagemProdutosDaCotacaoRecebida, canPage: true, rowsPerPage: 30);
+        @grid.GetHtml(
+                htmlAttributes: new { id = "gridProdutosCotacao" },
+                headerStyle: "DataGridHeader",
+                alternatingRowStyle: "DataGridAlternateItemStyle",
+                columns: grid.Columns(
+                    grid.Column("", header: "Produto", format: @<text><i class="fa fa-caret-right"></i> <font color="#000000">@item.nome_produto</font></text>),
+                    grid.Column("", header: "Marca/Fabricante", format: @<text><font color="#000000">@item.marca_produto</font></text>),
+                    grid.Column("", header: "Quant.", format: @<text><font color="#000000">@item.quantidade_produto_exibicao</font></text>),
+                    grid.Column("", header: "R$ unitário", format: @<input type="text" name="inValorProduto" id="inValorProduto_@item.id_codigo_item" placeholder = "0,00" class = "valorResposta sonums calculaValor" onblur="LimpaCampoTotal('@item.id_codigo_item')" style="width:100px;" value="@item.valor_produto" />),
+                    grid.Column("", header: "Unidade", format: @<text><font color="#000000">@item.unidade_produto</font></text>),
+                    grid.Column("", header: "Confirma", format: @<text>&nbsp;&nbsp;
+                                                                                    @if (@item.produto_cotado == "sim")
+                                                                                    {
+                                                                                        <input type="checkbox" name="checkbox" id="@item.id_codigo_item" onclick="" class="check" value="@item.id_codigo_item" checked>
+                                                                                    }
+                                                                                    else
+                                                                                    {
+                                                                                        <input type="checkbox" name="checkbox" id="@item.id_codigo_item" onclick="" class="check" value="@item.id_codigo_item">
+                                                                                    } 
+                                                                </text>),
+                    grid.Column("", header: "R$ Total", format: @<input readonly type="text" name="inValorTotal" id="inValorTotal_@item.id_codigo_item" placeholder="0,00" class="" style="width:120px;" value="@item.total_por_produto" />),
+                    grid.Column("", header: "Desconto", format: @<div id="comDescontoAplicado_@item.id_codigo_item" class="desconto"><font size="1" color="#0101DF"><b>* Sim</b></font></div>),
+                    grid.Column("", header: "Produto Alternativo", format: @<text>
+                                                                                    @if (@item.quantidade_imagens_anexadas == 0)
+                                                                                    {
+                                                                                        if (Model.STATUS_COTACAO_RECEBIDA != "ENCERRADA")
+                                                                                        {
+                                                                                            <div id="adicionarFotos_@item.id_codigo_item" style="" align="left"><a href="#" id="comFotoDeProduto_adicionar_@item.id_codigo_item" onclick="setarProdutoFotoAlternativa(@item.id_codigo_item)" class="imagemProduto" data-toggle="modal" data-target="#modal_adicionar_produto_alternativo" title="Adiciona foto de outro produto em proposta de substituição"><i class="fa fa-camera"></i> adicionar fotos</a></div>
+                                                                                        }
+                                                                                        else
+                                                                                        {
+                                                                                            <div id="adicionarFotos_@item.id_codigo_item" style="" align="left"><a href="#" id="comFotoDeProduto_adicionar_@item.id_codigo_item" onclick="naoPode()" class="imagemProduto" data-toggle="modal" title="Adiciona foto de outro produto em proposta de substituição"><i class="fa fa-camera"></i> adicionar fotos</a></div>
+                                                                                        }
+
+                                                                                        <div id="verFotos_@item.id_codigo_item" style="display:none;" align="left"><a href="#" id="comFotoDeProduto_ver_@item.id_codigo_item" onclick="setarProdutoFotoAlternativa2(@item.id_codigo_item,@ViewBag.idEmpresa,@ViewBag.idUsuarioLogado)" class="imagemProduto" data-toggle="modal" data-target="#modal_ver_produto_alternativo" title="Ver as fotos de produtos adicionados em proposta de substituição"><i class="fa fa-camera"></i> ver fotos</a></div>
+                                                                                    }
+                                                                                    else if (@item.quantidade_imagens_anexadas > 0)
+                                                                                    {
+                                                                                        <div id="verFotos_@item.id_codigo_item" style="" align="left"><a href="#" id="comFotoDeProduto_ver_@item.id_codigo_item" onclick="setarProdutoFotoAlternativa2(@item.id_codigo_item,@ViewBag.idEmpresa,@ViewBag.idUsuarioLogado)" class="imagemProduto" data-toggle="modal" data-target="#modal_ver_produto_alternativo" title="Ver as fotos de produtos adicionados em proposta de substituição"><i class="fa fa-camera"></i> ver fotos</a></div>
+                                                                                        <div id="adicionarFotos_@item.id_codigo_item" style="display:none;" align="left"><a href="#" id="comFotoDeProduto_adicionar_@item.id_codigo_item" onclick="setarProdutoFotoAlternativa(@item.id_codigo_item)" class="imagemProduto" data-toggle="modal" data-target="#modal_adicionar_produto_alternativo" title="Adiciona foto de outro produto em proposta de substituição"><i class="fa fa-camera"></i> adicionar fotos</a></div>
+                                                                                    }
+                                                                          </text>),
+                    grid.Column(null, null, format: @<input type="hidden" name="inQuantidadeRealDoProduto" id="inQuantidadeRealDoProduto_@item.id_codigo_item" value="@item.quantidade_real_produto" />),
+                    grid.Column(null, null, format: @<input type="hidden" name="inQuantasFotosAnexadas" id="inQuantasFotosAnexadas_@item.id_codigo_item" value="@item.quantidade_imagens_anexadas" />)
+           ),
+           tableStyle: "table table-striped table-hover");
+
+        <!-- CAMPOS HIDDEN -->
+        @Html.HiddenFor(m => m.IDS_PRODUTOS_SELECIONADOS_PARA_RESPOSTA_DA_COTACAO, new { @id = "IDS_PRODUTOS_SELECIONADOS_PARA_RESPOSTA_DA_COTACAO" })
+        @Html.HiddenFor(m => m.VALORES_UNITARIOS_PRODUTOS_SELECIONADOS_PARA_RESPOSTA_DACOTACAO, new { @id = "VALORES_UNITARIOS_PRODUTOS_SELECIONADOS_PARA_RESPOSTA_DACOTACAO" })
+        @Html.HiddenFor(m => m.VALOR_TOTAL_DO_LOTE_DE_MERCADORIAS_SOMAR_SEM_DESCONTO, new { @id = "VALOR_TOTAL_DO_LOTE_DE_MERCADORIAS_SOMAR_SEM_DESCONTO" })
+        @Html.HiddenFor(m => m.ID_PRODUTO_FOTOS, new { @id = "ID_PRODUTO_FOTOS" })
+        @Html.HiddenFor(m => m.ID_QUADRO_FOTOS, new { @id = "ID_QUADRO_FOTOS" })
+        @Html.HiddenFor(m => m.BOTAO_CONFIRMAR_FOTOS, new { @id = "BOTAO_CONFIRMAR_FOTOS" })
+        @Html.HiddenFor(m => m.LISTA_NOMES_FOTOS_PRODUTOS_ALTERNATIVOS, new { @id = "LISTA_NOMES_FOTOS_PRODUTOS_ALTERNATIVOS" })
+        @Html.HiddenFor(m => m.TIPO_IMAGEM_EXCLUSAO, new { @id = "TIPO_IMAGEM_EXCLUSAO" })
+        @Html.HiddenFor(m => m.QUANTIDADE_FOTOS_NOPRODUTO, new { @id = "QUANTIDADE_FOTOS_NOPRODUTO" })
+        @Html.HiddenFor(m => m.COTACAO_EDITADA, new { @id = "COTACAO_EDITADA" })
+    }
+
+    <!-- Janela MODAL - ADICIONAR FOTOS DE PRODUTOS ALTERNATIVOS -->
+    <div id="modal_adicionar_produto_alternativo" class="modal fade" role="dialog">
+        <br /><br /><br />
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color: #337ab7">
+                    <button type="button" id="fecharPopUpImagens" class="close" data-dismiss="modal"><i class="fa fa-times"></i></button>
+                    <h4 class="modal-title"><font color=white><i class="fa fa-camera"></i> Produtos Alternativos</font></h4>
+                </div>
+                <div class="modal-body">
+                    <div class="file_name" style="display:none">
+                        <input id="fileupload" type="file" class="form-control" onblur="" name="files[]" accept="image/JPG" multiple>
+                    </div>
+                    <div id="foto_original_produto_alternativo">
+                        <!-- Permite anexar imagens em quadros vazios) -->
+                        <div>Clique no quadro pontilhado (vazio) para selecionar a imagem a ser anexada à COTAÇÃO: (Obs: somente arquivos com tipo JPG ou PNG)</div>
+                        <div class="row">
+                            <div class="panel-body">
+                                <div class="imagem" style="float: left; margin:2px;">
+                                    <a href="#" id="imagem_link_1" class="prod_alter" title="Adicionar imagem 1"><img src="" id="imagem_1" style="border: 2px dashed #999; background-color: #ebebeb; height: 110px; width: 110px; opacity: 0.5" /></img></a>
+                                    <div id="excluir_imagem_1" class="text-right"><a href="#" id="excluir_inc_imagem_link_1" class="excluir_prod_alter" onclick="setarQueImagemExcluir('inc')" title="Excluir a foto"><i class="fa fa-trash-o"></i></a></div>
+
+                                    <input type="hidden" name="inIdFoto_1" id="inIdFoto_1" value="" />
+                                </div>
+                                <div class="imagem" style="float: left; margin:2px;">
+                                    <a href="#" id="imagem_link_2" class="prod_alter" title="Adicionar imagem 2"><img src="" id="imagem_2" style="border: 2px dashed #999; background-color: #ebebeb; height: 110px; width: 110px; opacity: 0.5" /></img></a>
+                                    <div id="excluir_imagem_2" class="text-right"><a href="#" id="excluir_inc_imagem_link_2" class="excluir_prod_alter" onclick="setarQueImagemExcluir('inc')" title="Excluir a foto"><i class="fa fa-trash-o"></i></a></div>
+
+                                    <input type="hidden" name="inIdFoto_2" id="inIdFoto_2" value="" />
+                                </div>
+                                <div class="imagem" style="float: left; margin:2px;">
+                                    <a href="#" id="imagem_link_3" class="prod_alter" title="Adicionar imagem 3"><img src="" id="imagem_3" style="border: 2px dashed #999; background-color: #ebebeb; height: 110px; width: 110px; opacity: 0.5" /></img></a>
+                                    <div id="excluir_imagem_3" class="text-right"><a href="#" id="excluir_inc_imagem_link_3" class="excluir_prod_alter" onclick="setarQueImagemExcluir('inc')" title="Excluir a foto"><i class="fa fa-trash-o"></i></a></div>
+
+                                    <input type="hidden" name="inIdFoto_3" id="inIdFoto_3" value="" />
+                                </div>
+                                <div class="imagem" style="float: left; margin:2px;">
+                                    <a href="#" id="imagem_link_4" class="prod_alter" title="Adicionar imagem 4"><img src="" id="imagem_4" style="border: 2px dashed #999; background-color: #ebebeb; height: 110px; width: 110px; opacity: 0.5" /></img></a>
+                                    <div id="excluir_imagem_4" class="text-right"><a href="#" id="excluir_inc_imagem_link_4" class="excluir_prod_alter" onclick="setarQueImagemExcluir('inc')" title="Excluir a foto"><i class="fa fa-trash-o"></i></a></div>
+
+                                    <input type="hidden" name="inIdFoto_4" id="inIdFoto_4" value="" />
+                                </div>
+                                <div class="imagem" style="margin:2px;">
+                                    <a href="#" id="imagem_link_5" class="prod_alter" title="Adicionar imagem 5"><img src="" id="imagem_5" style="border: 2px dashed #999; background-color: #ebebeb; height: 110px; width: 110px; opacity: 0.5" /></img></a>
+                                    <div id="excluir_imagem_5" class="text-right"><a href="#" id="excluir_inc_imagem_link_5" class="excluir_prod_alter" onclick="setarQueImagemExcluir('inc')" title="Excluir a foto"><i class="fa fa-trash-o"></i></a></div>
+
+                                    <input type="hidden" name="inIdFoto_5" id="inIdFoto_5" value="" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="excluir_todas_inc" align="right" style="display:none;"><a href="#" id="excluir_todas_inc_imagem" class="excluir_todas_prod_alter" onclick="setarQueImagemExcluir('inc')" title="Excluir todas as fotos"><i class="fa fa-trash-o"></i> Excluir todas</a></div>
+                    </div>
+
+                    <div>
+                        <a tabindex="-1" href="#" id="confirmarFotos" class="btn btn-primary btn-large" style="margin-top:18px; float:right; display:none;"><i class="fa fa-check"></i> Confirmar Imagens</a>
+                    </div>
+                </div>
+                <div class="modal-footer">&nbsp;</div>
+            </div>
+        </div>
+    </div>
+    <!-- Fim janela MODAL- ADICIONAR FOTOS DE PRODUTOS ALTERNATIVOS -->
+
+    <!-- Janela MODAL - VER FOTOS DE PRODUTOS ALTERNATIVOS ADICIONADOS -->
+    <div id="modal_ver_produto_alternativo" class="modal fade" role="dialog">
+        <br /><br /><br />
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color: #337ab7">
+                    <button type="button" id="fecharPopUpImagens2" class="close" data-dismiss="modal"><i class="fa fa-times"></i></button>
+                    <h4 class="modal-title"><font color=white><i class="fa fa-camera"></i> Produtos Alternativos</font></h4>
+                </div>
+                <div class="modal-body">
+                    <div class="file_name" style="display:none">
+                        <input id="fileupload2" type="file" class="form-control" onblur="" name="files[]" multiple>
+                    </div>
+                    <div id="foto_original_produto_alternativo2">
+                        <!-- Exibe as FOTOS ANEXADAS ao PRODUTO -->
+                        @*<div>Clique no quadro pontilhado (vazio) para selecionar a imagem a ser anexada à COTAÇÃO:</div>*@
+                        <div class="row">
+                            <div class="panel-body">
+                                <div class="imagem" style="float: left; margin:2px;">
+                                    <img src="" id="imagem_1_ver" style="border: 2px dashed #999; background-color: #ebebeb; height: 110px; width: 110px;" /></img>
+                                    <div id="ver_excluir_imagem_1" class="text-right"><a href="#" id="excluir_ver_imagem_link_1" class="excluir_prod_alter" onclick="setarQueImagemExcluir('ver')" title="Excluir a foto"><i class="fa fa-trash-o"></i></a></div>
+
+                                    <input type="hidden" name="inIdVer_Foto_1" id="inIdVer_Foto_1" value="" />
+                                </div>
+                                <div class="imagem" style="float: left; margin:2px;">
+                                    <img src="" id="imagem_2_ver" style="border: 2px dashed #999; background-color: #ebebeb; height: 110px; width: 110px;" /></img>
+                                    <div id="ver_excluir_imagem_2" class="text-right"><a href="#" id="excluir_ver_imagem_link_2" class="excluir_prod_alter" onclick="setarQueImagemExcluir('ver')" title="Excluir a foto"><i class="fa fa-trash-o"></i></a></div>
+                                
+                                    <input type="hidden" name="inIdVer_Foto_2" id="inIdVer_Foto_2" value="" />
+                                </div>
+                                <div class="imagem" style="float: left; margin:2px;">
+                                    <img src="" id="imagem_3_ver" style="border: 2px dashed #999; background-color: #ebebeb; height: 110px; width: 110px;" /></img>
+                                    <div id="ver_excluir_imagem_3" class="text-right"><a href="#" id="excluir_ver_imagem_link_3" class="excluir_prod_alter" onclick="setarQueImagemExcluir('ver')" title="Excluir a foto"><i class="fa fa-trash-o"></i></a></div>
+
+                                    <input type="hidden" name="inIdVer_Foto_3" id="inIdVer_Foto_3" value="" />
+                                </div>
+                                <div class="imagem" style="float: left; margin:2px;">
+                                    <img src="" id="imagem_4_ver" style="border: 2px dashed #999; background-color: #ebebeb; height: 110px; width: 110px;" /></img>
+                                    <div id="ver_excluir_imagem_4" class="text-right"><a href="#" id="excluir_ver_imagem_link_4" class="excluir_prod_alter" onclick="setarQueImagemExcluir('ver')" title="Excluir a foto"><i class="fa fa-trash-o"></i></a></div>
+                                
+                                    <input type="hidden" name="inIdVer_Foto_4" id="inIdVer_Foto_4" value="" />
+                                </div>
+                                <div class="imagem" style="margin:2px;">
+                                    <img src="" id="imagem_5_ver" style="border: 2px dashed #999; background-color: #ebebeb; height: 110px; width: 110px;" /></img>
+                                    <div id="ver_excluir_imagem_5" class="text-right"><a href="#" id="excluir_ver_imagem_link_5" class="excluir_prod_alter" onclick="setarQueImagemExcluir('ver')" title="Excluir a foto"><i class="fa fa-trash-o"></i></a></div>
+
+                                    <input type="hidden" name="inIdVer_Foto_5" id="inIdVer_Foto_5" value="" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="excluir_todas_ver" align="right" style=""><a href="#" id="excluir_todas_ver_imagem" class="excluir_todas_prod_alter" onclick="setarQueImagemExcluir('ver')" title="Excluir todas as fotos"><i class="fa fa-trash-o"></i> Excluir todas</a></div>
+                    </div>
+                </div>
+                <div class="modal-footer">&nbsp;</div>
+            </div>
+        </div>
+    </div>
+    <!-- Fim janela MODAL- VER FOTOS DE PRODUTOS ALTERNATIVOS ADICIONADOS -->
+
+@*</div>*@

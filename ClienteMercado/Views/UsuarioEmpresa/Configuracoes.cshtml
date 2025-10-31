@@ -1,0 +1,366 @@
+﻿@model ClienteMercado.Models.CadastroEmpresa
+
+@{
+    ViewBag.Title = "ClienteMercado";
+    Layout = "~/Views/Shared/_Layout_internas.cshtml";
+}
+
+<div id="container_configuracoes">
+
+    @using (Html.BeginForm("Configuracoes", "UsuarioEmpresa", new { @id = "formConfiguracoes" }))
+    {
+        <div id="linha_navegacao_ramos_atividade">
+            <div id="linha_opcoes_navegacao_ramos_atividade" class="linha_opcoes_navegacao">
+                <div id="area_navegacao1_setado" class="">
+                    <span class="nomes_navegacao_setado">@Html.LabelFor(m => m.ID_RAMO_ATIVIDADE_EMPRESA)</span>
+                </div>
+                <div id="seta1" class="seta-direita_setado"></div>
+                <div id="area_navegacao2_off" class="">
+                    @Html.LabelFor(m => m.ID_CODIGO_TIPO_CONTRATO_COTADA)
+                </div>
+                <div id="seta2" class="seta-direita_off"></div>
+            </div>
+            <div id="titulo_ramos" class="titulos_setores">
+                &nbsp;&nbsp;Escolha seus ramos de atividades:&nbsp;&nbsp;<span id="texto_nota1" class="texto_menor_nota"><b><u>Nota</u>: * Todos os campos abaixo deverão ser preenchidos</b></span>
+            </div>
+
+            <div id="sub_container_ramos">
+                <div id="secao_atividades" class="formata_campos_cadastro">
+                    <br/>
+                    <div id="label_atividades" class="labels_atividades">
+                        @Html.LabelFor(m => m.ID_GRUPO_ATIVIDADES)
+                    </div>
+                    <div id="campo_atividades" class="">
+                        @Html.DropDownList("ID_GRUPO_ATIVIDADES", Model.ListagemGruposAtividadeEmpresa, new { style = "font-family: 'Verdana', Geneva, sans-serif; width: 305px;", @tabindex = "1", @id = "ID_GRUPO_ATIVIDADES" })&nbsp;*
+                        @Html.ValidationMessageFor(m => m.ID_GRUPO_ATIVIDADES, String.Empty)
+                    </div>
+                    <br/>
+                    <div id="label_ramos" class="labels_atividades">
+                        Produtos / Serviços comercializados:<br />&nbsp;<span id="mensagem_nota" class="texto_menor_nota"><b>* entre com no máximo 5</b></span>
+                    </div>
+                    <div id="lista_filtro_atividades" class="">
+                        @Html.TextBoxFor(m => m.DESCRICAO_RAMO_ATIVIDADE_EMPRESA, new { style = "font-family: 'Verdana', Geneva, sans-serif; width: 300px;", maxlength = 150, @id = "DESCRICAO_RAMO_ATIVIDADE_EMPRESA", @tabindex = "2" })
+                        @Html.HiddenFor(m => m.DESCRICAO_RAMO_ATIVIDADE_EMPRESA_CONFORME_BANCO, new { @id = "DESCRICAO_RAMO_ATIVIDADE_EMPRESA_CONFORME_BANCO" })
+                        @Html.HiddenFor(m => m.ID_RAMO_ATIVIDADE_EMPRESA, new { @id = "ID_RAMO_ATIVIDADE_EMPRESA" })
+
+                        @Html.HiddenFor(m => m.RAMOS_ATIVIDADES_SELECIONADOS, new { @id = "RAMOS_ATIVIDADES_SELECIONADOS" })
+                        @Html.HiddenFor(m => m.DESCRICAO_RAMOS_ATIVIDADES_SELECIONADOS, new { @id = "DESCRICAO_RAMOS_ATIVIDADES_SELECIONADOS" })*
+                        @Html.HiddenFor(m => m.DESCRICAO_RAMOS_ATIVIDADES_SELECIONADOS_ORIGINAL, new { @id = "DESCRICAO_RAMOS_ATIVIDADES_SELECIONADOS_ORIGINAL" })
+                        <div id="btn_adicionar" class="">Adicionar</div>
+                    </div>
+                    <div id="container_lista_atividades" class="">
+                        <table id="table_atividades">
+                            <caption>Atividades selecionadas</caption>
+                            <tr><td class="coluna1"></td><td class="coluna2"></td></tr>
+                        </table>
+                    </div>
+                </div>
+
+                <br/>
+                <div id="area_botoes_ramos" class="">
+                    <div id="btn_teste" class="formata_campos_cadastro_button_continuar">Continuar >></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="linha_navegacao_planos_assinatura" style="display: none;">
+            <div id="linha_opcoes_navegacao_planos_assinatura" class="linha_opcoes_navegacao">
+                <div id="area_navegacao1_off" class="">
+                    @Html.LabelFor(m => m.ID_RAMO_ATIVIDADE_EMPRESA)
+                </div>
+                <div id="seta1" class="seta-direita_off"></div>
+                <div id="area_navegacao2_setado" class="">
+                    <span class="nomes_navegacao_setado">@Html.LabelFor(m => m.ID_CODIGO_TIPO_CONTRATO_COTADA)</span>
+                </div>
+                <div id="seta2" class="seta-direita_setado"></div>
+            </div>
+            <div id="titulo_planos" class="titulos_setores">
+                &nbsp;&nbsp;Escolha seu plano de assinatura:&nbsp;&nbsp;<span id="texto_nota2" class="texto_menor_nota">(<b>* Clique no botão ao lado da opção para saber mais e selecionar o plano desejado</b>)</span>
+            </div>
+
+
+            <div id="sub_container_planos">
+                <div id="secao_planos" class="formata_campos_cadastro2">
+                    <div id="plano1">&nbsp;@Html.RadioButton("tipo_plano", 1, new { @onClick = "setarTipoPlano(this.value,'#999999','plano1',0);" })&nbsp;Empresa Cotante</div>
+                    <div id="plano2">&nbsp;@Html.RadioButton("tipo_plano", 2, new { @onClick = "setarTipoPlano(this.value,'#999999','plano2',15);" })&nbsp;Individual Usuário</div>
+                    <div id="plano3">&nbsp;@Html.RadioButton("tipo_plano", 3, new { @onClick = "setarTipoPlano(this.value,'#999999','plano3',90);" })&nbsp;Ideal Empresa</div>
+                    <div id="plano4">&nbsp;@Html.RadioButton("tipo_plano", 4, new { @onClick = "setarTipoPlano(this.value,'#999999','plano4',225);" })&nbsp;Mais Empresa</div>
+                    <div id="restante_menu">
+                        @Html.TextBoxFor(m => m.ID_CODIGO_TIPO_CONTRATO_COTADA, new { @type = "hidden", @id = "ID_CODIGO_TIPO_CONTRATO_COTADA" })
+                        @Html.TextBoxFor(m => m.VALOR_PLANO_CONTRATADO, new { @type = "hidden", @id = "VALOR_PLANO_CONTRATADO" })
+                    </div>
+                </div>
+                <div id="descricao_planos" class="formata_descricao_plano">
+                    <div id="descPlano1">
+                        <table id="table_descricao_plano1">
+                            <caption>Características do Plano</caption>
+                            <tr><td class="ce">Plano:</td><td class="cd">&nbsp;<b>EMPRESA COTANTE</b></td></tr>
+                            <tr><td class="ce">Usuários permitidos:</td><td class="cd">&nbsp;1 usuário</td></tr>
+                            <tr><td class="ce">Cotar produtos no mercado:</td><td class="cd">&nbsp;Sim</td></tr>
+                            <tr><td class="ce">Ser visto e encontrado por outras empresas cotantes:</td><td class="cd">&nbsp;Sim</td></tr>
+                            <tr><td class="ce">Receber cotações:</td><td class="cd">&nbsp;Sim</td></tr>
+                            <tr><td class="ce">Ver conteúdo das cotações:</td><td class="cd">&nbsp;Não</td></tr>
+                            <tr><td class="ce">Ver quem enviou as cotações:</td><td class="cd">&nbsp;Não</td></tr>
+                            <tr><td class="ce">Responder cotações:</td><td class="cd">&nbsp;Não</td></tr>
+                            <tr><td class="ce">Relatório informando empresa e valor que venceu cotação:</td><td class="cd">&nbsp;Sim</td></tr>
+                            <tr><td class="ce">Relatório de atividades gerais no sistema:</td><td class="cd">&nbsp;Sim</td></tr>
+                            <tr><td class="ce">&nbsp;</td><td class="cd">&nbsp;</td></tr>
+                            <tr><td class="ce">Tipo de pagamento:</td><td class="cd">&nbsp;-----</td></tr>
+                            <tr><td class="ce">Data deste pagamento:</td><td class="cd">&nbsp;-----</td></tr>
+                            <tr><td rowspan="3" class="ce" style="border-bottom: none">VALOR:</td></tr>
+                            <tr><td class="cd" style="border-bottom: none">&nbsp;<b>GRATUÍTO</b></td></tr>
+                            <tr><td class="cd" style="border-bottom: none">&nbsp;</td></tr>
+                        </table>
+                    </div>
+                    <div id="descPlano2">
+                        <table id="table_descricao_plano2">
+                            <caption>Características do Plano</caption>
+                            <tr><td class="ce">Plano:</td><td class="cd">&nbsp;<b>INDIVIDUAL USUÁRIO</b></td></tr>
+                            <tr><td class="ce">Usuários permitidos:</td><td class="cd">&nbsp;Sem limite (quantos usuários quiser)</td></tr>
+                            <tr><td class="ce">Cotar produtos no mercado:</td><td class="cd">&nbsp;Sim</td></tr>
+                            <tr><td class="ce">Ser visto e encontrado por outras empresas cotantes:</td><td class="cd">&nbsp;Sim</td></tr>
+                            <tr><td class="ce">Receber cotações:</td><td class="cd">&nbsp;Sim</td></tr>
+                            <tr><td class="ce">Ver conteúdo das cotações:</td><td class="cd">&nbsp;Sim</td></tr>
+                            <tr><td class="ce">Ver quem enviou as cotações:</td><td class="cd">&nbsp;Sim</td></tr>
+                            <tr><td class="ce">Responder cotações:</td><td class="cd">&nbsp;Sim</td></tr>
+                            <tr><td class="ce">Relatório informando empresa e valor que venceu cotação:</td><td class="cd">&nbsp;Sim</td></tr>
+                            <tr><td class="ce">Relatório de atividades gerais no sistema:</td><td class="cd">&nbsp;Sim</td></tr>
+                            <tr><td class="ce">&nbsp;</td><td class="cd">&nbsp;</td></tr>
+                            <tr><td class="ce">Tipo de pagamento:</td><td class="cd">&nbsp;Mensal</td></tr>
+                            <tr><td class="ce">Data deste pagamento:</td><td class="cd">&nbsp;Hoje</td></tr>
+                            <tr><td rowspan="3" class="ce" style="border-bottom: none">VALOR:</td></tr>
+                            <tr><td class="cd" style="border-bottom: none">&nbsp;<b>R$ 15,00 / mês por usuário</b></td></tr>
+                            <tr><td class="cd" style="border-bottom: none">&nbsp;</td></tr>
+                        </table>
+                    </div>
+                    <div id="descPlano3">
+                        <table id="table_descricao_plano3">
+                            <caption>Características do Plano</caption>
+                            <tr><td class="ce">Plano:</td><td class="cd">&nbsp;<b>IDEAL EMPRESA</b></td></tr>
+                            <tr><td class="ce">Usuários permitidos:</td><td class="cd">&nbsp;10 usuários</td></tr>
+                            <tr><td class="ce">Cotar produtos no mercado:</td><td class="cd">&nbsp;Sim</td></tr>
+                            <tr><td class="ce">Ser visto e encontrado por outras empresas cotantes:</td><td class="cd">&nbsp;Sim</td></tr>
+                            <tr><td class="ce">Receber cotações:</td><td class="cd">&nbsp;Sim</td></tr>
+                            <tr><td class="ce">Ver conteúdo das cotações:</td><td class="cd">&nbsp;Sim</td></tr>
+                            <tr><td class="ce">Ver quem enviou as cotações:</td><td class="cd">&nbsp;Sim</td></tr>
+                            <tr><td class="ce">Responder cotações:</td><td class="cd">&nbsp;Sim</td></tr>
+                            <tr><td class="ce">Relatório informando empresa e valor que venceu cotação:</td><td class="cd">&nbsp;Sim</td></tr>
+                            <tr><td class="ce">Relatório de atividades gerais no sistema:</td><td class="cd">&nbsp;Sim</td></tr>
+                            <tr><td class="ce">&nbsp;</td><td class="cd">&nbsp;</td></tr>
+                            <tr><td class="ce">Tipo de pagamento:</td><td class="cd">&nbsp;Mensal</td></tr>
+                            <tr><td class="ce">Data deste pagamento:</td><td class="cd">&nbsp;Hoje</td></tr>
+                            <tr><td rowspan="3" class="ce" style="border-bottom: none">VALOR:</td></tr>
+                            <tr><td class="cd" style="border-bottom: none">&nbsp;<b>R$ 90,00 / mês</b></td></tr>
+                            <tr><td class="cd" style="border-bottom: none">&nbsp;</td></tr>
+                        </table>
+                    </div>
+                    <div id="descPlano4">
+                        <table id="table_descricao_plano4">
+                            <caption>Características do Plano</caption>
+                            <tr><td class="ce">Plano:</td><td class="cd">&nbsp;<b>MAIS EMPRESA</b></td></tr>
+                            <tr><td class="ce">Usuários permitidos:</td><td class="cd">&nbsp;30 usuários</td></tr>
+                            <tr><td class="ce">Cotar produtos no mercado:</td><td class="cd">&nbsp;Sim</td></tr>
+                            <tr><td class="ce">Ser visto e encontrado por outras empresas cotantes:</td><td class="cd">&nbsp;Sim</td></tr>
+                            <tr><td class="ce">Receber cotações:</td><td class="cd">&nbsp;Sim</td></tr>
+                            <tr><td class="ce">Ver conteúdo das cotações:</td><td class="cd">&nbsp;Sim</td></tr>
+                            <tr><td class="ce">Ver quem enviou as cotações:</td><td class="cd">&nbsp;Sim</td></tr>
+                            <tr><td class="ce">Responder cotações:</td><td class="cd">&nbsp;Sim</td></tr>
+                            <tr><td class="ce">Relatório informando empresa e valor que venceu cotação:</td><td class="cd">&nbsp;Sim</td></tr>
+                            <tr><td class="ce">Relatório de atividades gerais no sistema:</td><td class="cd">&nbsp;Sim</td></tr>
+                            <tr><td class="ce">&nbsp;</td><td class="cd">&nbsp;</td></tr>
+                            <tr><td class="ce">Tipo de pagamento:</td><td class="cd">&nbsp;Mensal</td></tr>
+                            <tr><td class="ce">Data deste pagamento:</td><td class="cd">&nbsp;Hoje</td></tr>
+                            <tr><td rowspan="3" class="ce" style="border-bottom: none">VALOR:</td></tr>
+                            <tr><td class="cd" style="border-bottom: none">&nbsp;<b>R$ 225,00 / mês</b></td></tr>
+                            <tr><td class="cd" style="border-bottom: none">&nbsp;</td></tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <br/>
+            <div id="area_botoes_assinatura1" class="area_botoes">
+                <div id="btn_teste2_return" class="formata_campos_cadastro_button_voltar"><< Voltar</div>
+            </div>
+            <div id="area_botoes_assinatura2" class="area_botoes2" style="display: none;">
+                <input type="submit" id="btn_gravar_configuracao" value="Assinar" class="btn_assinar_boleto" />
+            </div>
+            <div id="btn_gravar" class="area_botoes3">
+                <input type="submit" id="btn_gravar_configuracao_alter" value="Gravar" class="btn_assinar_boleto"/>
+            </div>
+        </div>
+
+        @Html.HiddenFor(m => m.ID_MEIO_PAGAMENTO)
+        @Html.HiddenFor(m => m.DESCRICAO_TIPO_CONTRATO_COTADA)
+
+        <input type="hidden" name="NOME_USUARIO_MASTER" id="NOME_USUARIO_MASTER" value="@ViewBag.nomeUsuarioLogado" />
+        <input type="hidden" name="NOME_FANTASIA_EMPRESA" id="NOME_FANTASIA_EMPRESA" value="@ViewBag.nomeEmpresaLogado" />
+        <input type="hidden" name="TIPO_LOGIN" id="TIPO_LOGIN" value="@ViewBag.tipoLogin" />
+    }
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script>
+        $(document).ready(function () {
+            //Atribuir valores iniciais
+            $('#ID_MEIO_PAGAMENTO').val(3); //Por enquanto será inserido o valor 3 --> 'TERCEIROS' pois estamos implementando a API de uma empresa de cobrança
+
+            //Variáveis globais usadas pelo Jquery
+            var listaIdDescricaoAtividades = [];
+            var listaIdDescricaoAtividadesOriginal = [];
+            var listaIdAtividades = [];
+
+            //Desliga a exibição dos Planos
+            $("#descPlano1").hide();
+            $("#descPlano2").hide();
+            $("#descPlano3").hide();
+            $("#descPlano4").hide();
+            $("#btn_gravar").hide();
+
+            //Controle de navegação das abas
+            $("#btn_teste").click(function(event) {
+                if (($("#ID_GRUPO_ATIVIDADES").val() != '') && ($("#RAMOS_ATIVIDADES_SELECIONADOS").val() != '')) {
+                    $("#linha_navegacao_ramos_atividade").hide();
+                    $("#linha_navegacao_planos_assinatura").show();
+                } else {
+                    //alert('Atenção!\n\nTodos os campos nesta tela, deverão ser preenchidos.');
+                    jAlert('ATENÇÃO!\n\nTodos os campos nesta tela, deverão ser preenchidos.', '  Ok  ');
+                }
+            });
+
+            $("#btn_teste2").click(function(event) {
+                if ($('#ID_CODIGO_TIPO_CONTRATO_COTADA').val() > 0) {
+                    $("#linha_navegacao_planos_assinatura").hide();
+                    $("#linha_navegacao_meios_pagamento").show();
+                } else {
+                    //alert('Atenção!\n\nEscolha um Plano de Assinatura.');
+                    jAlert('ATENÇÃO!\n\nEscolha um Plano de Assinatura.', '  Ok  ');
+                }
+            });
+
+            $("#btn_teste3").click(function(event) {
+                $("#linha_navegacao_meios_pagamento").hide();
+                $("#linha_navegacao_planos_assinatura").show();
+            });
+
+            $("#btn_teste2_return").click(function(event) {
+                $("#linha_navegacao_planos_assinatura").hide();
+                $("#linha_navegacao_ramos_atividade").show();
+            });
+
+            $("#btn_voltar_cartao").click(function(event) {
+                $("#linha_navegacao_meios_pagamento").hide();
+                $("#linha_navegacao_planos_assinatura").show();
+            });
+
+            $("#btn_voltar_boleto").click(function(event) {
+                $("#linha_navegacao_meios_pagamento").hide();
+                $("#linha_navegacao_planos_assinatura").show();
+            });
+
+            //Ajax do Autocomplete das Atividades da Empresa
+            $("#DESCRICAO_RAMO_ATIVIDADE_EMPRESA").autocomplete({
+                source: function(request, response) {
+                    $.ajax({
+                        type: "POST",
+                        url: "/UsuarioEmpresa/AutoCompleteRamosAtividade",
+                        dataType: "json",
+                        data: { 'term': $("#DESCRICAO_RAMO_ATIVIDADE_EMPRESA").val(), 'idRamoAtividade': $('#ID_GRUPO_ATIVIDADES').val() },
+                        success: function(data) {
+                            response($.map(data, function(item) {
+                                return { label: item.DESCRICAO_PRODUTO_SERVICO, value: item.ID_CODIGO_PRODUTOS_SERVICOS_EMPRESAS_PROFISSIONAIS }; 
+                            }));
+                        }
+                    });
+                },
+                select: function(event, ui) {
+                    $("#DESCRICAO_RAMO_ATIVIDADE_EMPRESA").val(ui.item.label); 
+                    $("#DESCRICAO_RAMO_ATIVIDADE_EMPRESA_CONFORME_BANCO").val(ui.item.label);
+                    $('#ID_RAMO_ATIVIDADE_EMPRESA').val(ui.item.value);
+                    return false;
+                },
+                minLength: 3,
+                messages: {
+                    noResults: "",
+                    results: ""
+                }
+            });
+
+            //Alimenta o Grid das Atividades selecionadas
+            $('#btn_adicionar').click(function () {
+                if ($("#DESCRICAO_RAMO_ATIVIDADE_EMPRESA").val() != '') {
+                    var idLinkExcluir = $("#ID_RAMO_ATIVIDADE_EMPRESA").val();
+                    var ramoAtividadeOriginal = $("#DESCRICAO_RAMO_ATIVIDADE_EMPRESA").val();
+                    var descricaoBanco = $("#DESCRICAO_RAMO_ATIVIDADE_EMPRESA_CONFORME_BANCO").val();
+
+                    listaIdDescricaoAtividades = $('#DESCRICAO_RAMOS_ATIVIDADES_SELECIONADOS').val().split(',');
+                    listaIdDescricaoAtividadesOriginal = $('#DESCRICAO_RAMOS_ATIVIDADES_SELECIONADOS_ORIGINAL').val().split(',');
+                    listaIdAtividades = $("#RAMOS_ATIVIDADES_SELECIONADOS").val().split(','); //Transforma string num array
+
+                    if (listaIdAtividades.length <= 5) {
+                        if ($.inArray($("#DESCRICAO_RAMO_ATIVIDADE_EMPRESA").val().toLowerCase(), listaIdDescricaoAtividades) == -1) {
+                            //Evita que o id alternativo seja igual a algum id de banco
+                            if ((idLinkExcluir == '') || (idLinkExcluir == parseInt(0)) || (ramoAtividadeOriginal != descricaoBanco)) {
+                                idLinkExcluir = (listaIdAtividades.length) + "a";
+                            }
+
+                            listaIdDescricaoAtividades.push($("#DESCRICAO_RAMO_ATIVIDADE_EMPRESA").val().toLowerCase());
+                            listaIdDescricaoAtividadesOriginal.push(ramoAtividadeOriginal);
+                            listaIdAtividades.push(idLinkExcluir);
+
+                            $('<tr><td class="coluna1" width="70%">&nbsp;<img src="../Content/images/play.png">&nbsp;&nbsp;' + $("#DESCRICAO_RAMO_ATIVIDADE_EMPRESA").val() + '</td><td align="center" width="30%"><a href="#" class="remover" id="' + $("#DESCRICAO_RAMO_ATIVIDADE_EMPRESA").val().toLowerCase() + '" border="0" title="Excluir"><img src="../Content/images/mini_x.png"></a></td></tr>').appendTo('#table_atividades');
+                            $("#RAMOS_ATIVIDADES_SELECIONADOS").val(listaIdAtividades);
+                            $('#DESCRICAO_RAMOS_ATIVIDADES_SELECIONADOS').val(listaIdDescricaoAtividades);
+                            $('#DESCRICAO_RAMOS_ATIVIDADES_SELECIONADOS_ORIGINAL').val(listaIdDescricaoAtividadesOriginal);
+
+                        } else {
+                            //alert('Atenção!\n\nVocê está tentando adicionar uma atividade que já existe em sua lista.\nFavor inserir uma atividade diferente.');
+                            jAlert('ATENÇÃO!\n\nVocê está tentando adicionar uma atividade que já existe em sua lista.\nFavor inserir uma atividade diferente.', '  Ok  ');
+                        }
+
+                    } else {
+                        //alert('Atenção!\n\nO limite de 5 Ramos de Atividade foi atingido!\nPara inserir um novo, você terá de excluir alguma das atividades que foram inseridas anteriormente.');
+                        jAlert('ATENÇÃO!\n\nO limite de 5 Ramos de Atividade foi atingido!\nPara inserir um novo, você terá de excluir alguma das atividades que foram inseridas anteriormente.', '  Ok  ');
+                    }
+                }
+
+                //alert('#RAMOS_ATIVIDADES_SELECIONADOS= ' + $('#RAMOS_ATIVIDADES_SELECIONADOS').val());
+                //alert('#DESCRICAO_RAMOS_ATIVIDADES_SELECIONADOS= ' + $('#DESCRICAO_RAMOS_ATIVIDADES_SELECIONADOS').val());
+                //alert('#DESCRICAO_RAMOS_ATIVIDADES_SELECIONADOS_ORIGINAL= '+$('#DESCRICAO_RAMOS_ATIVIDADES_SELECIONADOS_ORIGINAL').val());
+
+                $("#DESCRICAO_RAMO_ATIVIDADE_EMPRESA").val('');
+                $("#DESCRICAO_RAMO_ATIVIDADE_EMPRESA_CONFORME_BANCO").val('');
+                $("#ID_RAMO_ATIVIDADE_EMPRESA").val(null);
+                $("#DESCRICAO_RAMO_ATIVIDADE_EMPRESA").focus();
+            });
+
+            //Remover itens do Grid de Atividades
+            $("#table_atividades").on("click", ".remover", function (e) {
+                var idExcluir = $(this).attr('id');
+
+                //Transforma string num array
+                listaIdAtividades = $("#RAMOS_ATIVIDADES_SELECIONADOS").val().split(',');
+                listaIdDescricaoAtividades = $('#DESCRICAO_RAMOS_ATIVIDADES_SELECIONADOS').val().split(',');
+                listaIdDescricaoAtividadesOriginal = $('#DESCRICAO_RAMOS_ATIVIDADES_SELECIONADOS_ORIGINAL').val().split(',');
+
+                var indexDesc = listaIdDescricaoAtividades.indexOf(idExcluir);
+
+                //Removendo atividade do array de ID´s
+                listaIdAtividades.splice(indexDesc, 1);
+                listaIdDescricaoAtividades.splice(indexDesc, 1);
+                listaIdDescricaoAtividadesOriginal.splice(indexDesc, 1);
+
+                //Removendo atividade da Lista exibida na tela
+                $(this).closest('tr').remove();
+
+                $("#RAMOS_ATIVIDADES_SELECIONADOS").val(listaIdAtividades);
+                $('#DESCRICAO_RAMOS_ATIVIDADES_SELECIONADOS').val(listaIdDescricaoAtividades);
+                $('#DESCRICAO_RAMOS_ATIVIDADES_SELECIONADOS_ORIGINAL').val(listaIdDescricaoAtividadesOriginal);
+                $("#DESCRICAO_RAMO_ATIVIDADE_EMPRESA").focus();
+            });
+
+        });
+
+    </script>
+}

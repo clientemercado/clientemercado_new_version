@@ -1,0 +1,332 @@
+﻿@model  ClienteMercado.UI.Core.ViewModel.NovaCentralDeComprasViewModel
+
+@{
+    ViewBag.Title = "ConvidarEmpresasCentralDeCompras";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="http://code.jquery.com/jquery-1.8.2.js"></script>
+<script src="http://code.jquery.com/ui/1.9.0/jquery-ui.js"></script>
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.9.0/themes/base/jquery-ui.css" />
+
+<style>
+    .HideColHead
+    {
+        display: none
+    }
+
+    .HideCol {
+        display: none
+    }
+
+    th {
+        background-color: #CDC9C9;
+        color: white;
+    } 
+</style>
+
+<div class="row">
+    <!-- BEGIN VALIDATION STATES-->
+    <div class="portlet box blue">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="far fa-file-alt"></i>Nova Central de Compras - <span class="step-title">
+                    Etapa 2 de 2
+                </span>
+            </div>
+        </div>
+        <div class="portlet-body form">
+            <div class="form-actions">
+                <div class="row">
+                    <div class="col-md-12">
+                        <button id="btn-criarNovaCentralCompras" class="btn blue button-submit" title="Criar NOVA CENTRAL de COMPRAS" style="display:none;"><i class="far fa-file-alt"></i> Criar Nova Central de Compras</button>
+                        <button id="btn-buscarParcerias" class="btn blue btn-padrao" title="Buscar EMPRESAS parceiras" style=""><i class="fa fa-search"></i> Buscar Empresas Parceiras </button>
+                        <button id="btn-enviarConvites" class="btn blue button-submit" title="Enviar CONVITES para possíveis EMPRESAS para parceria" style="display:none;">Enviar Convite <i class="fa fa-sign-out"></i></button>
+                    </div>
+                </div>
+            </div>
+            <!-- BEGIN FORM-->
+            <form action="#" class="form-horizontal">
+                <div class="form-body">
+                    <div class="form-group" id="cabecalho_2">
+                        <label class="col-md-2 control-label"><font color="#3297E0"><b>Central Compras:</b></font></label>
+                        <div class="col-md-4">
+                            <h5>@Model.inNomeCentralCompras</h5>
+                        </div>
+                        <label class="col-md-2 control-label"><font color="#3297E0"><b>Ramo Atividade:</b></font></label>
+                        <div class="col-md-4">
+                            <h5>@Model.inRamoAtividadeEmpresaAdm</h5>
+                        </div>
+                        <label class="col-md-2 control-label"><font color="#3297E0"><b>Administradora:</b></font></label>
+                        <div class="col-md-4">
+                            <h5>@Model.inEmpresaLogadaAdmCC</h5>
+                        </div>
+                        <label class="col-md-2 control-label"><font color="#3297E0"><b>Cidade:</b></font></label>
+                        <div class="col-md-4">
+                            <h5>@Model.inCidadeEmpresaAdmCC</h5>
+                        </div>
+                        <label class="col-md-2 control-label"><font color="#3297E0"><b>Usuário Resp:</b></font></label>
+                        <div class="col-md-4">
+                            <h5>@Model.inNomeUsuarioRespEmpresaAdmCC</h5>
+                        </div>
+                    </div>
+                    <hr />
+
+                    <div class="form-group">
+                        <div class="portlet-body flip-scroll col-md-12">
+                            <table id="gridPossiveisParceiros" class="table table-bordered table-striped table-condensed flip-content">
+                                <thead class="flip-content">
+                                    <tr bgcolor="#CDC0B0">
+                                        <th data-column-id="idEmpresa" data-type="numeric" data-identifier="true" data-visible="false" data-width="4%">&nbsp;</th>
+                                        <th data-column-id="nomeEmpresa" data-width="25%">Empresa</th>
+                                        @*<th data-column-id="logradouroEmpresa">Localização</th>*@
+                                        <th data-column-id="cidadeEmpresa" data-width="15%">Cidade</th>
+                                        <th data-column-id="ufEmpresa" data-header-align="center" data-align="center" data-width="5%">UF</th>
+                                        <th data-column-id="usuarioContatoEmpresa">Contato</th>
+                                        <th data-column-id="eMailEmpresa">E-mail</th>
+                                        <th data-formatter="commands" data-align="center" data-width="5%">&nbsp;</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+            <input type="hidden" id="incCC" value="@Model.inCCCriptografado" />
+            <input type="hidden" id="ineA"  value="@Model.ineACriptografado" />
+            <input type="hidden" id="incGA" value="@Model.inCodRamoAtividade" />
+            <input type="hidden" id="inNomeCentralDeCompras" value="@Model.inNomeCentralCompras" />
+            <input type="hidden" id="inUsuResp" value="@Model.inNomeUsuarioRespEmpresaAdmCC" />
+            <input type="hidden" id="inRecarregaGrid" value="0" />
+            <input type="hidden" id="inConvitesEnviados" value="0" />
+            <input type="hidden" id="inQuantasEmpresasParceiras" value="0" />
+            <!-- END FORM-->
+        </div>
+    </div>
+    <!-- END VALIDATION STATES-->
+</div>
+
+<script>
+    jQuery(document).ready(function () {
+        debugger;
+
+        //Botão BUSCAR PARCERIAS
+        $(document).on("click", "#btn-buscarParcerias", function () {
+            //--------------------------------------------------------
+            if ($('#inRecarregaGrid').val() == 0) {
+                debugger;
+
+                //CONSULTA os DADOS e CARREGA o GRID
+                var grid = $('#gridPossiveisParceiros').bootgrid({
+                            ajax: true,
+                            navigation: 0, //CABEÇALHO: 2 - Exibe só RODAPÉ
+                            columnSelection: false, //SELETOR de COLUNA: True - Habilita / False - Desabilita
+                            url: "/NovaCentralDeCompras/BuscarParceirosParaComposicaoDaCentralDeCompras",
+                            post: function () {
+                                /* PARÂMETROS a serem enviados na REQUISIÇÃO AJAX */
+                                return {
+                                    cCC: $('#incCC').val(),
+                                    eA: $('#ineA').val(),
+                                    cGA: $('#incGA').val()
+                                };
+                            },
+                            selection: true,
+                            multiSelect: true,
+                            rowSelect: true,
+                            keepSelection: true,
+                            formatters: {
+                                "commands": function (column, row) {
+                                    var hintTrash = "EXCLUIR o Item";
+                                    return "<button type=\"button\" class=\"btn btn-xs btn-default command-delete\" data-row-id=\"" + row.idEmpresa + "\" title=\"" + hintTrash + "\"><font color='red'><span class=\"fa fa-trash-o\"></span></font></button>";
+                                }
+                            }
+                            }).on("selected.rs.jquery.bootgrid", function(e, rows)
+                            {
+                                //var rowIds = [];
+
+                                //for (var i = 0; i < rows.length; i++)
+                                //{
+                                //    rowIds.push(rows[i].idEmpresa);
+                                //}
+
+                                //alert("Select: " + rowIds.join(","));
+
+                            }).on("deselected.rs.jquery.bootgrid", function(e, rows)
+                            {
+                                //var rowIds = [];
+
+                                //for (var i = 0; i < rows.length; i++)
+                                //{
+                                //    rowIds.push(rows[i].idEmpresa);
+                                //}
+
+                                //alert("Deselect: " + rowIds.join(","));
+
+                            }).on("loaded.rs.jquery.bootgrid", function () {
+                                /* Executa depois que os dados são carregados e renderizados */
+                                debugger;
+
+                                var quantRegistros = grid.bootgrid("getTotalRowCount");
+
+                                if (parseInt(quantRegistros) > parseInt(0)) {
+                                    $('#btn-enviarConvites').show(); //HABILITA botão CONVITE
+                                }
+                                else {
+                                    //SE NÃO FORAM ENCONTRADAS EMPRESAS PARA PARCERIA
+                                    swal({
+                                        title: "ATENÇÃO " + $('#inUsuResp').val() + ",\n",
+                                        text: "Você acabou de criar a Central de Compras:\n " + $('#inNomeCentralDeCompras').val() + "\ne e não existem empresas na mesma região ou arredores atuantes no mesmo ramo de atividade desta Central.\n\nDeseja excluir a Central de Compras que acabou de criar?",
+                                        type: "warning",
+                                        showCancelButton: true,
+                                        confirmButtonColor: "#337ab7",
+                                        confirmButtonText: "Sim",
+                                        cancelButtonText: "Não",
+                                        closeOnConfirm: true,
+                                    },
+                                   function (isConfirm) {
+                                       if (isConfirm) {
+                                           //-----------------------------------------------------------------------
+                                           debugger;
+
+                                           $.ajax({
+                                               type: "POST",
+                                               url: "/NovaCentralDeCompras/ExcluirACentralDeComprasQuandoNaoExistemParticipantesAlemDaEmpresaADM",
+                                               dataType: 'json',
+                                               data: {
+                                                   'cCC': $('#incCC').val(),
+                                                   'eA': $('#ineA').val()
+                                               },
+                                               success: function (data) {
+                                                   debugger;
+
+                                                   if (data.centralComprasExcluida == "Ok") {
+                                                       swal({
+                                                           title: "A Central de Compras foi EXCLUÍDA com SUCESSO.\n\nVocê será redirecionado para a página inicial.\n\nEquipe Cliente & Mercado.", type: "warning"
+                                                       },
+                                                       function () {
+                                                           debugger;
+
+                                                           //DESVIAR para PÁGINA INICIAL
+                                                           window.location.href = "@Url.Action("Index", "Home", new { Area = "Company" })";
+                                                       });
+                                                   }
+                                               }
+                                           });
+                                           //-----------------------------------------------------------------------
+                                       }
+                                       else {
+                                           debugger;
+
+                                           swal({
+                                               title: "Você será redirecionado para a página inicial.\n\nEquipe Cliente & Mercado.", type: "warning"
+                                           },
+                                           function () {
+                                               debugger;
+
+                                               //DESVIAR para PÁGINA INICIAL
+                                               window.location.href = "@Url.Action("Index", "Home", new { Area = "Company" })";
+                                           });
+
+                                           e.preventDefault();
+                                       }
+                                   });
+                                }
+
+                                grid.find(".command-delete").on("click", function (e) {
+                                    $(this).closest('tr').remove();
+                                });
+                            });
+
+                $('#inRecarregaGrid').val(1);
+            }
+            else {
+                debugger;
+
+                $('#gridPossiveisParceiros').bootgrid('reload');
+            }
+            //--------------------------------------------------------
+
+        });
+
+        //Botão que redireciona para CRIAR NOVA CENTRAL COMPRAS
+        $(document).on("click", "#btn-criarNovaCentralCompras", function () {
+            if ($('#inConvitesEnviados').val() == 1) {
+                //CONVITES foram enviados para POSSÍVEIS EMPRESAS PARCEIRAS
+                window.location.href = "@Url.Action("CriarCentralDeCompras", "NovaCentralDeCompras")";
+            }
+            else {
+                //AINDA NÃO FORAM ENVIADOS os CONVITES para as possíveis EMPRESAS PARCEIRAS
+                swal({
+                    title: "ATENÇÃO " + $('#inUsuResp').val() + ",\n",
+                    text: "Você acabou de criar a Central de Compras:\n " + $('#inNomeCentralDeCompras').val() + "\ne está deixando a página sem enviar os CONVITES às empresas que serão suas parceiras neste processo de compras.\nVocê pode realizar esta ação depois.\n\nDeseja mesmo sair sem enviar os CONVITES agora?",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#337ab7",
+                    confirmButtonText: "Sim",
+                    cancelButtonText: "Não",
+                    closeOnConfirm: true,
+                },
+               function (isConfirm) {
+                   if (isConfirm) {
+                       window.location.href = "@Url.Action("CriarCentralDeCompras", "NovaCentralDeCompras")";
+                   }
+               });
+            }
+        });
+
+        //Botão ENVIAR CONVITES
+        $(document).on("click", "#btn-enviarConvites", function () {
+            debugger;
+
+            var empresasParceirasSelecionadas = new Array();
+
+            $(".select-box:checked").each(function () {
+                if ($(this).val() != "all") {
+                    empresasParceirasSelecionadas.push($(this).val());
+                }
+            })
+
+            if (empresasParceirasSelecionadas.length > 0) {
+                jQuery.ajaxSettings.traditional = true;
+
+                $.ajax({
+                    type: "POST",
+                    url: "/NovaCentralDeCompras/EnviarConvitesParaEmpresasSelecionadasAComporACentralDeCompras", //CONTINUAR NA ACTION, NO CONTROLLER...
+                    dataType: 'json',
+                    data: {
+                        'cCC': $('#incCC').val(),
+                        'eA': $('#ineA').val(),
+                        'empresasSelecionadas': empresasParceirasSelecionadas
+                    },
+                    success: function (data) {
+                        debugger;
+
+                        if (data.convitesEnviados == "Ok") {
+                            swal({
+                                title: "Caro " + $('#inUsuResp').val() + ",\n\nOs convites foram enviados com SUCESSO para as empresas selecionadas.\nAguarde o contato e o ACEITE do convite pelas empresas para que possam começar suas cotações junto aos fornecedores\n\nVocê será redirecionado para a página onde visualizará todas as CENTRAIS de COMPRAS que sua empresa administra ou participa e poderá criar a partir dela suas cotações.\n\nLhe desejamos sucesso e bons negócios em suas Cotações e Compras.\n\nEquipe Cliente & Mercado.", type: "warning"
+                            },
+                            function () {
+                                debugger;
+
+                                $("#inConvitesEnviados").val(1);
+                                $(".select-box").prop("checked", false);
+                                $(".active").removeClass("active");
+                                $("#btn-criarNovaCentralCompras").show();
+                                $("#btn-enviarConvites").hide();
+
+                                //DESVIAR para PÁGINA de LISTAGEM das CENTRAIS de COMPRAS da empresa
+                                window.location.href = "@Url.Action("Index", "NossasCentraisDeCompras")";
+                            });
+
+                        }
+                    }
+                });
+            }
+            else {
+                swal({ title: "ATENÇÃO " + $('#inUsuResp').val() + ",\n\nSelecione 1 ou mais empresas para ENVIAR o Convite.", type: "warning", confirmButtonColor: "#337ab7" });
+            }
+        });
+    });
+</script>

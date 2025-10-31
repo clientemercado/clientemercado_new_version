@@ -1,0 +1,315 @@
+﻿@model  ClienteMercado.UI.Core.ViewModel.NovaCentralDeComprasViewModel
+
+@{
+    ViewBag.Title = "CadastroDosProdutosEmpresaFornecedora";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="http://code.jquery.com/jquery-1.8.2.js"></script>
+<script src="http://code.jquery.com/ui/1.9.0/jquery-ui.js"></script>
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.9.0/themes/base/jquery-ui.css" />
+
+    <!-- FIM DA BARRA DE FERRAMENTAS -->
+    <div class="row">
+        <!-- BEGIN VALIDATION STATES-->
+        <div class="portlet box blue">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="far fa-file-alt"></i>Importação de Produtos da Empresa Fornecedora<span class="step-title">
+                    </span>
+                </div>
+            </div>
+
+            <div class="portlet-body form">
+                <div class="form-actions">
+                    <div class="row">
+                        <div class="col-md-4">
+                            @*<button id="btn-novo" class="btn btn-primary btn-padrao" title="" style=""><i class="fa fa-file-o"></i>&nbsp;Novo Fornecedor</button>&nbsp;&nbsp;
+                            <button id="btn-continuar" class="btn btn-primary btn-padrao" title="" style=""><i class="fa fa-floppy-o"></i>&nbsp;Gravar</button>*@
+                        </div>
+                        <div class="col-md-8">&nbsp;</div>
+                    </div>
+                </div>
+                <!-- BEGIN FORM-->
+                <form class="form-horizontal">
+                    <div class="form-body">
+                        <div class="form-group" id="cabecalho_1">
+                            <label class="col-md-2 control-label"><font color="#3297E0"><b>Administradora:</b></font></label>
+                            <div class="col-md-4">
+                                <h5>@Model.NOME_FANTASIA_EMPRESA</h5>
+                            </div>
+                            <label class="col-md-2 control-label"><font color="#3297E0"><b>Ramo Atividade:</b></font></label>
+                            <div class="col-md-4">
+                                <h5>@Model.inRamoAtividadeEmpresaAdm</h5>
+                            </div>
+                            <label class="col-md-2 control-label"><font color="#3297E0"><b>Cidade:</b></font></label>
+                            <div class="col-md-4">
+                                <h5>@Model.inCidadeEmpresaAdmCC</h5>
+                            </div>
+                            <label class="col-md-2 control-label"><font color="#3297E0"><b>Usuário Resp:</b></font></label>
+                            <div class="col-md-4">
+                                <h5>@Model.NOME_USUARIO</h5>
+                            </div>
+                        </div>
+                        <hr />
+
+                        <div class="form-group">
+                            <!-- BEGIN SAMPLE TABLE PORTLET-->
+                            <br />
+                            <div class="portlet-body flip-scroll col-md-12">
+                                <div class="" id="tab1">
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3"><font color="#3297E0"><b>Arquivo .CSV de produtos:</b></font> <font color="red">*</font></label>
+                                        <div class="col-md-6">
+                                            @*<input type="text" id="inNomeUsuarioEmpresa" placeholder="informe Nome Usuário..." maxlength="100" size="50" obrigatorio="1" value="@Model.inNomeUsuarioEmpresa" class="form-control" />*@
+                                            <input type="file" id="fileInput" placeholder="Selecione o arquivo .CSV para importação..." accept=".csv" maxlength="100" size="50" obrigatorio="1" value="@Model.inNomeUsuarioEmpresa" class="form-control" />
+                                            <p id="status"></p>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <button id="btnUpload" class="btn btn-primary btn-padrao" title="" style="">Enviar</button>&nbsp;&nbsp;
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <!-- END FORM-->
+
+                <input type="hidden" id="inEdit" value="@ViewBag.inEdit" />
+                <input type="hidden" id="inDtHj" value="@Model.inDataCriacaoCC" />
+                <input type="hidden" id="inIdEmp" value="@ViewBag.idEmp" />
+            </div>
+        </div>
+        <!-- END VALIDATION STATES-->
+    </div>
+
+    <script src="~/Scripts/validacoes.js"></script>
+    <script>
+    jQuery(document).ready(function () {
+        @*if ($("#inNomeUsuarioEmpresa").val() != "")
+            $("#inCPF").attr("disabled", true);
+
+        if ($("#inEdit").val() == "E")
+            $("#inSenha").hide();
+
+        $("#inCPF").focus();
+
+        //Botão GRAVAR
+        $(document).on("click", "#btn-continuar", function () {
+            //VALIDANDO o PREENCHIMENTO dos CAMPOS
+            debugger;
+
+            var cont = 0;
+            var msg = "";
+            var obj = {};
+            var aviso = 0;
+            var mensagem = "ATENÇÃO!!!\n\nOs CAMPOS em vermelho, são de preenchimento obrigatório!"
+
+            $("input[type=text]").each(function () {
+                $(this).css({ "border": "1px solid #ccc", "padding": "2px" });
+                var input = $(this).val();
+                console.log($(this).attr("campo") + " " + input);
+
+                if (
+                    ($("#inCPF").val() == "") || ($("#inNomeUsuarioEmpresa").val() == "") || ($("#inEmailUsuario").val() == "") || ($("#inLogin").val() == "") || ($("#inSenha").val() == "")) {
+
+                    aviso = 1;
+                    if ($("#inCPF").val() == "") {
+                        $("#inCPF").css({ "border": "1px solid #F00", "padding": "2px" });
+                    }
+
+                    if ($("#inNomeUsuarioEmpresa").val() == "") {
+                        $("#inNomeUsuarioEmpresa").css({ "border": "1px solid #F00", "padding": "2px" });
+                    }
+
+                    if ($("#inLogin").val() == "") {
+                        $("#inLogin").css({ "border": "1px solid #F00", "padding": "2px" });
+                    }
+
+                    if ($("#inSenha").val() == "") {
+                        $("#inSenha").css({ "border": "1px solid #F00", "padding": "2px" });
+                    }
+
+                    if ($("#inEmailUsuario").val() == "") {
+                        $("#inEmailUsuario").css({ "border": "1px solid #F00", "padding": "2px" });
+                    }
+                }
+            });
+
+            debugger;
+
+            //VERIFICANDO CAMPOS
+            if (aviso == 1) {
+                swal({
+                    title: mensagem, type: "warning"
+                },
+                    function () {
+                        if ($("#inCPF").val() == "") {
+                            $("#inCPF").focus();
+                        }
+                        else if ($("#inNomeUsuarioEmpresa").val() == "") {
+                            $("#inNomeUsuarioEmpresa").focus();
+                        }
+                        else if ($("#inLogin").val() == "") {
+                            $("#inLogin").focus();
+                        }
+                        else if ($("#inSenha").val() == "") {
+                            $("#inSenha").focus();
+                        }
+                        else if ($("#inEmailUsuario").val() == "") {
+                            $("#inEmailUsuario").focus();
+                        }
+                    });
+            }
+            else {
+                //REGISTRAR/EDITAR NOVA EMPRESA FORNECEDORA
+                debugger;
+
+                $.ajax({
+                    type: "POST",
+                    url: "/NovaEmpresaFornecedor/RegistrarUsuEmpresaFornecedor",
+                    dataType: 'json',
+                    data: {
+                        'cpfUsu': $("#inCPF").val(),
+                        'nomeUsu': $("#inNomeUsuarioEmpresa").val(),
+                        'idEmp': $("#inIdEmp").val(),
+                        'log': $("#inLogin").val(),
+                        'pass': $("#inSenha").val(),
+                        'tipoG': $("#inEdit").val(),
+                        'emailUsu': $("#inEmailUsuario").val()
+                    },
+                    success: function (data) {
+                        debugger;
+
+                        if (data.msg == "Ok") {
+                            debugger;
+
+                            msg = ($("#inEdit").val() == "N") ? "SUCESSO!\n\nO USUÁRIO da Empresa Fornecedora foi registrado com Sucesso!" : "SUCESSO!\n\nOs dados do USUÁRIO foram alterados com Sucesso!";
+                            $("#inEdit").val("E");
+                            $("#inCPF").attr("disabled", true);
+                            $("#inSenha").hide();
+
+                            swal({
+                                title: msg, type: "warning"
+                            },
+                            function () { });
+                        }
+                        else if (data.tipoParticipacao == "NOk") {
+                            swal({
+                                title: "ATENÇÃO!\n\nOcorreu um ERRO ao tentar registrar a Empresa Fornecedora.\nTente novamente mais tarde.\n\nEquipe ClienteMercado", type: "warning"
+                            });
+                        }
+                    }
+                });
+            }
+        });
+
+        $(document).on("click", "#btn-novo", function () {
+            $("#inCPF").val('');
+            $("#inNomeUsuarioEmpresa").val('');
+            $("#inLogin").val('');
+            $("#inSenha").val('');
+            window.location.href = "@Url.Action("CriarNovaEmpresaFornecedor", "NovaEmpresaFornecedor", new { Area = "Company" })";
+        });
+
+        //DEFINIR RAMO ATIVIDADE
+        $(document).on("click", ".ramoatividade", function () {
+            if ($(".ramoatividade").is(":checked")) {
+                $('#inListaDeRamosDeAtividade').val($('#inMeuRamoAtividades').val());
+            }
+            else {
+                $('#inListaDeRamosDeAtividade').val(0);
+            }
+        });
+
+        //Ajax - Consulta CNPJ
+        $("#inCNPJ").blur(function () {
+            if ($("#inCNPJ").val() != '') {
+                $('#img_load_direcionada1').show();
+
+                $.ajax({
+                    type: 'POST',
+                    url: '/Registration_company/VerificaSeCNPJExisteNoBancoNew', //Caminho Controler/Action
+                    dataType: 'json', //Tipo de dados
+                    data: { 'cnpjDigitado': $("#inCNPJ").val() }, //Valor passado por parâmetro
+                    success: function (result) {
+                        $('#img_load_direcionada1').hide();
+                        debugger;
+
+                        if (result.validacaoCNPJ == 'cnpjjacadastrado') {
+                            //Se CNPJ já cadastrado, exibe dados identificadores da Empresa
+                            $("#inIdEmp").val(result.idEmpresa);
+                            $("#inNomeFantasiaEmpresa").val(result.nomeFantasia);
+                            $("#inDataCadastroEmpresa").val(result.dataCadastro);
+                            $("#inListaDeRamosDeAtividade").val(result.ramoAtividade),
+                            $("#inListaDeRamosDeAtividadeParaComprasDaCC").val(result.ramoAtividade);
+                            $("#inEnderecoEmpresa").val(result.endereco);
+                            $("#inCompEnderecoEmpresa").val(result.complemento);
+                            $("#inCepEnderecoEmpresa").val(result.cep);
+                            $("#inCidadeEmpresa").val(result.cidade);
+                            $("#inListaUFs").val(result.uf);
+                            $("#inBairroEmpresa").val(result.bairro);
+                            $("#inEdit").val('E');
+                            swal({
+                                title: "ATENÇÃO!!!\n\nEMPRESA já CADASTRADA!", type: "warning"
+                            },
+                                function () { });
+                        }
+                        else if (result.validacaoCNPJ == 'cnpjinvalido') {
+                            //Se CNPJ for INVÁLIDO
+                            swal({
+                                title: "ATENÇÃO!!!\n\nCNPJ INVÁLIDO!", type: "warning"
+                            },
+                                function () {
+                                    $('#inCNPJ').val('').focus();
+                                });
+                        }
+                    }
+                });
+            }
+        });
+    });
+
+    //LIMPAR CAMPO CNPJ
+    function limparCampoCPF() {
+        $("#inCPF").val('');
+        $("#inNomeUsuarioEmpresa").val('');
+        $("#inLogin").val('');
+        $("#inSenha").val('');
+    }*@
+
+        //======================================================================
+        document.getElementById('btnUpload').addEventListener('click', async () => {
+            debugger;
+
+            const file = document.getElementById('fileInput').files[0];
+            if (!file) return alert('Selecione um arquivo CSV.');
+
+            const formData = new FormData();
+            formData.append('file', file);
+
+            const res = await fetch('/api/upload', { method: 'POST', body: formData });
+            const data = await res.json();
+            const jobId = data.jobId;
+            document.getElementById('status').textContent = 'Processando...';
+
+            // Polling a cada 1 segundo
+            const interval = setInterval(async () => {
+                const r = await fetch(`/api/progresso/${jobId}`);
+                if (!r.ok) return;
+
+                const { progresso } = await r.json();
+                document.getElementById('progress').value = progresso;
+
+                if (progresso >= 100) {
+                    clearInterval(interval);
+                    document.getElementById('status').textContent = '✅ Concluído!';
+                } else if (progresso < 0) {
+                    clearInterval(interval);
+                    document.getElementById('status').textContent = '❌ Erro no processamento.';
+                }
+            }, 1000);
+        });
+        //======================================================================
+    </script>

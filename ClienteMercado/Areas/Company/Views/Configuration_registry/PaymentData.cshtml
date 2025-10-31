@@ -1,0 +1,129 @@
+﻿@model ClienteMercado.UI.Core.ViewModel.CadastroEmpresaViewModel
+
+@{
+    ViewBag.Title = "PaymentData";
+    Layout = "~/Views/Shared/_Layout_configuration.cshtml";
+}
+
+<script src="http://code.jquery.com/jquery-1.8.2.js"></script>
+<script src="http://code.jquery.com/ui/1.9.0/jquery-ui.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pnotify/3.2.1/pnotify.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pnotify/3.2.1/pnotify.buttons.js"></script>
+<script src="~/Scripts/validacoes.js"></script>
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.9.0/themes/base/jquery-ui.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pnotify/3.2.1/pnotify.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pnotify/3.2.1/pnotify.buttons.css" />
+
+<style>
+    .ui-pnotify {
+        top: 100px; /*Replace the 25px with the top that you need*/
+        right: 25px;
+        position: absolute;
+        height: auto;
+        z-index: 9999
+    }
+
+        .ui-pnotify.customsuccess .ui-pnotify-container {
+            background-color: #337ab7 !important;
+        }
+
+        .ui-pnotify.customsuccess .ui-pnotify-text {
+            font-size: 11px
+        }
+
+        .ui-pnotify.customsuccess .ui-pnotify-title,
+        .ui-pnotify.customsuccess .ui-pnotify-text,
+        .ui-pnotify.customsuccess .ui-pnotify-icon,
+        .ui-pnotify.customsuccess .ui-pnotify-sticker,
+        .ui-pnotify.customsuccess .ui-pnotify-closer {
+            color: #FFF !important;
+        }
+</style>
+
+<div class="row">
+<!-- BEGIN VALIDATION STATES-->
+    <div class="portlet box blue">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="fas fa-money-check"></i>Configurações - Dados Financeiros - Etapa 3 de 3
+            </div>
+        </div>
+
+        <div class="portlet-body form">
+            <form class="form-horizontal">
+                <div class="form-body"> <!-- CONTINUAR AQUI - ACERTAR ESSE RETORNO NO BOTÃO VOLTAR -->
+                    <a href="@Url.Action("DataLocation", "Configuration_registry")" class="btn default button-previous"><i class="fas fa-arrow-left"></i> Voltar</a>
+                    <hr />
+                    <div class="form-group">
+                        <div class="col-md-12">@*<font color="#3297E0"><h4><b>Como sua empresa pretende atuar no Cliente Mercado:</b></h4></font>*@
+                            <p><h4>Sr(a) <b>@Model.APELIDO_USUARIO,</b></h4></p>
+                            @*<br />*@
+                            <p><h4>Você terá <b>60</b> dias para utilizar <b>gratuitamente</b> os recursos do site ClienteMercado.</h4></p>
+                            <p><h4>É importante saber:</h4></p>
+                            <ul>
+                                <li><h4>Ao aceitar os termos de uso, sua data para uso gratuito iniciará hoje <b>@ViewBag.dataHojeFormatada</b> e finalizará em <b>@ViewBag.dataVencimentoPeriodoGratuito;</b></h4></li>
+                                <li><h4>Sua empresa poderá atuar em nossa plataforma nesse período, como empresa <b>COMPRADORA</b> ou empresa <b>FORNECEDORA</b> ou ambos (<b>COMPRADORA</b> e <b>FORNECEDORA</b>);</h4></li>
+                                <li><h4>Após o término do <b>período de gratuidade</b> em <b>@ViewBag.dataVencimentoPeriodoGratuito</b>, caso você opte por continuar a usar a plataforma, (<b>após sua confirmação</b>) lhe será cobrada uma taxa mensal de <b>R$ 150,00</b>, a ser paga via <b>Boleto Bancário</b> (+ taxa boleto), <b>Cartão de Crédito</b> ou <b>PicPay</b>;</h4></li>
+                                <li><h4>Reinteramos que esta <b>plataforma</b> é uma <b>ferramenta profissional</b> de <b>uso pago</b>, que <b>visa trazer economia para sua empresa através das Compras em Grupo</b>, diminuindo dessa forma o seu preço final para o consumidor e tornando sua empresa mais competitiva no mercado onde atua.</h4></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <button type="button" id="btn-comecarGratuidade" class="btn btn-primary btn-padrao" title="" style=""><i class="fas fa-flag-checkered"></i> Começar período GRATUITO</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <!-- END FORM-->
+
+            <input type="hidden" id="inMeuRamoAtividades" value="@ViewBag.codRamoAtividadeEmpresaAdm" />
+            <input type="hidden" id="inIdPais" value="@Model.PAIS_EMPRESA_USUARIO" />
+            <input type="hidden" id="inIdEndereco" value="@Model.ID_CODIGO_ENDERECO_EMPRESA_USUARIO" />
+            <input type="hidden" id="inIdEstado" value="@Model.ID_ESTADOS_EMPRESA_USUARIO" />
+            <input type="hidden" id="inDocLogado" value="@Model.CPF_USUARIO" />
+            <input type="hidden" id="inCodAtacadista" value="@Model.ID_GRUPO_ATIVIDADES_ATACADO" />
+            <input type="hidden" id="inCodVarejista" value="@Model.ID_GRUPO_ATIVIDADES_VAREJO" />
+            <input type="hidden" id="inPrimeiroAcesso" value="@ViewBag.primeiroAcesso" />
+            <input type="hidden" id="inTipoAtuacaoNoSite" value="@ViewBag.tipoAtuacao" />
+            <input type="hidden" id="inDataFialGratuidade" value="@ViewBag.dataVencimentoPeriodoGratuito" />
+        </div>
+    </div>
+    <!-- END VALIDATION STATES-->
+</div>
+
+<script>
+    jQuery(document).ready(function () {
+        debugger;
+
+        $("#btn-comecarGratuidade").click(function () {
+            debugger;
+
+            $.ajax({
+                type: 'POST',
+                url: '/Configuration_registry/ComecarGratuidadeNoSistema',
+                dataType: 'json', //Tipo de dados
+                data: {
+                    'dataFinalGratuidade': $('#inDataFialGratuidade').val()
+                },
+                success: function (result) {
+                    debugger;
+
+                    if (result.dataFinalGratuidadeRegistrada = "Ok") {
+
+                        swal({
+                            title: "ATENÇÃO!\n\nSeu PERÍODO de GRATUIDADE de 60 dias começa agora.\nVocê será redirecionado para a página inicial, onde poderá dar início ao uso das ferramentas que esta plataforma lhe proporciona.\n\nAtenciosamente,\n\nEquipe ClienteMercado", type: "warning"
+                        },
+                            function () {
+                                //DESVIAR PARA PÁGINA DA ETAPA 3
+                                window.location.href = "@Url.Action("Index", "Home")";
+                        });
+                    }
+                }
+            });
+        });
+    });
+</script>

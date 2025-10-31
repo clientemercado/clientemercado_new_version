@@ -1,0 +1,30 @@
+﻿@{
+ViewBag.Title = "ClienteMercado";
+Layout = "~/Views/Shared/_Layout_Confirma_Novo_Login.cshtml";
+}
+
+<script src="~/Scripts/contadorRegressivo.js"></script>
+
+<div id="label_titulo_paginas2" class="label_paginas">&nbsp;&nbsp;Alteração de Senha</div>
+
+<div id="container_nova_senha2">
+    <div id="mensagem_apresentacao1" class="formata_msg_sucesso">
+        <img src='@Url.Content("~/Content/images/tick_.png")' style='margin-left: 25px; margin-top: 35px; border: none;' />
+        Senha alterada com sucesso. Por favor, utilize-a em seu próximo acesso. Obrigado!
+    </div>
+    <div id="mensagem_apresentacao2" class="formata_msg_sucesso2">
+        Você será redirecionado para a área de Login em:&nbsp;&nbsp;&nbsp; 
+    </div>
+    <div id="mensagem_segundos" ></div>
+</div>
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            countDown();
+        });
+    </script>
+}

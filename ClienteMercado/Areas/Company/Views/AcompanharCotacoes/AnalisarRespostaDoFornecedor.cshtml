@@ -1,0 +1,1405 @@
+﻿@model  ClienteMercado.UI.Core.ViewModel.DadosDaCotacaoViewModel
+
+@{
+    ViewBag.Title = "Analisar Resposta Do Fornecedor";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="http://code.jquery.com/jquery-1.8.2.js"></script>
+<script src="http://code.jquery.com/ui/1.9.0/jquery-ui.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pnotify/3.2.1/pnotify.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pnotify/3.2.1/pnotify.buttons.js"></script>
+
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.9.0/themes/base/jquery-ui.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pnotify/3.2.1/pnotify.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pnotify/3.2.1/pnotify.buttons.css" />
+
+<style>
+    .HideColHead {
+        display: none
+    }
+
+    .HideCol {
+        display: none
+    }
+
+    th {
+        background-color: #CDC9C9;
+        color: white;
+    }
+
+    .status {
+        font-size: 9pt;
+    }
+
+    a:link {
+        text-decoration: none;
+    }
+
+    .sweet-alert button.cancel {
+        background-color: #337ab7;
+        color: white;
+    }
+
+        .sweet-alert button.cancel:hover {
+            background-color: #337ab7;
+            color: white;
+        }
+
+    .ui-pnotify {
+        top: 100px; /*Replace the 25px with the top that you need*/
+        right: 25px;
+        position: absolute;
+        height: auto;
+        z-index: 9999
+    }
+
+        .ui-pnotify.customsuccess .ui-pnotify-container {
+            background-color: #337ab7 !important;
+        }
+
+        .ui-pnotify.customsuccess .ui-pnotify-text {
+            font-size: 11px
+        }
+
+        .ui-pnotify.customsuccess .ui-pnotify-title,
+        .ui-pnotify.customsuccess .ui-pnotify-text,
+        .ui-pnotify.customsuccess .ui-pnotify-icon,
+        .ui-pnotify.customsuccess .ui-pnotify-sticker,
+        .ui-pnotify.customsuccess .ui-pnotify-closer {
+            color: #FFF !important;
+        }
+
+    .alinhacentro {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: auto;
+        font-family: Verdana;
+        color: #FF0000;
+        font-weight: bold;
+    }
+</style>
+
+<div class="row">
+    @*<div class="col-md-12">*@
+    <!-- BEGIN VALIDATION STATES-->
+    <div class="portlet box blue">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="fas fa-clipboard-list"></i> Acompanhar Cotações / Analisar Resposta Do Fornecedor
+            </div>
+        </div>
+        <div class="portlet-body form">
+            <!-- BEGIN FORM-->
+            <form action="#" class="form-horizontal">
+                <div class="form-body">
+                    <div class="form-group" id="cabecalho" style="">
+                        <label class="col-md-2 control-label"><font color="#3297E0"><b>Central Compras:</b></font></label>
+                        <div class="col-md-4">
+                            <h5>@Model.inNomeCentralCompras</h5>
+                        </div>
+                        <label class="col-md-2 control-label"><font color="#3297E0"><b>Ramo Atividade:</b></font></label>
+                        <div class="col-md-4">
+                            <h5>@Model.inRamoAtividadeCC</h5>
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="form-group" id="cabecalho" style="">
+                        <label class="col-md-2 control-label"><font color="#3297E0"><b>Fornecedor:</b></font></label>
+                        <div class="col-md-4">
+                            <h5>@Model.inNomeFantasiaEmpresaCotada</h5>
+                        </div>
+                        <label class="col-md-2 control-label"><font color="#3297E0"><b>Contato:</b></font></label>
+                        <div class="col-md-4">
+                            <h5>@Model.inNomeUsuarioRespDaEmpresaCotada</h5>
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="form-actions">
+                        <div class="row">
+                            <div class="col-md-9">
+                                <a href="@Url.Action("MapaDaCotacao", "AcompanharCotacoes", new { Area = "Company", cCC = @Model.cCC, iCM = Model.iCM })" class="btn default button-previous">
+                                    <i class="fas fa-arrow-left"></i> Voltar
+                                </a>
+
+                                @{
+                                    if (Model.inCodEmpresaLogada == Model.inCodEmpresaADM)
+                                    {
+                                        if (Model.inCodEmpresaFornecedoraComRespostaEmAnalise > 0)
+                                        {
+                                            if (Model.idEmpresaFornecedoraCotada == Model.inCodEmpresaFornecedoraComRespostaEmAnalise)
+                                            {
+                                                if (Model.quantidadeEmpresasQueRegistraramOAceiteDosValoresCotados == Model.quantidadeEmpresasParticipantesDestaCotacao)
+                                                {
+                                                    <a href="#" id="" class="btn btn-success"><i class="far fa-check-circle"></i> Negociação Aceita</a>
+                                                    <a href="#" id="checkall" class="btn btn-primary check"><i class="far fa-check-square"></i> Seleciona Todos Itens</a>
+                                                    <a href="#" id="deselectall" class="btn btn-danger check" style="display:none;"><i class="far fa-square"></i> Desmarca Todos Itens</a>
+
+                                                    if (ViewBag.TodosItensPedidos != "sim")
+                                                    {
+                                                        <a href="#" id="inEfetuarPedido" class="btn blue button-submit"><i class="fas fa-file-signature"></i> Fazer Pedido</a>
+                                                    }
+                                                    else
+                                                    {
+                                                        <a href="#" id="inEfetuarPedido" class="btn blue button-submit" style="display:none;"><i class="fas fa-file-signature"></i> Fazer Pedido</a>
+                                                        <a href="#" id="inCancelarPedido" class="btn btn-danger" style=""><i class="far fa-window-close"></i> Cancelar Pedido</a>
+
+                                                        if (ViewBag.fornecedorConfirmouPedido)
+                                                        {
+                                                            <a href="#" id="inConfirmarEntregaPedido" class="btn blue" style="" title="Confirmar Itens do Pedido já entregues"><i class="fas fa-box-open"></i></a>
+                                                        }
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    if (Model.cotacaoRespondida == "sim")
+                                                    {
+                                                        <a href="#" id="inSolicitarConfirmacao" class="btn blue button-submit"><i class="fas fa-stamp"></i> Confirmar Associados</a>
+                                                    }
+                                                }
+                                            }
+                                            else
+                                            {
+                                                if (Model.quantidadeEmpresasQueRegistraramOAceiteDosValoresCotados == Model.quantidadeEmpresasParticipantesDestaCotacao)
+                                                {
+                                                    <a href="#" id="" class="btn btn-info"><i class="far fa-check-circle"></i> <b>Cotação Encerrada</b></a>
+                                                }
+                                                else
+                                                {
+                                                    <a href="#" id="" class="btn btn-warning"><i class="fas fa-search"></i> Cotação em Análise</a>
+                                                }
+                                            }
+                                        }
+                                        else
+                                        {
+                                            if (Model.possuiContraProposta == "sim")
+                                            {
+                                                <a href="#" id="inCancelarContraProposta" class="btn btn-danger"><i class="far fa-edit"></i> Cancelar Contra-Proposta</a>
+                                            }
+                                            else
+                                            {
+                                                if (Model.cotacaoRespondida == "sim")
+                                                {
+                                                    <a href="#" id="inEnviarContraProposta" class="btn blue button-submit"><i class="far fa-edit"></i> Enviar Contra-Proposta</a>
+                                                }
+                                            }
+
+                                            if (Model.existemCotacoesQueReceberamContraProposta == "sim")
+                                            {
+                                                if (Model.possuiContraProposta == "sim")
+                                                {
+                                                    if (Model.cotacaoRespondida == "sim")
+                                                    {
+                                                        <a href="#" id="inSolicitarConfirmacao" class="btn  blue button-submit"><i class="fas fa-stamp"></i> Confirmar Associados</a>
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    <a href="#" id="" class="btn btn-info"><i class="fas fa-stamp"></i>  Confirmar Associados (aguarde)</a>
+                                                }
+                                            }
+                                            else
+                                            {
+                                                if (Model.cotacaoRespondida == "sim")
+                                                {
+                                                    <a href="#" id="inSolicitarConfirmacao" class="btn  blue button-submit"><i class="fas fa-stamp"></i> Confirmar Associados</a>
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    if ((Model.existeSolicitacaoDeConfirmacaoAprovandoRespostaDosFornecedores == "sim") && (Model.inCodEmpresaLogada != Model.inCodEmpresaADM))
+                                    {
+                                        if (Model.todosCotantesAceitaramNegociacao == "nao")
+                                        {
+                                            if (Model.idEmpresaFornecedoraCotada == Model.inCodEmpresaFornecedoraComRespostaEmAnalise)
+                                            {
+                                                <a href="#" id="inConfirmarAceiteDaNegociacao" title="Aceitar Negociação" class="btn btn-warning aceitenegociacao"> <i class="fas fa-thumbs-up"></i> Aceitar negociação</a>
+                                                <a href="#" id="inNegociacaoAceita" class="btn btn-success" style="display: none;"> <i class="far fa-check-circle"></i> Negociação Aceita</a>
+
+                                                if (@Model.inCodEmpresaLogada == @Model.inCodEmpresaADM)
+                                                {
+                                                    <a href="#" id="checkall" class="btn btn-primary check"><i class="far fa-check-square"></i> Seleciona Todos Itens</a>
+                                                    <a href="#" id="deselectall" class="btn btn-danger check" style="display:none;"><i class="far fa-square"></i> Desmarca Todos Itens</a>
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <a href="#" id="" class="btn btn-warning"><i class="fas fa-search"></i> Cotação em Análise</a>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            if (Model.idEmpresaFornecedoraCotada == Model.inCodEmpresaFornecedoraComRespostaEmAnalise)
+                                            {
+                                                <a href="#" id="" class="btn btn-success"><i class="far fa-check-circle"></i> Negociação Aceita</a>
+
+                                                if (@Model.inCodEmpresaLogada == @Model.inCodEmpresaADM)
+                                                {
+                                                    <a href="#" id="checkall" class="btn btn-primary check"><i class="far fa-check-square"></i> Seleciona Todos Itens</a>
+                                                    <a href="#" id="deselectall" class="btn btn-danger check" style="display:none;"><i class="far fa-square"></i> Desmarca Todos Itens</a>
+                                                }
+                                            }
+                                            else
+                                            {
+                                                if (Model.quantidadeEmpresasQueRegistraramOAceiteDosValoresCotados == Model.quantidadeEmpresasParticipantesDestaCotacao)
+                                                {
+                                                    <a href="#" id="" class="btn btn-info"><i class="far fa-check-circle"></i> <b>Cotação Encerrada</b></a>
+                                                }
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if ((Model.possuiContraProposta == "sim") && (Model.inCodEmpresaLogada != Model.inCodEmpresaADM))
+                                        {
+                                            <a href="#" id="" class="btn btn-danger"> Contra-Proposta em Análise</a>
+                                        }
+                                    }
+                                }
+                            </div>
+
+                            @{
+                                if (Model.idEmpresaFornecedoraCotada == Model.inCodEmpresaFornecedoraComRespostaEmAnalise)
+                                {
+                                    <div class="col-md-1">
+                                        <font color="#3297E0" size="2"><b>Participantes:</b></font>&nbsp;<font size="3"><b>@Model.quantidadeEmpresasParticipantesDestaCotacao</b></font>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <font color="#3297E0" size="2"><b>Confirmados:</b></font>&nbsp;&nbsp;<font size="3" color="@Model.corQuantidadeConfirmada"><b>@Model.quantidadeEmpresasQueRegistraramOAceiteDosValoresCotados</b></font>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="col-md-3"></div>
+                                }
+                            }
+                        </div>
+                    </div>
+
+                    <div id="inMensagemStatus" class="col-md-12 alinhacentro" style=''></div>
+                    <br />
+                    <div class="form-group">
+                        <div class="portlet-body flip-scroll col-md-12">
+                            <table id="gridItensCotadosRespondidos" class="table table-bordered table-striped table-condensed flip-content">
+                                <thead class="flip-content">
+                                    <tr>
+                                        @*<th data-column-id="idItemCotacao" data-type="numeric" data-identifier="true" data-visible="false" data-width="4%">&nbsp;</th>*@
+                                        <th data-formatter="link0" data-width="4%" data-header-align="center" data-align="center">&nbsp;</th>
+                                        <th data-formatter="link1" data-width="20%" data-header-align="left" data-align="left">Produto</th>
+                                        <th data-formatter="link2" data-width="15%" data-header-align="left" data-align="left">Marca</th>
+                                        <th data-formatter="link3" data-width="7%" data-header-align="center" data-align="right">Quant.</th>
+                                        <th data-formatter="link4" data-width="8%" data-header-align="center" data-align="center">Unid.</th>
+                                        <th data-formatter="link5" data-width="9%" data-header-align="center" data-align="right">R$ Tab.</th>
+                                        <th data-formatter="valorresp" data-width="11%" data-header-align="center" data-align="right">R$ Resp.</th>
+                                        <th data-formatter="valorcp" data-width="9%" data-header-align="center" data-align="right">R$ CP</th>
+                                        <th data-formatter="valorTotal" data-width="10%" data-header-align="center" data-align="right">R$ Total</th>
+                                        <th data-formatter="link6" data-width="7%" data-header-align="center" data-align="center">Ped. Nº</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <hr />
+
+                    <div class="form-group">
+                        <div class="portlet-body flip-scroll col-md-12">
+                            <font color="#3297E0"><label class=""><i class="far fa-comments"></i> <b>Perguntas do Comprador / Fornecedor:</b></label></font>
+                        </div>
+                        <div class="portlet-body flip-scroll col-md-12">
+                            @{
+                                if (Model.inCodEmpresaLogada == Model.inCodEmpresaADM)
+                                {
+                                    <div id="texto_chat_alternativo" style="border:0px;">
+                                        <input type="text" name="name" id="TEXTO_CHAT_COTACAO_USUARIO_COTANTE_ALTERNATIVO" data-required="1" size="20" class="form-control cotacao" placeholder="digite sua pergunta..." />
+                                    </div>
+                                    <div id="texto_chat_principal" style="border:0px; display:none">
+                                        <input type="text" name="name" id="TEXTO_CHAT_COTACAO_USUARIO_COTANTE" data-required="1" size="20" class="form-control cotacao" placeholder="digite sua pergunta..." />
+                                        <div align="right"><small class="caracteres"></small></div>
+                                    </div>
+                                }
+                            }
+                            <br />
+                            <!-- TRANSCRIÇÃO do DIÁLOGO ENTRE COTANTE e FORNECEDOR -->
+                            <div role="tabpanel" class="tab-pane active" id="dialogos">
+                                <table id="dialogo_entre_cotante_efornecedor" class="table table-striped table-hover"></table>
+                            </div>
+                        </div>
+                        <div id="botao_enviar" class="col-md-12" style="align-content:center; display:none">
+                            <a href="#" id="enviarPerguntaOuResposta" class="btn btn-primary btn-large" title="Enviar conteúdo digitado como PERGUNTA ou RESPOSTA"><i class="fa fa-share"></i> Enviar</i></a>
+                        </div>
+                    </div>
+
+                </div>
+            </form>
+
+            <div id="modalBaixaPedido" class="modal fade" role="dialog">
+                <br /><br /><br />
+                <div class="modal-dialog modal-lg" style="width:50%">
+                    <div class="modal-content">
+
+                        <div class="modal-header" style="background-color: #337ab7">
+                            <a><i type="button" class="glyphicon glyphicon-remove" data-dismiss="modal" style="color:#fff; position: absolute;top:8px;right: 8px;"></i></a>
+                            <h4 class="modal-title" style="text-align:left;"><font color=white><i class="fas fa-list-ol"></i> Baixa do(s) PEDIDO(s) Entregue(s):</font></h4>
+                        </div>
+
+                        <div class="portlet-body form">
+                            <div class="row">
+                                <div class="form-body">
+                                    <div class="col-md-12">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label><b>Nº Pedido a baixar:</b></label>
+                                                @Html.DropDownList("inListaPedidosBaixa", Model.inListaPedidosBaixa, new { @class = "form-control obrigatorio", @id = "inListaPedidosBaixa" })
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label><b>Dt. Entrega:</b></label>
+                                                <input type='text' id='inDataEntrega' size='10' value="" maxlength="10" class='form-control data info obrigatorio' placeholder="DD/MM/AAAA" style='' onclick='' />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label>&nbsp;</label>
+                                            <br />
+                                            <a href="#" id="inConfirmarBaixa" class="btn blue button-submit botoes" style=''><i class='fas fa-check'></i> Baixar</a>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">&nbsp;</div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <input type="hidden" id="inCCC" value="@Model.cCC" />
+            <input type="hidden" id="ineA" value="@Model.ineACriptografado" />
+            <input type="hidden" id="inICM" value="@Model.iCM" />
+            <input type="hidden" id="iniCCF" value="@Model.iCCF" />
+            <input type="hidden" id="inCodigoEmpresaAdmCC" value="@Model.inCodEmpresaADM" />
+            <input type="hidden" id="inCodigoUsuarioAdmCC" value="@Model.inCodUsuariomEmpresaADM" />
+            <input type="hidden" id="inCodigoEmpresaLogada" value="@Model.inCodEmpresaLogada" />
+            <input type="hidden" id="inNomeCentralCompras" value="@Model.inNomeCentralCompras" />
+            <input type="hidden" id="inIdEmpresaFornecedora" value="@Model.idEmpresaFornecedoraCotada" />
+            <input type="hidden" id="inNomeFornecedor" value="@Model.inNomeFantasiaEmpresaCotada" />
+            <input type="hidden" id="inCodigoEmpresaFornecedoraComRespostaEmAnalise" value="@Model.inCodEmpresaFornecedoraComRespostaEmAnalise" />
+            <input type="hidden" id="idUsuarioEmpresaFornecedoraCotada" value="@Model.idUsuarioEmpresaFornecedoraCotada" />
+            <input type="hidden" id="inVerParticipantes" value="" />
+            <input type="hidden" id="inExistemOutrosFornecedoresComContraProposta" value="@Model.existemCotacoesQueReceberamContraProposta" />
+            <input type="hidden" id="inPossuiContraPropostaEnviada" value="@Model.possuiContraProposta" />
+            <input type="hidden" id="inRejeitouCP" value="@Model.inRejeitouContraProposta" />
+            <input type="hidden" id="inAceiteCP" value="@Model.inAceitouContraProposta" />
+            <input type="hidden" id="ID_FORNECEDOR_COTACAO_ANALISADA" value="0" />
+            <input type="hidden" id="inValorTotal" value="" />
+            <input type="hidden" id="inIdPedidoRecebido" value="@ViewBag.idPedido" />
+            <input type="hidden" id="inCodControlePedido" value="@ViewBag.codControlePedido" />
+            <input type="hidden" id="inTodosCotantesAceitaramNegociacao" value="@Model.todosCotantesAceitaramNegociacao" />
+            <input type="hidden" id="inSolicitaconfirmacao" value="Model.existeSolicitacaoDeConfirmacaoAprovandoRespostaDosFornecedores" />
+            <input type="hidden" id="inAceitouNegociacao" value="@Model.negociacaoDoAdmComFornecedoresAceita" />
+            <input type="hidden" id="inRejeitouNegociacao" value="@Model.rejeitouSolicitacaoAprovandoValoresCotacao" />
+            <input type="hidden" id="mensagemStatus" value="@Model.mensagemStatus" />
+            <input type="hidden" id="inTodosItensPedidos" value="@ViewBag.TodosItensPedidos" />
+            <input type="hidden" id="inTodosOsPedidosEntregues" value="@Model.pedidoEntregueIntegralmente" />
+            <input type="hidden" id="inRejeitouPedido" value="@Model.rejeitouPedido" />
+        </div>
+    </div>
+    <!-- END VALIDATION STATES-->
+    @*</div>*@
+</div>
+
+<script>
+    jQuery(document).ready(function () {
+        carregarGrid();
+        carregarChat();
+
+        $(".data").mask("99/99/9999");
+        $('.monetario').mask('000.000.000.000.000,00', { reverse: true });
+
+        if ($('#inRejeitouPedido').val() == "sim") {
+            swal({ title: "ATENÇÃO:<br><br>Este fornecedor DESISTIU de atender um PEDIDO para esta COTAÇÃO.", type: "warning", confirmButtonColor: "#337ab7", html: true });
+        }
+
+        if ($('#inAceitouNegociacao').val() == "sim") {
+            $('#inConfirmarAceiteDaNegociacao').hide();
+            $('#inNegociacaoAceita').show();
+        }
+
+        if ($('#inRejeitouCP').val() == "sim") {
+            $('#inSolicitarConfirmacao').hide();
+        }
+
+        if ($('#inTodosItensPedidos').val() == "sim") {
+            $('.check').hide();
+        }
+
+        if ($('#inTodosOsPedidosEntregues').val() == "sim") {
+            $('#inEfetuarPedido').hide();
+            $('#inCancelarPedido').hide();
+            $('#checkall').hide();
+        }
+
+        if ($('#mensagemStatus').val() != "") {
+            $('#inMensagemStatus').append("<font color='#3297E0'><i class='far fa-check-circle'></i></font>&nbsp;" + $('#mensagemStatus').val());
+        }
+
+        //Desabilita / Habilita o campo para digitação do texto de PERGUNTA / RESPOSTA
+        $("#TEXTO_CHAT_COTACAO_USUARIO_COTANTE_ALTERNATIVO").focus(function () {
+            $("#texto_chat_alternativo").hide();
+            $("#texto_chat_principal").show();
+            $("#botao_enviar").show();
+
+            $("#TEXTO_CHAT_COTACAO_USUARIO_COTANTE").val('');
+            $("#TEXTO_CHAT_COTACAO_USUARIO_COTANTE").focus();
+        });
+
+        $("#TEXTO_CHAT_COTACAO_USUARIO_COTANTE").focus(function () {
+            $("#botao_enviar").show();
+        });
+
+        if ($('#inAceiteCP').val() == "sim") {
+            $('#TEXTO_CHAT_COTACAO_USUARIO_COTANTE_ALTERNATIVO').hide();
+        }
+        else if ($('#inAceiteCP').val() == "nao") {
+            $('#TEXTO_CHAT_COTACAO_USUARIO_COTANTE_ALTERNATIVO').show();
+        }
+        else {
+            $('#inMensagemStatus').append("");
+        }
+
+        //SOLICITAR CONFIRMAÇÃO aos demais PARTICIPANTES da COTAÇÃO, PRETENCENTES À CENTRAL COMPRAS
+        $("#inSolicitarConfirmacao").click(function () {
+            debugger;
+
+            if (($('#inPossuiContraPropostaEnviada').val() == 'sim') && ($('#inAceiteCP').val() == "nao")) {
+                swal({ title: "ATENÇÃO:<br><br>Você enviou uma <b>CONTRA-PROPOSTA</b> a esse fornecedor.<br><br>Favor aguardar a resposta do fornecedor, <b>ACEITANDO</b> ou <b>NÃO ACEITANDO</b> a mesma.", type: "warning", confirmButtonColor: "#337ab7", html: true });
+            }
+            else {
+                $.ajax({
+                    url: "/AcompanharCotacoes/SolicitarConfirmacaoDaCotacaoAosDemaisCotantes",
+                    dataType: 'json',
+                    cache: false,
+                    async: true,
+                    data: {
+                        'cCC': $('#inCCC').val(),
+                        'eA': $('#ineA').val(),
+                        'iCM': $("#inICM").val(),
+                        'iCCF': $("#iniCCF").val(),
+                        'idFor': $('#inIdEmpresaFornecedora').val()
+                    },
+                    success: function (data) {
+                        debugger;
+
+                        if (data.confirmacaoSolicitada == "Ok") {
+
+                            //EXIBE MSG LATERAL À DIREITA SUPERIOR
+                            new PNotify({
+                                title: 'Sucesso!',
+                                text: 'SOLICITAÇÕES de CONFIRMAÇÃO da Cotação enviadas com Sucesso!',
+                                type: 'success',
+                                styling: 'bootstrap3',
+                                icons: 'bootstrap3',
+                                addclass: 'customsuccess',
+                                animateSpeed: 'fast',
+                                mouseReset: true,
+                                Buttons: {
+                                    closer: true
+                                }
+                            });
+
+                            /*
+                             OBS: DEMAIS COMPORTAMENTOS AQUI!...
+                             */
+
+                            //RECARREGAR a PÁGINA
+                            window.location.href = "@Url.Action("AnalisarRespostaDoFornecedor", "AcompanharCotacoes", new { Area = "Company" })" + "?cCC=" + $('#inCCC').val() + "&iCM=" + $('#inICM').val() + "&iCCF=" + $('#iniCCF').val();
+                        }
+                    }
+                });
+            }
+        });
+
+        //Botão GERAR CONTRA-PROPOSTA para a EMPRESA FORNECEDORA onde for clicado
+        $("#inEnviarContraProposta").click(function () {
+            swal({
+                title: "ATENÇÃO!!\n\n",
+                text: "Será montada uma <b>CONTRA-PROPOSTA</b> com os <b>menores preços</b> respondidos por todas as empresas cotadas, a ser enviada ao fornecedor <b>" + $('#inNomeFornecedor').val() + "</b>.<br><br>Confirma o envio desta <b>CONTRA-PROPOSTA</b>?",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#337ab7",
+                confirmButtonText: "Sim",
+                cancelButtonText: "Não",
+                closeOnConfirm: true,
+                html: true
+            },
+                function (isConfirm) {
+                    if (isConfirm) {
+                        debugger;
+
+                        $.ajax({
+                        url: "/AcompanharCotacoes/GerarContraPropostaAoFornecedorEmQuestao",
+                        dataType: 'json',
+                        cache: false,
+                        async: true,
+                        data: {
+                            'idCotacaoFilha': $("#iniCCF").val(),
+                            'idFornecedor': $('#inIdEmpresaFornecedora').val(),
+                            'cCC': $('#inCCC').val(),
+                            'codEmpresaAdm': $('#inCodigoEmpresaAdmCC').val()
+                        },
+                        success: function (data) {
+                            debugger;
+
+                                if (data.contraPropostaGerada == "Ok") {
+                                    //EXIBE MSG LATERAL À DIREITA SUPERIOR
+                                    new PNotify({
+                                        title: 'SUCESSO!',
+                                        text: 'CONTRA PROPOSTA enviada ao FORNECEDOR com SUCESSO!',
+                                        type: 'success',
+                                        styling: 'bootstrap3',
+                                        icons: 'bootstrap3',
+                                        addclass: 'customsuccess',
+                                        animateSpeed: 'fast',
+                                        mouseReset: true,
+                                        Buttons: {
+                                            closer: true
+                                        }
+                                    });
+
+                                    //RECARREGAR a PÁGINA
+                                    window.location.href = "@Url.Action("AnalisarRespostaDoFornecedor", "AcompanharCotacoes", new { Area = "Company" })" + "?cCC=" + $('#inCCC').val() + "&iCM=" + $('#inICM').val() + "&iCCF=" + $('#iniCCF').val();
+                                }
+                            }
+                        });
+                    }
+                    else {
+                        debugger;
+                    }
+                });
+
+        });
+
+        //Botão CANCELAR ENVIO da CONTRA-PROPOSTA para a EMPRESA FORNECEDORA
+        $("#inCancelarContraProposta").click(function () {
+            $.ajax({
+                url: "/AcompanharCotacoes/CancelarContraPropostaAoFornecedorEmQuestao",
+                dataType: 'json',
+                cache: false,
+                async: true,
+                data: {
+                    'idCotacaoFilha': $("#iniCCF").val()
+                },
+                success: function (data) {
+                    debugger;
+
+                    if (data.contraPropostaGeradaCancelada == "Ok") {
+                        //EXIBE MSG LATERAL À DIREITA SUPERIOR
+                        new PNotify({
+                            title: 'SUCESSO!',
+                            text: 'A CONTRA PROPOSTA enviada ao FORNECEDOR foi CANCELADA com SUCESSO!',
+                            type: 'success',
+                            styling: 'bootstrap3',
+                            icons: 'bootstrap3',
+                            addclass: 'customsuccess',
+                            animateSpeed: 'fast',
+                            mouseReset: true,
+                            Buttons: {
+                                closer: true
+                            }
+                        });
+
+                        //RECARREGAR a PÁGINA
+                        window.location.href = "@Url.Action("AnalisarRespostaDoFornecedor", "AcompanharCotacoes", new { Area = "Company" })" + "?cCC=" + $('#inCCC').val() + "&iCM=" + $('#inICM').val() + "&iCCF=" + $('#iniCCF').val();
+                    }
+                }
+            });
+        });
+
+        //Registra a PERGUNTA ou RESPOSTA, enviando-a ao FORNECEDOR COTADO
+        $("#enviarPerguntaOuResposta").click(function () {
+            if ($("#TEXTO_CHAT_COTACAO_USUARIO_COTANTE").val() != '') {
+                debugger;
+
+                textoPerguntaOuResposta = $("#TEXTO_CHAT_COTACAO_USUARIO_COTANTE").val();
+
+                $.ajax({
+                    url: "/AcompanharCotacoes/GravarDialogoEntreCotanteDaCCEFornecedor",
+                    dataType: 'json',
+                    cache: false,
+                    async: true,
+                    data: {
+                        'idCotacaoFilha': $("#iniCCF").val(),
+                        'idUsuarioEmpresaCotante': $("#inCodigoUsuarioAdmCC").val(),
+                        'idUsuarioEmpresaCotada': $('#idUsuarioEmpresaFornecedoraCotada').val(),
+                        'textoPerguntaOuResposta': textoPerguntaOuResposta
+                    },
+                    success: function (data) {
+                        debugger;
+
+                        $("#texto_chat_principal").val('');
+                        $("#texto_chat_principal").hide();
+                        $("#texto_chat_alternativo").hide();
+                        $("#botao_enviar").hide();
+                        $('#dialogo_entre_cotante_efornecedor td').parent().remove();
+
+                        carregarChat();
+                    }
+                });
+            }
+            else {
+                swal({
+                    title: "ATENÇÃO!!\n\nDigite a PERGUNTA ou RESPOSTA a ser encaminhada ao vendedor!", type: "warning"
+                },
+                    function () {
+                        debugger;
+
+                        $("#TEXTO_CHAT_COTACAO_USUARIO_COTANTE").val('');
+                        $("#TEXTO_CHAT_COTACAO_USUARIO_COTANTE").focus();
+                    });
+            }
+        });
+
+        //BOTÃO de CONFIRMAÇÃO de ACEITE da NEGOCIAÇÃO
+        $("#inConfirmarAceiteDaNegociacao").click(function () {
+            $.ajax({
+                url: "/AcompanharCotacoes/RegistrarAceiteDaNegociacaoDoAdmDaCCComOFornecedor",
+                dataType: 'json',
+                cache: false,
+                async: true,
+                data: {
+                    'cCC': $('#inCCC').val(),
+                    'iCM': $("#inICM").val(),
+                    'idEmpresaLogada': $('#inCodigoEmpresaLogada').val()
+                },
+                success: function (data) {
+                    debugger;
+
+                    if (data.confirmacaoNegociacao == "Ok") {
+                        //EXIBE MSG LATERAL À DIREITA SUPERIOR
+                        new PNotify({
+                            title: 'SUCESSO!',
+                            text: 'Registramos o seu ACEITE para a negociação da COTAÇÃO em questão!',
+                            type: 'success',
+                            styling: 'bootstrap3',
+                            icons: 'bootstrap3',
+                            addclass: 'customsuccess',
+                            animateSpeed: 'fast',
+                            mouseReset: true,
+                            Buttons: {
+                                closer: true
+                            }
+                        });
+
+                        //RECARREGAR a PÁGINA
+                        window.location.href = "@Url.Action("AnalisarRespostaDoFornecedor", "AcompanharCotacoes", new { Area = "Company" })" + "?cCC=" + $('#inCCC').val() + "&iCM=" + $('#inICM').val() + "&iCCF=" + $('#iniCCF').val();
+                    }
+                }
+            });
+        });
+
+        //============================================================================
+        //BOTÃO de CONFIRMAÇÃO de ACEITE da NEGOCIAÇÃO
+        $("#inNaoAceitarNegociacao").click(function () {
+            $.ajax({
+                url: "/AcompanharCotacoes/RegistrarNaoAceitacaoDaNegociacaoDoAdmDaCCComOFornecedor",
+                dataType: 'json',
+                cache: false,
+                async: true,
+                data: {
+                    'cCC': $('#inCCC').val(),
+                    'iCM': $("#inICM").val(),
+                    'idEmpresaLogada': $('#inCodigoEmpresaLogada').val()
+                },
+                success: function (data) {
+                    debugger;
+
+                    if (data.rejeicaoNegociacao == "Ok") {
+                        //EXIBE MSG LATERAL À DIREITA SUPERIOR
+                        new PNotify({
+                            title: 'SUCESSO!',
+                            text: 'Registramos que você NÃO ACEITOU a negociação da COTAÇÃO em questão!',
+                            type: 'success',
+                            styling: 'bootstrap3',
+                            icons: 'bootstrap3',
+                            addclass: 'customsuccess',
+                            animateSpeed: 'fast',
+                            mouseReset: true,
+                            Buttons: {
+                                closer: true
+                            }
+                        });
+
+                        //RECARREGAR a PÁGINA
+                        window.location.href = "@Url.Action("AnalisarRespostaDoFornecedor", "AcompanharCotacoes", new { Area = "Company" })" + "?cCC=" + $('#inCCC').val() + "&iCM=" + $('#inICM').val() + "&iCCF=" + $('#iniCCF').val();
+                    }
+                }
+            });
+        });
+        //============================================================================
+
+        //Contador REGRESSIVO de caracteres do campo TEXTAREA
+        $(document).on("input", "#TEXTO_CHAT_COTACAO_USUARIO_COTANTE", function () {
+            var limite = 200;
+            var informativo = " caracteres restantes";
+            var caracteresDigitados = $(this).val().length;
+            var caracteresRestantes = (limite - caracteresDigitados);
+
+            if (caracteresRestantes <= 0) {
+                var comentario = $("#TEXTO_CHAT_COTACAO_USUARIO_COTANTE").val();
+                $("#TEXTO_CHAT_COTACAO_USUARIO_COTANTE").val(comentario.substr(0, limite));
+                $(".caracteres").text("0 " + informativo);
+            } else {
+                $(".caracteres").text(caracteresRestantes + " " + informativo);
+            }
+        });
+
+        //EFETUAR PEDIDO ao FORNECEDOR
+        $("#inEfetuarPedido").click(function () {
+            debugger;
+
+            var somaItensPedido = 0;
+            var codsProdsPedidos = "";
+            var codsIndividuais = "";
+
+            $(".itemcotado:checked").each(function () {
+                if (codsProdsPedidos == "") {
+                    codsProdsPedidos = $(this).val();
+                    codsIndividuais = $(this).attr('idcotacaoinvidual');
+                }
+                else {
+                    codsProdsPedidos = (codsProdsPedidos + ',' + $(this).val());
+                    codsIndividuais = (codsIndividuais + ',' + $(this).attr('idcotacaoinvidual'));
+                }
+
+                var totalItemPedido = $(this).closest("tr").find("td").eq(8).text().replace(".", "").replace(",", ".");
+                somaItensPedido += parseFloat(totalItemPedido);
+            });
+
+            if (parseFloat(somaItensPedido) > 0) {
+                swal({
+                    title: "ATENÇÃO!!\n\n",
+                    text: "Confirma o ENVIO de um PEDIDO com os Itens selecionados para o fornecedor <b>" + $('#inNomeFornecedor').val() + "</b>?",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#337ab7",
+                    confirmButtonText: "Sim",
+                    cancelButtonText: "Não",
+                    closeOnConfirm: true,
+                    html: true
+                },
+                    function (isConfirm) {
+                        if (isConfirm) {
+                            debugger;
+
+                            $.ajax({
+                                url: "/AcompanharCotacoes/EnviarOPedidoAoFornecedor",
+                                dataType: 'json',
+                                cache: false,
+                                async: true,
+                                data: {
+                                    'cCC': $('#inCCC').val(),
+                                    'iCM': $("#inICM").val(),
+                                    'iCCF': $('#iniCCF').val(),
+                                    'codsProdutosNegociacao': codsProdsPedidos,
+                                    'codsItensIndividuais': codsIndividuais,
+                                    'somaItensDoPedido': somaItensPedido,
+                                    'idPedido': $('#inIdPedidoRecebido').val(),
+                                    'idFornecedor': $('#inIdEmpresaFornecedora').val(),
+                                    'nomeCentralCompras': $('#inNomeCentralCompras').val(),
+                                    'aceitouCP': $('#inAceiteCP').val()
+                                },
+                                success: function (data) {
+                                    debugger;
+
+                                    if (data.pedidoFeito == "sim") {
+                                        $('#inMensagemStatus').html("");
+                                        $('#inMensagemStatus').append("<font color='#3297E0'><i class='far fa-check-circle'></i></font>&nbsp;" + data.mensagemStatus);
+
+                                        $(".itemcotado:checked").each(function () {
+                                            $('#inTicado_' + $(this).val()).show();
+                                        });
+
+                                        $(".itemcotado").attr("checked", false);
+                                        $('#inIdPedidoRecebido').val(data.idPedido);
+                                        $('#inCodControlePedido').val(data.codControlePedido);
+
+                                        //EXIBE MSG LATERAL À DIREITA SUPERIOR
+                                        new PNotify({
+                                            title: 'SUCESSO!',
+                                            text: 'O PEDIDO do(s) ITEM(s) selecionado(s), foi realizado com sucesso!',
+                                            type: 'success',
+                                            styling: 'bootstrap3',
+                                            icons: 'bootstrap3',
+                                            addclass: 'customsuccess',
+                                            animateSpeed: 'fast',
+                                            mouseReset: true,
+                                            Buttons: {
+                                                closer: true
+                                            }
+                                        });
+
+                                        //RECARREGAR a PÁGINA
+                                        window.location.href = "@Url.Action("AnalisarRespostaDoFornecedor", "AcompanharCotacoes", new { Area = "Company" })" + "?cCC=" + $('#inCCC').val() + "&iCM=" + $('#inICM').val() + "&iCCF=" + $('#iniCCF').val();
+
+                                        if (data.todosItensPedidos == "sim") {
+                                            $('.check').hide();
+                                            $('#inEfetuarPedido').hide();
+                                            $('#inCancelarPedido').show();
+                                            $('#inConfirmarEntregaPedido').show();
+                                        }
+                                    }
+                                }
+                            });
+                        }
+                        else {
+                            debugger;
+
+                            $(".itemcotado").attr("checked", false);
+
+                            new PNotify({
+                                title: 'ATENÇÃO!',
+                                text: 'Cancelado o envio do PEDIDO para o Fornecedor ' + $('#inNomeFornecedor').val() + '!',
+                                type: 'success',
+                                styling: 'bootstrap3',
+                                icons: 'bootstrap3',
+                                addclass: 'customsuccess',
+                                animateSpeed: 'fast',
+                                mouseReset: true,
+                                Buttons: {
+                                    closer: true
+                                }
+                            });
+                        }
+                    });
+            }
+            else {
+                swal({ title: 'ATENÇÃO:\n\nSelecione pelo menos 1 ITEM na lista para efetuar o PEDIDO ao FORNECEDOR.', type: "warning", confirmButtonColor: "#337ab7" });
+            }
+        });
+
+        //CANCELAR PEDIDO ao FORNECEDOR
+        $("#inCancelarPedido").click(function () {
+            debugger;
+
+            if (parseInt($('#inIdPedidoRecebido').val()) > 0) {
+                var motivoCancelamento = "";
+
+                swal({
+                    title: "<b>DESISTIR DO PEDIDO<b>",
+                    text: "Informe o <b>MOTIVO</b> pelo qual a <b>CENTRAL de COMPRAS</b> está <b>CANCELANDO este PEDIDO</b>:",
+                    type: "input",
+                    showCancelButton: true,
+                    closeOnConfirm: false,
+                    html: true,
+                    animation: "slide-from-top",
+                    inputPlaceholder: "Descreva aqui..."
+                },
+                    function (inputValue) {
+                        if (inputValue) {
+                            motivoCancelamento = inputValue;
+                        }
+
+                        swal({
+                            title: "ATENÇÃO!!\n\n",
+                            text: "Confirma o CANCELAMENTO do PEDIDO enviado ao fornecedor <b>" + $('#inNomeFornecedor').val() + "</b>?",
+                            type: "warning",
+                            showCancelButton: true,
+                            confirmButtonColor: "#337ab7",
+                            confirmButtonText: "Sim",
+                            cancelButtonText: "Não",
+                            closeOnConfirm: true,
+                            html: true
+                        },
+                            function (isConfirm) {
+                                if (isConfirm) {
+                                    debugger;
+
+                                    $.ajax({
+                                        url: "/AcompanharCotacoes/CancelarOPedidoEnviadoAoFornecedor",
+                                        dataType: 'json',
+                                        cache: false,
+                                        async: true,
+                                        data: {
+                                            'cCC': $('#inCCC').val(),
+                                            'iCM': $("#inICM").val(),
+                                            'iCCF': $('#iniCCF').val(),
+                                            'idPedido': $('#inIdPedidoRecebido').val(),
+                                            'aceitouCP': $('#inAceiteCP').val(),
+                                            'motivoCancelamento': motivoCancelamento
+                                        },
+                                        success: function (data) {
+                                            debugger;
+
+                                            if (data.pedidoExcluido == "sim") {
+                                                $('#inIdPedidoRecebido').val(0);
+
+                                                $('#inMensagemStatus').html("");
+                                                $('#inMensagemStatus').append("<font color='#3297E0'><i class='far fa-check-circle'></i></font>&nbsp;" + data.mensagemStatus);
+
+                                                //EXIBE MSG LATERAL À DIREITA SUPERIOR
+                                                new PNotify({
+                                                    title: 'SUCESSO!',
+                                                    text: "O PEDIDO enviado ao fornecedor <b>" + $('#inNomeFornecedor').val() + "</b>, foi CANCELADO com SUCESSO!",
+                                                    type: 'success',
+                                                    styling: 'bootstrap3',
+                                                    icons: 'bootstrap3',
+                                                    addclass: 'customsuccess',
+                                                    animateSpeed: 'fast',
+                                                    mouseReset: true,
+                                                    Buttons: {
+                                                        closer: true
+                                                    }
+                                                });
+
+                                                $('#gridItensCotadosRespondidos').bootgrid('reload');
+
+                                                if (data.pedidoExcluido == "sim") {
+                                                    $('#inCancelarPedido').hide();
+                                                    $('#inConfirmarEntregaPedido').hide();
+                                                    $('#checkall').show();
+                                                    $('#inEfetuarPedido').show();
+                                                }
+                                            }
+                                        }
+                                    });
+                                }
+                                else {
+                                    debugger;
+
+                                }
+                            });
+
+                    });
+            }
+        });
+
+        //CONFIRMAR ENTREGA TOTAL OU PARCIAL DO PEDIDO
+        $("#inConfirmarEntregaPedido").click(function () {
+            $("#modalBaixaPedido").modal({
+                backdrop: 'static',
+                keyboard: true,
+                show: true
+            });
+        });
+
+        //SELECIONAR TODOS
+        $(".check").click(function () {
+            debugger;
+
+            $(".itemcotado").each(
+                function () {
+                    if ($(this).prop("checked")) {
+                        $(this).prop("checked", false);
+
+                        $('#deselectall').hide();
+                        $('#checkall').show();
+                    } else {
+                        if ($(this).attr('itempedido') == "nao") {
+                            $(this).prop("checked", true);
+                        }
+
+                        $('#checkall').hide();
+                        $('#deselectall').show();
+                    }
+                }
+            )
+        });
+    });
+
+    function carregarGrid() {
+        debugger;
+
+        //CARREGA a LISTA de ITENS COTADOS RESPONDIDOS pelo FORNECEDOR
+        var grid = $('#gridItensCotadosRespondidos').bootgrid({
+            ajax: true,
+            navigation: 0, //CABEÇALHO: 2 - Exibe só RODAPÉ
+            columnSelection: false, //SELETOR de COLUNA: True - Habilita / False - Desabilita
+            url: "/AcompanharCotacoes/BuscaListaDeItensDaCotacaoRespondidaPeloFornecedor",
+            post: function () {
+                /* PARÂMETROS a serem enviados na REQUISIÇÃO AJAX */
+                return {
+                    'iCM': $('#inICM').val(),
+                    'iCCF': $('#iniCCF').val()
+                };
+            },
+            selection: true,
+            multiSelect: true,
+            rowSelect: true,
+            keepSelection: true,
+            formatters: {
+                "link0": function (column, row) {
+                    return "<input type='checkbox' name='checkbox' id='" + row.idItemCotacao + "' class='itemcotado' title='" + row.hint + "' value='" + row.idItemCotacao + "' itempedido='" + row.itemFoiPedido + "' idcotacaoinvidual='" + row.idItemCotacaoIndividualEmpresa + "' onclick='verificaSeOItemFoiPedido(" + row.idItemCotacao + ");' " + row.habilitar + ">";
+                },
+                "link1": function (column, row) {
+                    if (row.itemFoiPedido == "sim") {
+                        return "<b><a href=\"#\" title='Item Pedido'>" + row.descricaoProdutoCotacao + "</a></b>";
+                    }
+                    else {
+                        return "<a href=\"#\">" + row.descricaoProdutoCotacao + "</a>";
+                    }
+                },
+                "link2": function (column, row) {
+                    if (row.itemFoiPedido == "sim") {
+                        return "<b><a href=\"#\" title='Item Pedido'>" + row.marcaProduto + "</a></b>";
+                    }
+                    else {
+                        return "<a href=\"#\">" + row.marcaProduto + "</a>";
+                    }
+                },
+                "link3": function (column, row) {
+                    if (row.itemFoiPedido == "sim") {
+                        return "<b><a href=\"#\" title='Item Pedido'>" + row.quantidadeProdutoCotacao + "</a></b>";
+                    }
+                    else {
+                        return "<a href=\"#\">" + row.quantidadeProdutoCotacao + "</a>";
+                    }
+                },
+                "link4": function (column, row) {
+                    if (row.itemFoiPedido == "sim") {
+                        return "<b><a href=\"#\" title='Item Pedido'>" + row.unidadeProdutoCotacao + "</a></b>";
+                    }
+                    else {
+                        return "<a href=\"#\">" + row.unidadeProdutoCotacao + "</a>";
+                    }
+                },
+                "link5": function (column, row) {
+                    if (row.itemFoiPedido == "sim") {
+                        return "<a href=\"#\" title='Item Pedido'>" + row.valorUnitarioTabela + "<a>";
+                    }
+                    else {
+                        return "<a href=\"#\">" + row.valorUnitarioTabela + "<a>";
+                    }
+                },
+                "link6": function (column, row) {
+                    if (row.itemFoiPedido == "sim") {
+                        return "<a href=\"#\" title='Produto PEDIDO a este Fornecedor'>" + row.codControlePedido + "&nbsp;<font color='#32CD32'><i class='fas fa-check'></i></font><a>";
+                    }
+                    else {
+                        if ((row.itemFoiPedido == "nao") && (row.habilitar == "disabled")) {
+                            return "<a href=\"#\" title='Produto PEDIDO a OUTRO Fornecedor'><font color='#FF0000'><i class='fas fa-check'></i></font><a>";
+                        }
+                        else {
+                            return "<div id='inTicado_" + row.idItemCotacao + "' style='display:none;'><font color='#32CD32'><i class='fas fa-check'></i></font></div>";
+                        }
+                    }
+                },
+                "valorresp": function (column, row) {
+                    $('#inValorTotal').val(row.somaTotalCalculado);
+
+                    if (row.ehOMenorPreco == "sim") {
+                        return "<font color=\"#FF0000\" title=\"Menor preço respondido por este Fornecedor\"><span><b>" + row.valorUnitarioDiferenciado + "</b></span></font>";
+                    }
+                    else {
+                        return "<a href=\"#\">" + row.valorUnitarioDiferenciado + "</a>";
+                    }
+                },
+                "valorcp": function (column, row) {
+                    debugger;
+
+                    if (row.temContraProposta) {
+                        var unitarioCP = row.valorUnitarioContraProposta.replace(".", "").replace(",", ".");
+                        var unitarioDiferenciado = row.valorUnitarioDiferenciado.replace(".", "").replace(",", ".");
+
+                        if (parseFloat(unitarioCP) == parseFloat(unitarioDiferenciado)) {
+                            return "<font color=\"#3297E0\" title=\"Menor preço respondido por este Fornecedor\"><span><b>" + row.valorUnitarioContraProposta + "</b></span></font>";
+                        }
+                        else if (parseFloat(unitarioCP) < parseFloat(unitarioDiferenciado)) {
+                            return "<font color=\"#008000\" title=\"Valor da Contra-Proposta\"><span><b>" + row.valorUnitarioContraProposta + "</b></span></font>";
+                        }
+                    }
+                    else {
+                        return "<a href=\"#\">" + row.valorUnitarioContraProposta + "</a>";
+                    }
+                },
+                "valorTotal": function (column, row) {
+                    if (row.temContraProposta) {
+                        var unitarioCP = row.valorUnitarioContraProposta.replace(".", "").replace(",", ".");
+                        var unitarioDiferenciado = row.valorUnitarioDiferenciado.replace(".", "").replace(",", ".");
+
+                        if (parseFloat(unitarioCP) == parseFloat(unitarioDiferenciado)) {
+                            return "<font color=\"#3297E0\" title=\"Total respondido pelo Fornecedor\"><span><b>" + row.valorTotalUnitarioVsQuantidade + "</b></span></font>";
+                        }
+                        else if (parseFloat(unitarioCP) < parseFloat(unitarioDiferenciado)) {
+                            return "<font color=\"#008000\" title=\"Total Contra-Proposta\"><span><b>" + row.valorTotalUnitarioVsQuantidade + "</b></span></font>";
+                        }
+                    }
+                    else {
+                        return "<font><span><b>" + row.valorTotalUnitarioVsQuantidade + "</b></span></font>";
+                    }
+                }
+            }
+        }).on("loaded.rs.jquery.bootgrid", function () {
+            //Método EXECUTADO após o carregamento do GRID
+            $('.checker').remove();
+
+            $("#gridItensCotadosRespondidos tbody").append(
+                "<tr>" +
+                "<td colspan='7'>&nbsp;</td>" +
+                "<td align='right'><b>TOTAL R$:</b>&nbsp;</td>" +
+                "<td align='right'><b>" + $('#inValorTotal').val() + "</b></td > " +
+                "<td>&nbsp;</td>" +
+            "</tr>");
+        });
+    };
+
+    function carregarChat() {
+        //Carregar DIÁLOGO do COTANTE com o FORNECEDOR
+        $.ajax({
+            type: "POST",
+            url: "/AcompanharCotacoes/CarregarDialogoEntreCotanteEFornecedor",
+            dataType: "json",
+            data: {
+                'idCotacaoFilha': $("#iniCCF").val()
+            },
+            success: function (data) {
+                var quantosDialogos = data.length;
+                var contadorMsg = 1;
+
+                if (quantosDialogos > 0) {
+                    $.each(data, function (index, chat) {
+
+                        //Inserir no Grid
+                        if (contadorMsg & 1) {
+                            debugger;
+
+                            $('<table><tr style="margin: 10px 0px;"><td width="2%"></td><td width="90%"><font color="#C0C0C0"><i class="fa fa-comment fa-2x"></i> </font><font color="#000000">' + chat.texto_chat + '<font color="#A9A9A9"> - ' + chat.autor_dialogo + " " + chat.data_chat + '</font></font></td></tr></table>').appendTo('#dialogo_entre_cotante_efornecedor');
+                        } else {
+                            debugger;
+
+                            $('<table><tr style="border-style: dotted; border-bottom-width: 1px; border-top-width: 0; border-right-width: 0; border-left-width: 0; border-bottom-color: #C0C0C0; margin: 10px 0px;"><td><font color="#FFFFFF">vazio</font></td><td></td><td width="100%"><font color="#DCDCDC"><i class="fa fa-comments fa-2x"></i> </font><font color="#000000">' + chat.texto_chat + '<font color="#A9A9A9"> - ' + chat.autor_dialogo + " " + chat.data_chat + '</font></font></td></tr></table>').appendTo('#dialogo_entre_cotante_efornecedor');
+                        }
+
+                        contadorMsg = (parseInt(contadorMsg) + parseInt(1));
+                    });
+
+                    $("#texto_chat_alternativo").show();
+                }
+                else {
+                    //Habilita campo para PERGUNTA / RESPOSTA
+                    $("#texto_chat_alternativo").show();
+                }
+            }
+        });
+    }
+
+    function verificaSeOItemFoiPedido(valor) {
+        debugger;
+
+        if ($('#' + valor).attr('itempedido') == "sim") {
+            var somaItensPedido = 0;
+            var codsProdsPedidos = "";
+
+            $(".itemcotado:checked").each(function () {
+                if (codsProdsPedidos == "") {
+                    codsProdsPedidos = $(this).val();
+                    codsIndividuais = $(this).attr('idcotacaoinvidual');
+                }
+                else {
+                    codsProdsPedidos = (codsProdsPedidos + ',' + $(this).val());
+                    codsIndividuais = (codsIndividuais + ',' + $(this).attr('idcotacaoinvidual'));
+                }
+
+                var totalItemPedido = $(this).closest("tr").find("td").eq(8).text().replace(".", "").replace(",", ".");
+                somaItensPedido += parseFloat(totalItemPedido);
+            });
+
+            var motivoCancelamento = "";
+
+            swal({
+                title: "<b>CANCELAR PEDIDO do ITEM<b>",
+                text: "O ITEM selecionado já foi PEDIDO a este fornecedor.<br>Informe o <b>MOTIVO</b> pelo qual a <b>CENTRAL de COMPRAS</b> está <b>CANCELANDO o PEDIDO do ITEM</b>:",
+                type: "input",
+                showCancelButton: true,
+                closeOnConfirm: false,
+                html: true,
+                animation: "slide-from-top",
+                inputPlaceholder: "Descreva aqui..."
+            },
+                function (inputValue) {
+                    if (inputValue) {
+                        motivoCancelamento = inputValue;
+                    }
+
+                    swal({
+                        title: "ATENÇÃO!!\n\n",
+                        text: "Confirma o CANCELAMENTO do PEDIDO deste ITEM?",
+                        type: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#337ab7",
+                        confirmButtonText: "Sim",
+                        cancelButtonText: "Não",
+                        closeOnConfirm: true,
+                        html: true
+                    },
+                        function (isConfirm) {
+                            if (isConfirm) {
+                                debugger;
+
+                                $.ajax({
+                                    url: "/AcompanharCotacoes/CancelarOPedidoDoItemAoFornecedor",
+                                    dataType: 'json',
+                                    cache: false,
+                                    async: true,
+                                    data: {
+                                        'cCC': $('#inCCC').val(),
+                                        'iCM': $("#inICM").val(),
+                                        'iCCF': $('#iniCCF').val(),
+                                        'codsProdutosNegociacao': codsProdsPedidos,
+                                        'codsItensIndividuais': codsIndividuais,
+                                        'somaItensDoPedido': somaItensPedido,
+                                        'idPedido': $('#inIdPedidoRecebido').val(),
+                                        'motivoCancelamento': motivoCancelamento
+                                    },
+                                    success: function (data) {
+                                        debugger;
+
+                                        if (data.itemExcluido == "sim") {
+                                            $('#inMensagemStatus').html("");
+                                            $('#inMensagemStatus').append("<font color='#3297E0'><i class='far fa-check-circle'></i></font>&nbsp;" + data.mensagemStatus);
+
+                                            $(".itemcotado").attr("checked", false);
+
+                                            //EXIBE MSG LATERAL À DIREITA SUPERIOR
+                                            new PNotify({
+                                                title: 'SUCESSO!',
+                                                text: 'O ITEM selecionado foi removido do PEDIDO com sucesso!',
+                                                type: 'success',
+                                                styling: 'bootstrap3',
+                                                icons: 'bootstrap3',
+                                                addclass: 'customsuccess',
+                                                animateSpeed: 'fast',
+                                                mouseReset: true,
+                                                Buttons: {
+                                                    closer: true
+                                                }
+                                            });
+
+                                            if (data.todosItensPedidos == "nao") {
+                                                $('#inCancelarPedido').hide();
+                                                $('#inConfirmarEntregaPedido').hide();
+                                                $('#checkall').show();
+                                                $('#inEfetuarPedido').show();
+                                            }
+                                            else {
+                                                $('.check').hide();
+                                                $('#inEfetuarPedido').hide();
+                                                $('#inCancelarPedido').show();
+                                                $('#inConfirmarEntregaPedido').show();
+                                            }
+
+                                            //$('#gridItensCotadosRespondidos').bootgrid('reload');
+                                            //RECARREGAR a PÁGINA
+                                            window.location.href = "@Url.Action("AnalisarRespostaDoFornecedor", "AcompanharCotacoes", new { Area = "Company" })" + "?cCC=" + $('#inCCC').val() + "&iCM=" + $('#inICM').val() + "&iCCF=" + $('#iniCCF').val();
+                                        }
+                                    }
+                                });
+                            }
+                            else {
+                                debugger;
+                                $(".itemcotado").attr("checked", false);
+                            }
+                        });
+                });
+        };
+    };
+
+    $(".glyphicon-remove").click(function () {
+        $('.obrigatorio').css({ "border": "1px solid #ccc", "padding": "2px" });
+    });
+
+    $("#inConfirmarBaixa").click(function () {
+        var primeiroCampo = "";
+        var qtdCamposVazios = 0;
+        var $inputsObrigatorios = $('.obrigatorio');
+        $inputsObrigatorios.each(function () {
+            $(this).css({ "border": "1px solid #ccc", "padding": "2px" });
+            if ($(this).hasClass("obrigatorio")) {
+                if (($(this).val() == "") || (parseFloat($(this).val()) == 0)) {
+                    $(this).css({ "border": "1px solid #F00", "padding": "2px" });
+                    qtdCamposVazios++;
+
+                    if (primeiroCampo == "") {
+                        primeiroCampo = $(this).attr('id');
+                    }
+                }
+            }
+        });
+
+        if (qtdCamposVazios == 0) {
+            swal({
+                title: "ATENÇÃO!!\n\n",
+                text: "Confirma a BAIXA do PEDIDO selecionado?",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#337ab7",
+                confirmButtonText: "Sim",
+                cancelButtonText: "Não",
+                closeOnConfirm: true,
+                html: true
+            },
+                function (isConfirm) {
+                    if (isConfirm) {
+                        debugger;
+
+                         $.ajax({
+                             url: "/AcompanharCotacoes/EfetuarBaixaDoPedidoEntregue",
+                            dataType: 'json',
+                            cache: false,
+                            async: true,
+                            data: {
+                                'cCC': $('#inCCC').val(),
+                                'iCM': $("#inICM").val(),
+                                'iCCF': $('#iniCCF').val(),
+                                'idPedidoABaixar': $('#inListaPedidosBaixa').val(),
+                                'dataEntrega': $('#inDataEntrega').val()
+                            },
+                            success: function (data) {
+                                debugger;
+
+                                if (data.pedidoBaixado == "sim") {
+                                    //EXIBE MSG LATERAL À DIREITA SUPERIOR
+                                    new PNotify({
+                                        title: 'SUCESSO!',
+                                        text: 'PEDIDO Nº ' + data.numeroPedido + ' RECEBIDO e BAIXADO com Sucesso!',
+                                        type: 'success',
+                                        styling: 'bootstrap3',
+                                        icons: 'bootstrap3',
+                                        addclass: 'customsuccess',
+                                        animateSpeed: 'fast',
+                                        mouseReset: true,
+                                        Buttons: {
+                                            closer: true
+                                        }
+                                    });
+
+                                    $('#modalBaixaPedido').modal('toggle');
+                                    $('#inCancelarPedido').hide();
+                                    $('#checkall').hide();
+                                    $('#inConfirmarEntregaPedido').hide();
+
+                                    /*
+                                     OBS: CONTINUAR AQUI <---------------====
+                                          1) FAZER MAIS UM TESTE DE FINALIZAÇÃO DO PEDIDO;
+                                          2) vER A PRÓIMA TAREFA - VER NA FOLHA ONDE ESCREVI ALGO QUE DEVERIA FAZER;
+                                     */
+
+                                    //RECARREGAR a PÁGINA
+                                    window.location.href = "@Url.Action("AnalisarRespostaDoFornecedor", "AcompanharCotacoes", new { Area = "Company" })" + "?cCC=" + $('#inCCC').val() + "&iCM=" + $('#inICM').val() + "&iCCF=" + $('#iniCCF').val();
+                                }
+                            }
+                        });
+                    }
+                    else {
+                        debugger;
+                        $('#inListaPedidosBaixa').val(0);
+                    }
+                });
+        }
+        else {
+            swal({ title: 'ATENÇÃO:\n\nOs campos:\n\n - Nº Pedido a baixar:\n - Dt. Entrega:\n\n devem ser preenchidos.', type: "warning", confirmButtonColor: "#337ab7" });
+        }
+    });
+</script>

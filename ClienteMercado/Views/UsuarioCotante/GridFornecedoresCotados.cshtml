@@ -1,0 +1,154 @@
+﻿@model  ClienteMercado.Models.AcompanharCotacaoEnviada
+
+@*<div class="row">*@
+@{
+        <!-- Monta o Grid com a Lista de FORNECEDORES que receberam a cotação do USUÁRIO COTANTE -->
+    WebGrid grid = new WebGrid(Model.ListagemFornecedoresDaCotacaoEnviada, canPage: true, rowsPerPage: 30);
+    @grid.GetHtml(
+                htmlAttributes: new { id = "gridFornecedoresDaCotacao" },
+                headerStyle: "DataGridHeader",
+                alternatingRowStyle: "DataGridAlternateItemStyle",
+                columns: grid.Columns(
+                    grid.Column("", header: "Empresa", format: @<text>@item.nome_empresa_fornecedor</text>),
+                    grid.Column("", header: "Cidade", format: @<text>@item.cidade_empresa_fornecedor</text>),
+                    grid.Column("", header: "U.F.", format: @<text>@item.estado_empresa_fornecedor</text>),
+                    grid.Column("", header: "Atendente", format: @<text>@item.usuario_respondendo_empresa_fornecedor</text>),
+                    grid.Column("", header: "Respondido", format: @<text>@if (@item.respondido_empresa_fornecedor == "SIM")
+                    {
+                        if (@item.tem_nao_tem_notificacao == "naoTem")
+                        {
+                            <div id="bonecoChat_@item.id_Empresa" style="float: right;"> <a href="#" id="@item.id_Empresa" class="verResposta" data-toggle="modal" data-target="#modal_resposta_cotacao_ecomunicacao_entre_cotante_ecotado" style="text-decoration:none" title="Ver a resposta da COTAÇÃO" onclick=""><i class="fa fa-weixin fa-2x" title="Ver a resposta da COTAÇÃO"></i></a></div>
+                        }
+                        else
+                        {
+                            <div id="bonecoChat_@item.id_Empresa" style="float: right;"><a href="#" id="@item.id_Empresa" class="verResposta" data-toggle="modal" data-target="#modal_resposta_cotacao_ecomunicacao_entre_cotante_ecotado" style="text-decoration:none" title="Ver a resposta da COTAÇÃO" onclick=""><font color="red"><i class="fa fa-weixin fa-2x" title="Ver a resposta da COTAÇÃO"></i></font></a></div>
+                        }
+                    }
+                    else
+                    {
+                        <div style="text-align:center;"><font color="red">Não respondeu</font></div>
+                    }
+                    </text>),
+                    @*grid.Column("", header: "Produto Alternativo", format: @<text><div align="center"><a href="#" id="comFotoDeProduto_" class="imagemProduto" style="font-size: 9pt;"><i class="fa fa-file-image-o"></i></a></div></text>),*@
+                    grid.Column(null, null, format: @<input type="hidden" name="inIdCotacaoFilha" id="inIdCotacaoFilha_@item.id_Empresa" value="@item.id_Cotacao_Filha" />)
+           ),
+           tableStyle: "DataGrid");
+}
+
+<!-- CAMPOS HIDDEN -->
+@Html.HiddenFor(m => m.ID_FORNECEDOR_COTACAO_ANALISADA, new { @id = "ID_FORNECEDOR_COTACAO_ANALISADA" })
+
+<!-- Janelas MODAL - COMUNICAÇÃO ENTRE COTANTES E COTADOS -->
+<div id="modal_resposta_cotacao_ecomunicacao_entre_cotante_ecotado" class="modal fade" role="dialog">
+    <br /><br /><br />
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content" style="width: 950px;">
+            <div class="modal-header" style="background-color: #337ab7">
+                <button type="button" class="close habiliteCampo" data-dismiss="modal"><i class="fa fa-times"></i></button>
+                <h4 class="modal-title"><font color=white><i class="fa fa-pencil-square fa-2x"></i> Ver RESPOSTA da COTAÇÃO</font></h4>
+            </div>
+            <div class="modal-body" id="resposta_cotacao">
+                <table id="gridProdutosCotados" border="1" cellspacing="3" cellpadding="3" width="100%" align="center">
+                    <tr style="background-color: #337ab7;">
+                        <td width="40%" align="left"><font color="#FFFFFF">&nbsp;<b>Produto</b></font></td>
+                        <td width="10%" align="center"><font color="#FFFFFF">&nbsp;<b>Quant.</b></font></td>
+                        <td width="10%" align="center"><font color="#FFFFFF">&nbsp;<b>R$ Unit.</b></font></td>
+                        <td width="10%" align="center"><font color="#FFFFFF">&nbsp;<b>R$ Total</b></font></td>
+                        <td width="10%" align="center"><font color="#FFFFFF">&nbsp;<b>Desconto</b></font></td>
+                        <td width="20%" align="center"><font color="#FFFFFF">&nbsp;<b>Foto Similar</b></font></td>
+                    </tr>
+                </table>
+
+                <!-- RESPOSTA DA COTAÇÃO DOS PRODUTOS -->
+                <table id="resposta_do_fornecedor" class="table table-striped table-hover"></table>
+            </div>
+
+            <div class="modal-body" id="chat_cotacao">
+                <div id="texto_chat_alternativo" style="border:0px;">
+                    <label for="">Perguntas ao Vendedor:</label>
+                    @Html.TextAreaFor(m => m.TEXTO_CHAT_COTACAO_USUARIO_COTANTE_ALTERNATIVO, new { @cols = 20, @rows = 1, @class = "form-control", @placeholder = "Escreva sua pergunta...", @id = "TEXTO_CHAT_COTACAO_USUARIO_COTANTE_ALTERNATIVO" })
+                </div>
+                <div id="texto_chat_principal" style="border:0px; display:none">
+                    <label for="">Perguntas ao Vendedor:</label>
+                    @Html.TextAreaFor(m => m.TEXTO_CHAT_COTACAO_USUARIO_COTANTE, new { @cols = 20, @rows = 3, @class = "form-control", @placeholder = "Escreva sua pergunta...", @id = "TEXTO_CHAT_COTACAO_USUARIO_COTANTE" })
+                    <div align="right"><small class="caracteres"></small></div>
+                </div>
+                <br />
+
+                <!-- TRANSCRIÇÃO do DIÁLOGO ENTRE COTANTE e FORNECEDOR -->
+                <div role="tabpanel" class="tab-pane active" id="dialogos">
+                    <table id="dialogo_entre_cotante_efornecedor" class="table table-striped table-hover"></table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div id="botao_enviar" class="col-md-12" style="align-content:center; display:none">
+                    <a href="#" id="enviarPerguntaOuResposta" class="btn btn-primary btn-large" title="Enviar conteúdo digitado como PERGUNTA ou RESPOSTA"><i class="fa fa-share"></i> Enviar</i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Fim janela MODAL-->
+<!-- Janela MODAL - PRODUTOS ALTERNATIVOS -->
+<div id="modal_produtos_alternativos" class="modal fade" role="dialog">
+    <br /><br /><br />
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content" style="width: 950px;">
+            <div class="modal-header" style="background-color: #337ab7">
+                <button type="button" class="close" data-dismiss="modal"><i class="fa fa-times"></i></button>
+                <h4 class="modal-title"><font color=white><i class="fa fa-camera fa-2x"></i> Produtos Alternativos</font></h4>
+            </div>
+
+            <div class="modal-body">
+                <section id="sliderhome">
+                    <div id="meuSlider" class="carousel slide" data-ride="carousel">
+                        <ol id="bullets_produtos" class="carousel-indicators"></ol>
+
+                        <!-- FOTOS PRODUTOS ALTERNATIVOS -->
+                        <div id="imagens_produtos_alternativos" class="carousel-inner"></div>
+
+                        <a class="left carousel-control" href="#meuSlider" data-slide="prev"><span class="glyphicon glyphicon-chevron-left"></span></a>
+                        <a class="right carousel-control" href="#meuSlider" data-slide="next"><span class="glyphicon glyphicon-chevron-right"></span></a>
+                    </div>
+                </section>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- Fim janela MODAL-->
+<!-- Janela MODAL - ANÁLISE DE PREÇOS - DE PRODUTO POR FORNECEDOR -->
+<div id="modal_analise_geral_daCotacao" class="modal fade" role="dialog">
+    <br /><br /><br />
+    <div class="modal-dialog modal-lg" style="width: 80%">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color: #337ab7">
+                <button type="button" class="close" data-dismiss="modal"><i class="fa fa-times"></i></button>
+                <h4 class="modal-title"><font color=white><i class="fa fa-calculator"></i> Análise - Geral</font></h4>
+            </div>
+
+            <div class="modal-body">
+                <table class="table" id="gridProdutosCotadosAnaliseGeral" width="">
+                    <thead style="background-color: #337ab7">
+                        <tr>
+                            <th width="3%">&nbsp;</th>
+                            <th width="30%" style="text-align:left"><b><font color="#FFFFFF">Empresa</font></b></th>
+                            <th width="5%" style="text-align:center"><b><font color="#FFFFFF">Resposta</font></b></th>
+                            <th width="10%" style="text-align:center"><b><font color="#FFFFFF">R$ Total</font></b></th>
+                            <th width="5%" style="text-align:center"><b><font color="#FFFFFF">% Desc.</font></b></th>
+                            <th width="10%" style="text-align:center"><b><font color="#FFFFFF">Tipo Desc.</font></b></th>
+                            <th width="10%" style="text-align:center"><b><font color="#FFFFFF">R$ Desc.</font></b></th>
+                            <th width="10%" style="text-align:center"><b><font color="#FFFFFF">R$ Pedido</font></b></th>
+                            <th width="10%" style="text-align:center"><b><font color="#FFFFFF">Menor R$</font></b></th>
+                            <th width="7%" style="text-align:center">&nbsp;</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- Fim janela MODAL-->
+@*</div>*@

@@ -1,0 +1,134 @@
+﻿@model ClienteMercado.Models.GerarFinanceiro
+@{
+    ViewBag.Title = "ClienteMercado";
+    Layout = "~/Views/Shared/_Layout_internas.cshtml";
+}
+
+<div id="container_financeiro">
+
+    @*<form action="https://www.moip.com.br/PagamentoMoIP.do" method="post">*@
+    <form action="https://desenvolvedor.moip.com.br/sandbox/PagamentoMoIP.do" method="post">
+        <div id="linha_navegacao_meios_pagamento">
+            <div id="linha_opcoes_navegacao_meios_pagamento" class="linha_opcoes_navegacao">
+                <div id="area_navegacao1_setado" class="">
+                    <span class="nomes_navegacao_setado">@Html.LabelFor(m => m.ID_MEIO_PAGAMENTO)</span>
+                </div>
+                <div id="seta1" class="seta-direita_setado"></div>
+            </div>
+
+            <div id="titulo_meios" class="titulos_setores">
+                &nbsp;&nbsp;Efetuar pagamento:
+            </div>
+
+            <div id="sub_container_pagamento_cartao">
+                <div id="secao_pagamentos" class="formata_campos_cadastro2">
+                    <div id="tela_pagamentos" class="">
+                        <div id="aviso_ticado">
+                            <img src='@Url.Content("~/Content/images/tick_.png")' style='margin-left: 50%; margin-top: 25px; border: none;' />
+                        </div>
+                        <div id="mensagem_apresentacao1" class="formata_msg_sucesso_original">
+                            Seus dados de configuração foram gravados com sucesso!
+                        </div>
+                        <br/>
+                        <div id="aviso_atencao">
+                            <img src='@Url.Content("~/Content/images/warning.png")' style='margin-left: 50%; margin-top: 25px; border: none;' />
+                        </div>
+                        <div id="mensagem_apresentacao2" class="formata_msg_sucesso2">
+                            Preencha o dado solicitado abaixo e em seguida clique no botão que lhe redirecionará para o financeiro MOIP.
+                        </div>
+                        <br/><br/>
+                        <div id="label_responsavel_faturamento" class="labels_cartao">
+                            @Html.LabelFor(m => m.RESPONSAVEL_EMISSAO_COBRANCA)
+                        </div>
+                        <div id="campo_responsavel_faturamento">
+                            @Html.DropDownList("RESPONSAVEL_EMISSAO_COBRANCA", Model.ListagemResponsaveisCobranca, new { style = "font-family: 'Verdana', Geneva, sans-serif; width: 200px;", @tabindex = "10", @id = "RESPONSAVEL_EMISSAO_COBRANCA" })
+                            <span id="mensagem_erro_responsavel" class="texto_menor_erro">@Html.ValidationMessageFor(m => m.RESPONSAVEL_EMISSAO_COBRANCA, String.Empty)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <input type="hidden" name="id_carteira" id="id_carteira" value="edwilsoncurti@hotmail.com" />
+            <input type="hidden" name="valor" id="valor" value="@ViewBag.valorPlanoContratado" />
+            <input type="hidden" name="nome" id="nome" value="@ViewBag.descricaoPlanoContratado" />
+            <input type="hidden" name="id_transacao" id="id_transacao" value="@ViewBag.idRegistroFinanceiro" />
+
+            <input type="hidden" name="pagador_nome" id="pagador_nome" value="" />
+            <input type="hidden" name="pagador_email" id="pagador_email" value="" />
+            <input type="hidden" name="pagador_cep" id="pagador_cep" value="" />
+            <input type="hidden" name="pagador_telefone" id="pagador_telefone" value="" />
+            <input type="hidden" name="pagador_logradouro" id="pagador_logradouro" value="" />
+            <input type="hidden" name="pagador_numero" id="pagador_numero" value="" />
+            <input type="hidden" name="pagador_bairro" id="pagador_bairro" value="" />
+            <input type="hidden" name="pagador_cidade" id="pagador_cidade" value="" />
+            <input type="hidden" name="pagador_estado" id="pagador_estado" value="" />
+            
+            @Html.HiddenFor(m => m.NOME_EMPRESA_PAGADOR, new { @id = "NOME_EMPRESA_PAGADOR", @value = "" })
+            @Html.HiddenFor(m => m.EMAIL_EMPRESA_PAGADOR, new { @id = "EMAIL_EMPRESA_PAGADOR", @value = "" })
+            @Html.HiddenFor(m => m.CEP_EMPRESA_PAGADOR, new { @id = "CEP_EMPRESA_PAGADOR", @value = "" })
+            @Html.HiddenFor(m => m.TELEFONE_EMPRESA_PAGADOR, new { @id = "TELEFONE_EMPRESA_PAGADOR", @value = "" })
+            @Html.HiddenFor(m => m.LOGRADOURO_EMPRESA_PAGADOR, new { @id = "LOGRADOURO_EMPRESA_PAGADOR", @value = "" })
+            @Html.HiddenFor(m => m.NUMERO_LOGRADOURO_EMPRESA_PAGADOR, new { @id = "NUMERO_LOGRADOURO_EMPRESA_PAGADOR", @value = "" })
+            @Html.HiddenFor(m => m.BAIRRO_EMPRESA_PAGADOR, new { @id = "BAIRRO_EMPRESA_PAGADOR", @value = "" })
+            @Html.HiddenFor(m => m.CIDADE_EMPRESA_PAGADOR, new { @id = "CIDADE_EMPRESA_PAGADOR", @value = "" })
+            @Html.HiddenFor(m => m.ESTADO_EMPRESA_PAGADOR, new { @id = "ESTADO_EMPRESA_PAGADOR", @value = "" })
+            
+            @Html.HiddenFor(m => m.NOME_USUARIO_PAGADOR, new { @id = "NOME_USUARIO_PAGADOR", @value = "" })
+            @Html.HiddenFor(m => m.EMAIL_USUARIO_PAGADOR, new { @id = "EMAIL_USUARIO_PAGADOR", @value = "" })
+            @Html.HiddenFor(m => m.CEP_USUARIO_PAGADOR, new { @id = "CEP_USUARIO_PAGADOR", @value = "" })
+            @Html.HiddenFor(m => m.TELEFONE_USUARIO_PAGADOR, new { @id = "TELEFONE_USUARIO_PAGADOR", @value = "" })
+            @Html.HiddenFor(m => m.LOGRADOURO_USUARIO_PAGADOR, new { @id = "LOGRADOURO_USUARIO_PAGADOR", @value = "" })
+            @Html.HiddenFor(m => m.NUMERO_LOGRADOURO_USUARIO_PAGADOR, new { @id = "NUMERO_LOGRADOURO_USUARIO_PAGADOR", @value = "" })
+            @Html.HiddenFor(m => m.BAIRRO_USUARIO_PAGADOR, new { @id = "BAIRRO_USUARIO_PAGADOR", @value = "" })
+            @Html.HiddenFor(m => m.CIDADE_USUARIO_PAGADOR, new { @id = "CIDADE_USUARIO_PAGADOR", @value = "" })
+            @Html.HiddenFor(m => m.ESTADO_USUARIO_PAGADOR, new { @id = "ESTADO_USUARIO_PAGADOR", @value = "" })
+        </div>
+        <br />
+        <div id="area_botoes_assinatura2" class="area_botoes2">
+            <input type="submit" id="btn_gerar_boleto_card" value="Pagar" class="btn_assinar_boleto" />
+        </div>
+
+        @*@Html.HiddenFor(m => m.ANO_CORRENTE, new { @id = "ANO_CORRENTE", @value = "" })*@
+    </form>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            //Posiciona o cursor  no primeiro campo da página
+            $("input[type=text]").first().focus();
+
+            $("#RESPONSAVEL_EMISSAO_COBRANCA").change(function (event) {
+                if ($("#RESPONSAVEL_EMISSAO_COBRANCA").val() == 1) {
+                    $("#pagador_nome").val($("#NOME_EMPRESA_PAGADOR").val());
+                    $("#pagador_email").val($("#EMAIL_EMPRESA_PAGADOR").val());
+                    $("#pagador_cep").val($("#CEP_EMPRESA_PAGADOR").val());
+                    $("#pagador_telefone").val($("#TELEFONE_EMPRESA_PAGADOR").val());
+                    $("#pagador_logradouro").val($("#LOGRADOURO_EMPRESA_PAGADOR").val());
+                    $("#pagador_numero").val($("#NUMERO_LOGRADOURO_EMPRESA_PAGADOR").val());
+                    $("#pagador_bairro").val($("#BAIRRO_EMPRESA_PAGADOR").val());
+                    $("#pagador_cidade").val($("#CIDADE_EMPRESA_PAGADOR").val());
+                    $("#pagador_estado").val($("#ESTADO_EMPRESA_PAGADOR").val());
+                }
+                else if ($("#RESPONSAVEL_EMISSAO_COBRANCA").val() == 2) {
+                    $("#pagador_nome").val($("#NOME_USUARIO_PAGADOR").val());
+                    $("#pagador_email").val($("#EMAIL_USUARIO_PAGADOR").val());
+                    $("#pagador_cep").val($("#CEP_USUARIO_PAGADOR").val());
+                    $("#pagador_telefone").val($("#TELEFONE_USUARIO_PAGADOR").val());
+                    $("#pagador_logradouro").val($("#LOGRADOURO_USUARIO_PAGADOR").val());
+                    $("#pagador_numero").val($("#NUMERO_LOGRADOURO_USUARIO_PAGADOR").val());
+                    $("#pagador_bairro").val($("#BAIRRO_USUARIO_PAGADOR").val());
+                    $("#pagador_cidade").val($("#CIDADE_USUARIO_PAGADOR").val());
+                    $("#pagador_estado").val($("#ESTADO_USUARIO_PAGADOR").val());
+                }
+
+                //alert('pagador_nome= ' + $("#pagador_nome").val());
+            });
+
+        });
+
+    </script>
+
+}

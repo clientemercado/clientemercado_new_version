@@ -1,0 +1,201 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    @*<div class="col-md-12">*@
+    <!-- BEGIN VALIDATION STATES-->
+    <div class="portlet box blue">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="fa fa-list-ul"></i> Cotações Enviadas
+            </div>
+        </div>
+        <div class="portlet-body form">
+            <!-- BEGIN FORM-->
+            <form action="#" class="form-horizontal">
+                <div class="form-body">
+                    <div class="form-group" id="cabecalho" style="">
+                        <label class="col-md-2 control-label"><b>Empresa:</b></label>
+                        <div class="col-md-4">
+                            <h5>ABC Materiais de Construção Ltda.</h5>
+                        </div>
+                        <label class="col-md-2 control-label"><b>Cidade:</b></label>
+                        <div class="col-md-4">
+                            <h5>Vitória-ES</h5>
+                        </div>
+                        <label class="col-md-2 control-label"><b>Usuário Resp:</b></label>
+                        <div class="col-md-4">
+                            <h5>Manoelino Maia</h5>
+                        </div>
+                    </div>
+                    <hr />
+
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <div class="col-md-6"><b>Cotação:</b></div>
+                            <div class="col-md-4"><b>Ramo Atividade:</b></div>
+                            <div class="col-md-2"></div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="col-md-2">
+                                <input type="text" name="name" id="inCodigoCentralCompras" data-required="1" size="8" class="form-control" placeholder="Código" />
+                            </div>
+                            <div class="col-md-4">
+                                <input type="text" name="name" id="inNomeCentralCompras" data-required="1" size="10" class="form-control" placeholder="Nome..." />
+                            </div>
+                            <div class="col-md-4">
+                                <select class="form-control" name="select">
+                                    <option value="">Selecione...</option>
+                                    <option value="1">Materiais Contrução</option>
+                                    <option value="2">Construção Civil</option>
+                                    <option value="3">Sumpermercado</option>
+                                    <option value="4">Hortifruti</option>
+                                </select>
+                            </div>
+                            <div class="col-md-2">
+                                <a href="javascript:;" class="btn blue button-submit">
+                                    Filtrar <i class="fas fa-filter"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <div class="col-md-6"><b>Central Compras:</b></div>
+                            <div class="col-md-4">&nbsp;</div>
+                            <div class="col-md-2"></div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="col-md-2">
+                                <input type="text" name="name" id="inCodigoCentralCompras" data-required="1" size="8" class="form-control" placeholder="Código" />
+                            </div>
+                            <div class="col-md-4">
+                                <input type="text" name="name" id="inNomeCentralCompras" data-required="1" size="10" class="form-control" placeholder="Descrição..." />
+                            </div>
+                            <div class="col-md-4">&nbsp;</div>
+                            <div class="col-md-2">&nbsp;</div>
+                        </div>
+                    </div>
+                    <hr />
+
+                    <div class="form-group">
+                        <!-- BEGIN SAMPLE TABLE PORTLET-->
+                        @*<div class="portlet box green">*@
+                        <div class="portlet-body flip-scroll col-md-12">
+                            <table class="table table-bordered table-striped table-condensed flip-content">
+                                <thead class="flip-content">
+                                    <tr>
+                                        <th width="">
+                                            Cotação Nº
+                                        </th>
+                                        <th>
+                                            Central Compras
+                                        </th>
+                                        <th class="numeric">
+                                            Respondendo
+                                        </th>
+                                        <th>
+                                            Dt. Envio
+                                        </th>
+                                        <th class="numeric">
+                                            Dt.Encerrou
+                                        </th>
+                                        <th class="numeric">
+                                            Ramo Atividade
+                                        </th>
+                                        <th class="numeric">
+                                            Responderam
+                                        </th>
+                                        <th class="numeric">
+                                            Status
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <a href="@Url.Action("VisualizarCotacaoEnviada", "CotacoesEnviadas", new { Area = "Company" })" class="" style="">000001</a>
+                                        </td>
+                                        <td>
+                                            <a href="@Url.Action("VisualizarCotacaoEnviada", "CotacoesEnviadas", new { Area = "Company" })" class="" style="">0001 - GRUPO de COMPRAS SETEMBRO/2020</a>
+                                        </td>
+                                        <td>
+                                            <a href="@Url.Action("VisualizarCotacaoEnviada", "CotacoesEnviadas", new { Area = "Company" })" class="" style="">10</a>
+                                        </td>
+                                        <td>
+                                            <a href="@Url.Action("VisualizarCotacaoEnviada", "CotacoesEnviadas", new { Area = "Company" })" class="" style="">25/11/2020</a>
+                                        </td>
+                                        <td class="numeric">
+                                            <a href="@Url.Action("VisualizarCotacaoEnviada", "CotacoesEnviadas", new { Area = "Company" })" class="" style="">28/11/2020</a>
+                                        </td>
+                                        <td class="numeric">
+                                            <a href="@Url.Action("VisualizarCotacaoEnviada", "CotacoesEnviadas", new { Area = "Company" })" class="" style="">Materiais Construção</a>
+                                        </td>
+                                        <td class="numeric">
+                                            <a href="@Url.Action("VisualizarCotacaoEnviada", "CotacoesEnviadas", new { Area = "Company" })" class="" style="">08</a>
+                                        </td>
+                                        <td class="numeric"><b><font color="#FF0000">ENCERRADA</font></b></td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <a href="@Url.Action("VisualizarCotacaoEnviada", "CotacoesEnviadas", new { Area = "Company" })" class="" style="">000002</a>
+                                        </td>
+                                        <td>
+                                            <a href="@Url.Action("VisualizarCotacaoEnviada", "CotacoesEnviadas", new { Area = "Company" })" class="" style="">0001 - GRUPO de COMPRAS SETEMBRO/2020</a>
+                                        </td>
+                                        <td>
+                                            <a href="@Url.Action("VisualizarCotacaoEnviada", "CotacoesEnviadas", new { Area = "Company" })" class="" style="">08</a>
+                                        </td>
+                                        <td>
+                                            <a href="@Url.Action("VisualizarCotacaoEnviada", "CotacoesEnviadas", new { Area = "Company" })" class="" style="">25/11/2020</a>
+                                        </td>
+                                        <td class="numeric">
+                                            <a href="@Url.Action("VisualizarCotacaoEnviada", "CotacoesEnviadas", new { Area = "Company" })" class="" style="">28/11/2020</a>
+                                        </td>
+                                        <td class="numeric">
+                                            <a href="@Url.Action("VisualizarCotacaoEnviada", "CotacoesEnviadas", new { Area = "Company" })" class="" style="">Materiais Construção</a>
+                                        </td>
+                                        <td class="numeric">
+                                            <a href="@Url.Action("VisualizarCotacaoEnviada", "CotacoesEnviadas", new { Area = "Company" })" class="" style="">05</a>
+                                        </td>
+                                        <td class="numeric"><b><font color="#FF0000">ENCERRADA</font></b></td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <a href="@Url.Action("VisualizarCotacaoEnviada", "CotacoesEnviadas", new { Area = "Company" })" class="" style="">000003</a>
+                                        </td>
+                                        <td>
+                                            <a href="@Url.Action("VisualizarCotacaoEnviada", "CotacoesEnviadas", new { Area = "Company" })" class="" style="">0001 - GRUPO de COMPRAS SETEMBRO/2020</a>
+                                        </td>
+                                        <td>
+                                            <a href="@Url.Action("VisualizarCotacaoEnviada", "CotacoesEnviadas", new { Area = "Company" })" class="" style="">07</a>
+                                        </td>
+                                        <td>
+                                            <a href="@Url.Action("VisualizarCotacaoEnviada", "CotacoesEnviadas", new { Area = "Company" })" class="" style="">25/11/2020</a>
+                                        </td>
+                                        <td class="numeric">
+                                            <a href="@Url.Action("VisualizarCotacaoEnviada", "CotacoesEnviadas", new { Area = "Company" })" class="" style="">28/11/2020</a>
+                                        </td>
+                                        <td class="numeric">
+                                            <a href="@Url.Action("VisualizarCotacaoEnviada", "CotacoesEnviadas", new { Area = "Company" })" class="" style="">Materiais Construção</a>
+                                        </td>
+                                        <td class="numeric">
+                                            <a href="@Url.Action("VisualizarCotacaoEnviada", "CotacoesEnviadas", new { Area = "Company" })" class="" style="">04</a>
+                                        </td>
+                                        <td class="numeric"><b><font color="#0000FF">EM ANDAMENTO</font></b></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        @*</div>*@
+                    </div>
+                </div>
+            </form>
+            <!-- END FORM-->
+        </div>
+    </div>
+    <!-- END VALIDATION STATES-->
+    @*</div>*@
+</div>

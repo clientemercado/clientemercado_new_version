@@ -1,0 +1,122 @@
+﻿@{
+    ViewBag.Title = "Visualizar ItensCotados Por Empresa";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    @*<div class="col-md-12">*@
+    <!-- BEGIN VALIDATION STATES-->
+    <div class="portlet box blue">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="fas fa-clipboard-list"></i> Acompanhar Cotações / Ver Itens Cotados por Empresa
+            </div>
+        </div>
+        <div class="portlet-body form">
+            <!-- BEGIN FORM-->
+            <form action="#" class="form-horizontal">
+                <div class="form-body">
+                    <div class="form-group" id="cabecalho" style="">
+                        <label class="col-md-2 control-label"><font color="#3297E0"><b>Central Compras:</b></font></label>
+                        <div class="col-md-4">
+                            <h5>@Model.inNomeCentralCompras</h5>
+                        </div>
+                        <label class="col-md-2 control-label"><font color="#3297E0"><b>Ramo Atividade:</b></font></label>
+                        <div class="col-md-4">
+                            <h5>@Model.inRamoAtividadeCC</h5>
+                        </div>
+                        <label class="col-md-2 control-label"><font color="#3297E0"><b>Administradora:</b></font></label>
+                        <div class="col-md-4">
+                            <h5>@Model.inEmpresaLogadaAdmCC</h5>
+                        </div>
+                        <label class="col-md-2 control-label"><font color="#3297E0"><b>Cidade:</b></font></label>
+                        <div class="col-md-4">
+                            <h5>@Model.inCidadeEmpresaAdmCC</h5>
+                        </div>
+                        <label class="col-md-2 control-label"><font color="#3297E0"><b>Usuário Resp:</b></font></label>
+                        <div class="col-md-4">
+                            <h5>@Model.inNomeUsuarioRespEmpresaAdmCC</h5>
+                        </div>
+                    </div>
+                    <hr />
+
+                    <div class="form-actions">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <a href="@Url.Action("MapaDaCotacao", "AcompanharCotacoes", new { Area = "Company", cCC = @Model.cCC, iCM = Model.iCM })" class="btn default button-previous">
+                                    <i class="fas fa-arrow-left"></i> Voltar
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <!-- OBS: AQUI VAI ENTRAR A LISTA DE EMPRESAS E ITENS COTADOS POR CADA EMPRESA -->
+                        <div class="portlet-body flip-scroll col-md-12">
+                            @{
+                                    var contador = 0;
+
+                                    foreach (var dadosEmpresaCotanteAnexou in Model.listaDeEmpresasQueAnexaramCotacaoESeusItensCotados)
+                                    {
+                                        <table class="table table-bordered table-striped table-condensed flip-content">
+                                            <thead class="flip-content">
+                                                <tr bgcolor="#DCDCDC">
+                                                    <td colspan="3"><label class=""><font color="#3297E0"><b>Empresa:</b></font>&nbsp;<b>@dadosEmpresaCotanteAnexou.nomeEmpresa / @dadosEmpresaCotanteAnexou.cidadeEmpresa-@dadosEmpresaCotanteAnexou.ufEmpresa</b></label></td>
+                                                    <td colspan="5"><label class=""><font color="#3297E0"><b>Contato:</b></font>&nbsp;<b>@dadosEmpresaCotanteAnexou.usuarioContatoEmpresa</b></label></td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="center" bgcolor="#0672a7" style="color:White;" width="25%" nowrap><b>Produto</b></td>
+                                                    <td align="center" bgcolor="#0672a7" style="color:White;" width="20%" nowrap><b>Marca</b></td>
+                                                    <td align="center" bgcolor="#0672a7" style="color:White;" width="5%" class="numeric" nowrap><b>Quant.</b></td>
+                                                    <td align="center" bgcolor="#0672a7" style="color:White;" width="5%" class="numeric" nowrap><b>Unid.</b></td>
+                                                    <td align="center" bgcolor="#0672a7" style="color:White;" width="10%" class="numeric" nowrap><b>R$ Unit.</b></td>
+                                                    <td align="center" bgcolor="#0672a7" style="color:White;" width="10%" class="numeric" nowrap><b>R$ Total</b></td>
+                                                    <td align="center" bgcolor="#0672a7" style="color:White;" width="5%" class="numeric" nowrap><b>Pedido</b></td>
+                                                    <td align="center" bgcolor="#0672a7" style="color:White;" width="20%" nowrap><b>Fornecedor</b></td>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @{
+                                                    foreach (var itensCotadosPelaEmpresaAnexou in Model.listaDeEmpresasQueAnexaramCotacaoESeusItensCotados[contador].listaDeItensCotadosPorEmpresa)
+                                                    {
+                                                        <tr>
+                                                            <td>@itensCotadosPelaEmpresaAnexou.descricaoProdutoCotado</td>
+                                                            <td>@itensCotadosPelaEmpresaAnexou.marcaProdutoCotado</td>
+                                                            <td class="numeric" align="right">@itensCotadosPelaEmpresaAnexou.quantidadeProdutoCotado&nbsp;</td>
+                                                            <td class="numeric" align="right">@itensCotadosPelaEmpresaAnexou.unidadeProdutoCotado&nbsp;</td>
+                                                            <td class="numeric" align="right">@itensCotadosPelaEmpresaAnexou.valorDoProdutoCotado&nbsp;</td>
+                                                            <td class="numeric" align="right">@itensCotadosPelaEmpresaAnexou.totalDoProdutoCotado&nbsp;</td>
+                                                            @{
+                                                                if (itensCotadosPelaEmpresaAnexou.itemFoiPedido == "sim")
+                                                                {
+                                                                    <td class="numeric" align="center"><font color='#008000' title="ITEM PEDIDO"><i class="fas fa-check"></i></font></td>
+                                                                    <td class="numeric" align="center">&nbsp;@itensCotadosPelaEmpresaAnexou.fornecedorItemPedido</td>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <td class="numeric" align="center">&nbsp;</td>
+                                                                    <td class="numeric" align="center">&nbsp;</td>
+                                                                }
+                                                             }
+                                                        </tr>
+                                                    }
+                                                }
+                                            </tbody>
+                                        </table>
+
+                                       contador = (contador + 1);
+                                    }
+                            }
+                        </div>
+                    </div>
+
+                </div>
+            </form>
+
+            <input type="hidden" id="inCCC" value="@Model.cCC" />
+            <input type="hidden" id="inICM" value="@Model.iCM" />
+        </div>
+    </div>
+    <!-- END VALIDATION STATES-->
+    @*</div>*@
+</div>

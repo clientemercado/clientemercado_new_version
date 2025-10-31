@@ -1,0 +1,9 @@
+# Visual Studio
+.vs/
+*.vscode/
+*.user
+*.suo
+*.dbmdl
+*.log
+bin/
+obj/

@@ -1,0 +1,45 @@
+﻿@model IEnumerable<ClienteMercado.Models.tipo_empresa_usuario>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table>
+    <tr>
+        <th>
+            ID_CODIGO_TIPO_EMPRESA_USUARIO
+        </th>
+        <th>
+            DESCRICAO_TIPO_EMPRESA_USUARIO
+        </th>
+        <th>
+            FISICA_JURIDICA_EMPRESA_USUARIO
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.ID_CODIGO_TIPO_EMPRESA_USUARIO)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DESCRICAO_TIPO_EMPRESA_USUARIO)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.FISICA_JURIDICA_EMPRESA_USUARIO)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+            @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+            @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+        </td>
+    </tr>
+}
+
+</table>

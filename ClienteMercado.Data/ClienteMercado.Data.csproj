@@ -1,0 +1,161 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\EntityFramework.6.4.4\build\EntityFramework.props" Condition="Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.props')" />
+  <Import Project="..\packages\Microsoft.SqlServer.Types.160.1000.6\build\net462\Microsoft.SqlServer.Types.props" Condition="Exists('..\packages\Microsoft.SqlServer.Types.160.1000.6\build\net462\Microsoft.SqlServer.Types.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{54CB4FE8-7C5F-41C8-A137-336B913357FD}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ClienteMercado.Data</RootNamespace>
+    <AssemblyName>ClienteMercado.Data</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.SqlServer.Types, Version=16.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.SqlServer.Types.160.1000.6\lib\net462\Microsoft.SqlServer.Types.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Contexto\cliente_mercadoContext.cs" />
+    <Compile Include="Entities\atividades_empresa.cs" />
+    <Compile Include="Entities\atividades_profissional.cs" />
+    <Compile Include="Entities\avaliacao_empresa_cotada.cs" />
+    <Compile Include="Entities\avaliacao_usuario_empresa_cotada.cs" />
+    <Compile Include="Entities\bairros_empresa_usuario.cs" />
+    <Compile Include="Entities\cards_empresa.cs" />
+    <Compile Include="Entities\cards_usuario_empresa.cs" />
+    <Compile Include="Entities\cards_usuario_profissional.cs" />
+    <Compile Include="Entities\central_de_compras.cs" />
+    <Compile Include="Entities\chat_cotacao_central_compras.cs" />
+    <Compile Include="Entities\chat_cotacao_usuario_cotante.cs" />
+    <Compile Include="Entities\chat_cotacao_usuario_empresa.cs" />
+    <Compile Include="Entities\cidades_empresa_usuario.cs" />
+    <Compile Include="Entities\classificacao_empresas_cotadas.cs" />
+    <Compile Include="Entities\classificacao_tipo_itens_cotacao.cs" />
+    <Compile Include="Entities\classificacao_usuario_empresas_cotadas.cs" />
+    <Compile Include="Entities\contato_cliente_mercado.cs" />
+    <Compile Include="Entities\controle_sms_usuario_empresa.cs" />
+    <Compile Include="Entities\controle_sms_usuario_profissional.cs" />
+    <Compile Include="Entities\cotacao_filha_central_compras.cs" />
+    <Compile Include="Entities\cotacao_filha_usuario_cotante.cs" />
+    <Compile Include="Entities\cotacao_filha_usuario_empresa.cs" />
+    <Compile Include="Entities\cotacao_individual_empresa_central_compras.cs" />
+    <Compile Include="Entities\cotacao_master_central_compras.cs" />
+    <Compile Include="Entities\cotacao_master_usuario_cotante.cs" />
+    <Compile Include="Entities\cotacao_master_usuario_empresa.cs" />
+    <Compile Include="Entities\COTACAO_PRODUTOS.cs" />
+    <Compile Include="Entities\empresas_fabricantes_marcas.cs" />
+    <Compile Include="Entities\empresas_participantes_central_de_compras.cs" />
+    <Compile Include="Entities\empresas_produtos_embalagens.cs" />
+    <Compile Include="Entities\empresas_produtos_marcas.cs" />
+    <Compile Include="Entities\empresas_solicitacao_participacao_central_de_compras.cs" />
+    <Compile Include="Entities\EMPRESA_FORNECEDOR.cs" />
+    <Compile Include="Entities\empresa_usuario.cs" />
+    <Compile Include="Entities\empresa_usuario_logins.cs" />
+    <Compile Include="Entities\enderecos_empresa_usuario.cs" />
+    <Compile Include="Entities\estados_empresa_usuario.cs" />
+    <Compile Include="Entities\financeiro_cobranca_faturamento_usuario_empresa.cs" />
+    <Compile Include="Entities\financeiro_cobranca_faturamento_usuario_profissional.cs" />
+    <Compile Include="Entities\forma_pagamento.cs" />
+    <Compile Include="Entities\fotos_itens_alternativos_cotacao_filha_negociacao_central_compras.cs" />
+    <Compile Include="Entities\fotos_itens_alternativos_cotacao_filha_negociacao_usuario_cotante.cs" />
+    <Compile Include="Entities\fotos_itens_alternativos_cotacao_filha_negociacao_usuario_empresa.cs" />
+    <Compile Include="Entities\grupo_atividades_empresa.cs" />
+    <Compile Include="Entities\itens_cotacao_filha_negociacao_central_compras.cs" />
+    <Compile Include="Entities\itens_cotacao_filha_negociacao_usuario_cotante.cs" />
+    <Compile Include="Entities\itens_cotacao_filha_negociacao_usuario_empresa.cs" />
+    <Compile Include="Entities\itens_cotacao_individual_empresa_central_compras.cs" />
+    <Compile Include="Entities\itens_cotacao_usuario_cotante.cs" />
+    <Compile Include="Entities\itens_cotacao_usuario_empresa.cs" />
+    <Compile Include="Entities\itens_pedido_central_compras.cs" />
+    <Compile Include="Entities\itens_pedido_usuario_cotante.cs" />
+    <Compile Include="Entities\itens_pedido_usuario_empresa.cs" />
+    <Compile Include="Entities\meios_pagamento_fatura_servicos.cs" />
+    <Compile Include="Entities\paises_empresa_usuario.cs" />
+    <Compile Include="Entities\pedido_central_compras.cs" />
+    <Compile Include="Entities\pedido_usuario_cotante.cs" />
+    <Compile Include="Entities\pedido_usuario_empresa.cs" />
+    <Compile Include="Entities\PRODUTOS_COTACAO_PEDIDO.cs" />
+    <Compile Include="Entities\PRODUTOS_FORNECEDOR.cs" />
+    <Compile Include="Entities\produtos_servicos_empresa_profissional.cs" />
+    <Compile Include="Entities\profissional_usuario.cs" />
+    <Compile Include="Entities\profissional_usuario_logins.cs" />
+    <Compile Include="Entities\profissoes_usuario.cs" />
+    <Compile Include="Entities\status_cotacao.cs" />
+    <Compile Include="Entities\tipos_contratos_servicos.cs" />
+    <Compile Include="Entities\tipos_cotacao.cs" />
+    <Compile Include="Entities\tipos_frete.cs" />
+    <Compile Include="Entities\tipo_empresa_usuario.cs" />
+    <Compile Include="Entities\tipo_resposta_cotacao.cs" />
+    <Compile Include="Entities\unidades_produtos.cs" />
+    <Compile Include="Entities\USUARIO_COMPRADOR.cs" />
+    <Compile Include="Entities\usuario_cotante.cs" />
+    <Compile Include="Entities\usuario_cotante_logins.cs" />
+    <Compile Include="Entities\usuario_empresa.cs" />
+    <Compile Include="Entities\USUARIO_FORNECEDOR.cs" />
+    <Compile Include="Entities\usuario_historico_empresas.cs" />
+    <Compile Include="Entities\usuario_profissional.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Microsoft.SqlServer.Types.160.1000.6\build\net462\Microsoft.SqlServer.Types.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.SqlServer.Types.160.1000.6\build\net462\Microsoft.SqlServer.Types.props'))" />
+    <Error Condition="!Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.4.4\build\EntityFramework.props'))" />
+    <Error Condition="!Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.4.4\build\EntityFramework.targets'))" />
+  </Target>
+  <Import Project="..\packages\EntityFramework.6.4.4\build\EntityFramework.targets" Condition="Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.targets')" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -1,0 +1,33 @@
+﻿@model ClienteMercado.Models.tipo_empresa_usuario
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<fieldset>
+    <legend>tipo_empresa_usuario</legend>
+
+    <div class="display-label">ID_CODIGO_TIPO_EMPRESA_USUARIO</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.ID_CODIGO_TIPO_EMPRESA_USUARIO)
+    </div>
+
+    <div class="display-label">DESCRICAO_TIPO_EMPRESA_USUARIO</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.DESCRICAO_TIPO_EMPRESA_USUARIO)
+    </div>
+
+    <div class="display-label">FISICA_JURIDICA_EMPRESA_USUARIO</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.FISICA_JURIDICA_EMPRESA_USUARIO)
+    </div>
+</fieldset>
+@using (Html.BeginForm()) {
+    <p>
+        <input type="submit" value="Delete" /> |
+        @Html.ActionLink("Back to List", "Index")
+    </p>
+}

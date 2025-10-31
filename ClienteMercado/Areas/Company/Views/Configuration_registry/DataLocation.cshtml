@@ -1,0 +1,264 @@
+﻿@model ClienteMercado.UI.Core.ViewModel.CadastroEmpresaViewModel
+
+@{
+    ViewBag.Title = "DataLocation";
+    Layout = "~/Views/Shared/_Layout_configuration.cshtml";
+}
+
+<script src="http://code.jquery.com/jquery-1.8.2.js"></script>
+<script src="http://code.jquery.com/ui/1.9.0/jquery-ui.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pnotify/3.2.1/pnotify.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pnotify/3.2.1/pnotify.buttons.js"></script>
+<script src="~/Scripts/validacoes.js"></script>
+
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.9.0/themes/base/jquery-ui.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pnotify/3.2.1/pnotify.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pnotify/3.2.1/pnotify.buttons.css" />
+
+<style>
+    .ui-pnotify {
+        top: 100px; /*Replace the 25px with the top that you need*/
+        right: 25px;
+        position: absolute;
+        height: auto;
+        z-index: 9999
+    }
+
+        .ui-pnotify.customsuccess .ui-pnotify-container {
+            background-color: #337ab7 !important;
+        }
+
+        .ui-pnotify.customsuccess .ui-pnotify-text {
+            font-size: 11px
+        }
+
+        .ui-pnotify.customsuccess .ui-pnotify-title,
+        .ui-pnotify.customsuccess .ui-pnotify-text,
+        .ui-pnotify.customsuccess .ui-pnotify-icon,
+        .ui-pnotify.customsuccess .ui-pnotify-sticker,
+        .ui-pnotify.customsuccess .ui-pnotify-closer {
+            color: #FFF !important;
+        }
+</style>
+
+<div class="row">
+    <!-- BEGIN VALIDATION STATES-->
+    <div class="portlet box blue">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="fas fa-cogs"></i>Configurações - Dados Localizações no Sistema - Etapa 2 de 3
+            </div>
+        </div>
+
+        <div class="portlet-body form">
+            <!-- BEGIN FORM-->
+            <form class="form-horizontal">
+                <div class="form-body">
+                    <a href="@Url.Action("Index", "Configuration_registry", new { one = "N" })" class="btn default button-previous"><i class="fas fa-arrow-left"></i> Voltar</a>
+                    <hr />
+                    <div class="form-group">
+                        @*<div class="col-md-12">*@
+                            <div class="col-md-12"><font color="#3297E0"><h4><b>Como sua empresa pretende atuar no Cliente Mercado:</b></h4></font></div>
+                        @*</div>*@
+                        <div class="col-md-12">
+                            <div class="col-md-12">
+                                <label style="margin-left:-5px" class="radio-inline"><input type="radio" name="inTipoAtuacao" id="tipoAtuacao" class="" value="C" onclick="$('#inTipoAtuacaoNoSite').val('C'); habilitarDesabilitarCampos();" @ViewBag.checadoC> Comprador Central Compras</label><label style="margin-left:-5px" class="radio-inline"><input type="radio" name="inTipoAtuacao" id="tipoAtuacao" class="" value="F" onclick="$('#inTipoAtuacaoNoSite').val('F'); habilitarDesabilitarCampos();" @ViewBag.checadoF> Fornecedor Central Compras</label><label style="margin-left:-5px" class="radio-inline"><input type="radio" name="inTipoAtuacao" id="tipoAtuacao" class="" value="CF" onclick="$('#inTipoAtuacaoNoSite').val('CF'); habilitarDesabilitarCampos();" @ViewBag.checadoCF> Comprador e Fornecedor Central Compras</label>
+                            </div>
+                        </div>
+                    </div>
+                    <h4><b><font color="#3297E0">Configurações de Busca no Sistema:</font></b></h4><div id="msg-erro-cpf-1" class="alert alert-danger" role="alert" style="text-align:center;display:none;"><h4><font color="red">CNPJ Inválido</font></h4></div>
+                    <hr />
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <div class="col-md-12"><font color="#3297E0"><b>Categoria Atacadista</b> que melhor define seu tipo de negócio (como <b>Fornecedor</b>):</font></div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="col-md-8">
+                                @Html.DropDownList("inListaDeCategoriasAtacadistas", Model.ListagemRamosComercioAtacadista, new { @class = "form-control cadastro", @id = "inListaDeCategoriasAtacadistas", style = "", @tabindex = "", @placeholder = "Selecione..." })
+                            </div>
+                            <div class="col-md-4">&nbsp;</div>
+                        </div>
+                        <div class="col-md-12">
+                            <br />
+                            <div class="col-md-12"><font color="#3297E0"><b>Categoria Varejista</b> que melhor define seu tipo de negócio (como <b>Comprador</b>):</font></div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="col-md-8">
+                                @Html.DropDownList("inListaDeCategoriasVarejista", Model.ListagemRamosComercioVarejista, new { @class = "form-control cadastro", @id = "inListaDeCategoriasVarejista", style = "", @tabindex = "", @placeholder = "Selecione..." })
+                            </div>
+                            <div class="col-md-4">&nbsp;</div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="col-md-8">&nbsp;</div>
+                            <div class="col-md-4" style="text-align:right;">
+                                <button type="button" id="btn-continuar" class="btn btn-primary btn-padrao" title="" style="">Continue <i class="fas fa-arrow-right"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <!-- END FORM-->
+
+            <input type="hidden" id="inMeuRamoAtividades" value="@ViewBag.codRamoAtividadeEmpresaAdm" />
+            <input type="hidden" id="inIdPais" value="@Model.PAIS_EMPRESA_USUARIO" />
+            <input type="hidden" id="inIdEndereco" value="@Model.ID_CODIGO_ENDERECO_EMPRESA_USUARIO" />
+            <input type="hidden" id="inIdEstado" value="@Model.ID_ESTADOS_EMPRESA_USUARIO" />
+            <input type="hidden" id="inDocLogado" value="@Model.CPF_USUARIO" />
+            <input type="hidden" id="inCodAtacadista" value="@Model.ID_GRUPO_ATIVIDADES_ATACADO" />
+            <input type="hidden" id="inCodVarejista" value="@Model.ID_GRUPO_ATIVIDADES_VAREJO" />
+            <input type="hidden" id="inPrimeiroAcesso" value="@ViewBag.primeiroAcesso" />
+            <input type="hidden" id="inTipoAtuacaoNoSite" value="@ViewBag.tipoAtuacao" />
+        </div>
+    </div>
+    <!-- END VALIDATION STATES-->
+</div>
+
+<script>
+    jQuery(document).ready(function () {
+        debugger;
+
+        $(".cadastro").prop("disabled", true);
+
+        if ($('#inTipoAtuacaoNoSite').val() == "C") {
+            $('#inListaDeCategoriasAtacadistas').val(0);
+            $('#inListaDeCategoriasAtacadistas').prop("disabled", true);
+            $('#inListaDeCategoriasVarejista').prop("disabled", false);
+        }
+        else if ($('#inTipoAtuacaoNoSite').val() == "F") {
+            $('#inListaDeCategoriasVarejista').val(0);
+            $('#inListaDeCategoriasVarejista').prop("disabled", true);
+            $('#inListaDeCategoriasAtacadistas').prop("disabled", false);
+        }
+        else if ($('#inTipoAtuacaoNoSite').val() == "CF") {
+            $('#inListaDeCategoriasVarejista').prop("disabled", false);
+            $('#inListaDeCategoriasAtacadistas').prop("disabled", false);
+        }
+
+        if (parseInt($('#inCodAtacadista').val()) > 0) {
+            $('#inListaDeCategoriasAtacadistas').val($('#inCodAtacadista').val());
+        }
+
+        if (parseInt($('#inCodVarejista').val()) > 0) {
+            $('#inListaDeCategoriasVarejista').val($('#inCodVarejista').val());
+        }
+
+        //GRAVAR DADOS CADASTRAIS
+        $("#btn-continuar").click(function () {
+            debugger;
+
+            var valor = 0;
+            var msg = "";
+
+            $(".cadastro").each(function (index) {
+                debugger;
+
+                if ($('#inTipoAtuacaoNoSite').val() == "C") {
+                    if ($('#inListaDeCategoriasVarejista').val() == 0) {
+                        valor = 1;
+                    }
+                }
+                else if ($('#inTipoAtuacaoNoSite').val() == "F") {
+                    if ($('#inListaDeCategoriasAtacadistas').val() == 0) {
+                        valor = 1;
+                    }
+                }
+                else if ($('#inTipoAtuacaoNoSite').val() == "CF") {
+                    if (($('#inListaDeCategoriasAtacadistas').val() == 0) || ($('#inListaDeCategoriasVarejista').val() == 0)) {
+                        valor = 1;
+                    }
+                }
+
+                if (valor == 1) {
+                    if ($('#inTipoAtuacaoNoSite').val() == "C") {
+                        if ($('#inListaDeCategoriasVarejista').val() == 0) {
+                            $('#inListaDeCategoriasVarejista').css({ "border": "1px solid #F00", "padding": "2px" });
+                        }
+                    }
+                    else if ($('#inTipoAtuacaoNoSite').val() == "F") {
+                        if ($('#inListaDeCategoriasAtacadistas').val() == 0) {
+                            $('#inListaDeCategoriasAtacadistas').css({ "border": "1px solid #F00", "padding": "2px" });
+                        }
+                    }
+                    else if ($('#inTipoAtuacaoNoSite').val() == "CF") {
+                        if ($('#inListaDeCategoriasAtacadistas').val() == 0) {
+                            $('#inListaDeCategoriasAtacadistas').css({ "border": "1px solid #F00", "padding": "2px" });
+                        }
+
+                        if ($('#inListaDeCategoriasVarejista').val() == 0) {
+                            $('#inListaDeCategoriasVarejista').css({ "border": "1px solid #F00", "padding": "2px" });
+                        }
+                    }
+
+                    msg = "ATENÇÃO:\n\nO(s) campo(s) em vermelho deve(m) ser preenchido(s).\n\nSão essenciais para que sua empresa possa LOCALIZAR FORNECEDORES ou ser LOCALIZADO por COMPRADORES nesta plataforma.\n\nAtenciosamente,\n\nEquipe ClienteMercado";
+                }
+            });
+
+            if (msg != "") {
+                swal({ title: msg, type: "warning", confirmButtonColor: "#337ab7" });
+            }
+            else {
+                debugger;
+
+                $.ajax({
+                    type: 'POST',
+                    url: '/Configuration_registry/AtualizarDadosDeLocalizacaoNoSistema',
+                    dataType: 'json', //Tipo de dados
+                    data: {
+                        'codAtacadista': $('#inListaDeCategoriasAtacadistas').val(),
+                        'codVarejista': $('#inListaDeCategoriasVarejista').val()
+                    },
+                    success: function (result) {
+                        debugger;
+
+                        if (result.dadosDeLocalizacaoAtualizados = "Ok") {
+                            swal.close(); //FECHA SWAL MSG
+
+                            //EXIBE MSG LATERAL À DIREITA SUPERIOR
+                            new PNotify({
+                                title: 'Sucesso!',
+                                text: 'Os dados de LOCALIZAÇÃO da EMPRESA no ClienteMercado foram configurados com SUCESSO!',
+                                type: 'success',
+                                styling: 'bootstrap3',
+                                icons: 'bootstrap3',
+                                addclass: 'customsuccess',
+                                animateSpeed: 'fast',
+                                mouseReset: true,
+                                Buttons: {
+                                    closer: true
+                                }
+                            });
+
+                            //DESVIAR PARA PÁGINA DA ETAPA 3
+                            window.location.href = "@Url.Action("PaymentData", "Configuration_registry")";
+                        }
+                    }
+                });
+            }
+        });
+    });
+
+    //HABILITAR e DESABILITAR CAMPOS
+    function habilitarDesabilitarCampos() {
+        debugger;
+
+        if ($('#inTipoAtuacaoNoSite').val() == "C") {
+            $('#inListaDeCategoriasAtacadistas').val(0);
+            $('#inListaDeCategoriasAtacadistas').prop("disabled", true);
+            $('#inListaDeCategoriasAtacadistas').css({ "border": "1px solid #DCDCDC", "padding": "2px" });
+            $('#inListaDeCategoriasVarejista').prop("disabled", false);
+        }
+        else if ($('#inTipoAtuacaoNoSite').val() == "F") {
+            $('#inListaDeCategoriasVarejista').val(0);
+            $('#inListaDeCategoriasVarejista').prop("disabled", true);
+            $('#inListaDeCategoriasVarejista').css({ "border": "1px solid #DCDCDC", "padding": "2px" });
+            $('#inListaDeCategoriasAtacadistas').prop("disabled", false);
+        }
+        else if ($('#inTipoAtuacaoNoSite').val() == "CF") {
+            $(".cadastro").css({ "border": "1px solid #DCDCDC", "padding": "2px" });
+            $('#inListaDeCategoriasVarejista').prop("disabled", false);
+            $('#inListaDeCategoriasAtacadistas').prop("disabled", false);
+        }
+    }
+
+</script>

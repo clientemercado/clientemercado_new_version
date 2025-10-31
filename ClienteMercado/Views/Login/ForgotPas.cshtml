@@ -1,0 +1,58 @@
+﻿@model ClienteMercado.Models.CadastroNovaSenha
+
+@{
+ViewBag.Title = "ClienteMercado";
+    Layout = "~/Views/Shared/_Layout_Login.cshtml";
+}
+
+<div id="label_titulo_paginas" class="label_paginas">&nbsp;&nbsp;Cadastrar Nova Senha</div>
+
+<div id="container_nova_senha">
+    
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true)
+
+        <div id="campos_para_login" class="campos_cadastro_nova_empresa_usuario">
+            <div id="label_tipo" class="formata_campos_login">
+                Para continuar usando nosso sistema, você deve cadastrar uma nova senha:
+            </div>
+            <br/>
+            <div id="label_senha1" class="formata_campos_login">
+                @Html.LabelFor(m => m.SENHA_EMPRESA_USUARIO_LOGINS)
+            </div>
+            <div id="campo_senha1" class="formata_campos_login">
+                @Html.TextBoxFor(m => m.SENHA_EMPRESA_USUARIO_LOGINS, new { style = "font-family: 'Verdana', Geneva, sans-serif; width: 160px;", maxlength = 31, @size = 30, @type = "password", @tabindex = "1" })
+                @Html.ValidationMessageFor(m => m.SENHA_EMPRESA_USUARIO_LOGINS, String.Empty)
+            </div>
+            <div id="label_senha2" class="formata_campos_login">
+                @Html.LabelFor(m => m.CONFIRMAR_SENHA_EMPRESA_USUARIO_LOGINS)
+            </div>
+            <div id="campo_senha2" class="formata_campos_login">
+                @Html.TextBoxFor(m => m.CONFIRMAR_SENHA_EMPRESA_USUARIO_LOGINS, new { style = "font-family: 'Verdana', Geneva, sans-serif; width: 160px;", maxlength = 31, @size = 30, @type = "password", @tabindex = "2" })
+                @Html.ValidationMessageFor(m => m.CONFIRMAR_SENHA_EMPRESA_USUARIO_LOGINS, String.Empty)
+            </div>
+            
+            @Html.HiddenFor(m => m.ID_CODIGO_USUARIO_LOGADO)
+            
+            <br/>
+            <div id="bt_submit" class="formata_campos_login">
+                <input type="submit" value="Enviar" class="i2Style"/>
+            </div>
+        </div>
+
+        <input type="hidden" name="TIPO_LOGIN" id="TIPO_LOGIN" value="@ViewBag.tipoLogin" />
+    }
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    @* Posiciona o cursor  no primeiro campo*@
+    <script type="text/javascript">
+        $(function () {
+            $("input[type=text]").first().focus();
+        });
+    </script>
+}

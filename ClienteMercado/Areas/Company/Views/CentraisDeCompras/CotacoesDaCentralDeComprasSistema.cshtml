@@ -1,0 +1,216 @@
+﻿@model  ClienteMercado.UI.Core.ViewModel.NossasCentraisDeComprasViewModel
+
+@{
+    ViewBag.Title = "Cotacoes Central De Compras";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="http://code.jquery.com/jquery-1.8.2.js"></script>
+<script src="http://code.jquery.com/ui/1.9.0/jquery-ui.js"></script>
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.9.0/themes/base/jquery-ui.css" />
+
+<style>
+    .HideColHead {
+        display: none
+    }
+
+    .HideCol {
+        display: none
+    }
+
+    th {
+        background-color: #CDC9C9;
+        color: white;
+    }
+
+    .status {
+        font-size: 9pt;
+    }
+
+    a:link {
+        text-decoration: none;
+    }
+</style>
+
+<div class="row">
+    @*<div class="col-md-12">*@
+    <!-- BEGIN VALIDATION STATES-->
+    <div class="portlet box blue">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="far fa-copy"></i> Cotações da Central de Compras
+            </div>
+        </div>
+        <div class="portlet-body form">
+            <!-- BEGIN FORM-->
+            <form action="#" class="form-horizontal">
+                <div class="form-body">
+                    <div class="form-group" id="cabecalho" style="">
+                        <label class="col-md-2 control-label"><font color="#3297E0"><b>Central Compras:</b></font></label>
+                        <div class="col-md-4">
+                            <h5>@Model.inNomeCentralCompras</h5>
+                        </div>
+                        <label class="col-md-2 control-label"><font color="#3297E0"><b>Ramo Atividade:</b></font></label>
+                        <div class="col-md-4">
+                            <h5>@Model.inRamoAtividadeCC</h5>
+                        </div>
+                        <label class="col-md-2 control-label"><font color="#3297E0"><b>Administradora:</b></font></label>
+                        <div class="col-md-4">
+                            <h5>@Model.inEmpresaLogadaAdmCC</h5>
+                        </div>
+                        <label class="col-md-2 control-label"><font color="#3297E0"><b>Cidade:</b></font></label>
+                        <div class="col-md-4">
+                            <h5>@Model.inCidadeEmpresaAdmCC</h5>
+                        </div>
+                        <label class="col-md-2 control-label"><font color="#3297E0"><b>Usuário Resp:</b></font></label>
+                        <div class="col-md-4">
+                            <h5>@Model.inNomeUsuarioRespEmpresaAdmCC</h5>
+                        </div>
+                    </div>
+                    <hr />
+
+                    <div class="form-actions">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <a href="@Url.Action("Index", "CentraisDeCompras", new { Area = "Company" })" class="btn default button-previous"><i class="fas fa-arrow-left"></i> Voltar</a>
+                                &nbsp;&nbsp;&nbsp;
+                                <a href="javascript:;" id="btn-pesquisar" class="btn blue button-submit"><i class="fas fa-search"></i> Pesquisar</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <div class="col-md-12"><font color="#3297E0"><b>Cotação:</b></font></div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="col-md-9">
+                                <input type="text" name="name" id="inNomeCotacao" data-required="1" size="10" class="form-control campo" placeholder="Nome..." />
+                            </div>
+                            <div class="col-md-3">&nbsp;</div>
+                        </div>
+                    </div>
+                    <hr />
+
+                    <div class="form-group">
+                        <!-- BEGIN SAMPLE TABLE PORTLET-->
+                        <div class="portlet-body flip-scroll col-md-12">
+                            <table id="gridCotacoesDaCentralCompras" class="table table-bordered table-striped table-condensed flip-content">
+                                <thead class="flip-content">
+                                    <tr>
+                                        <th data-column-id="nomeDaCotacao" data-width="30%" data-formatter="link1">Cotação</th>
+                                        <th data-column-id="dataCriacaoDaCotacao" data-width="10%" data-formatter="link2">Dt. Envio</th>
+                                        <th data-column-id="dataEncerramentoCotacao" data-width="10%" data-formatter="link3">Dt. Encerra</th>
+                                        <th data-column-id="grupoAtividades" data-width="27%" data-formatter="link4">Ramo Atividade</th>
+                                        @*<th data-column-id="quantasEmpresas" data-width="12%" data-align="right" data-formatter="link5">Respondendo</th>
+                                        <th data-column-id="statusCotacao" data-width="11%" data-align="center" data-formatter="status">Status</th>*@
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <!-- END FORM-->
+
+            <input type="hidden" id="inCCC" value="@Model.cCC" />
+            <input type="hidden" id="inUsuarioLogado" value="@Model.inNomeUsuarioLogado" />
+            <input type="hidden" id="inNomeCC" value="@Model.inNomeCentralCompras" />
+            <input type="hidden" id="inQuantidadeEmpresasDaCC" value="@ViewBag.quantasEmpresas" />
+            <input type="hidden" id="inCodigoEmpresaAdmCC" value="@Model.inCodEmpresaADM" />
+            <input type="hidden" id="inCodigoEmpresaLogada" value="@Model.inCodEmpresaLogada" />
+            <input type="hidden" id="inRecarregaGrid" value="0" />
+        </div>
+    </div>
+    <!-- END VALIDATION STATES-->
+    @*</div>*@
+</div>
+<script>
+    jQuery(document).ready(function () {
+        debugger;
+
+        //CARREGA o GRID com as COTAÇÕES
+        carregarGrid();
+
+        $("#inNomeCotacao").autocomplete({
+            source: function (request, response) {
+                debugger;
+                var termo = $("#inNomeCotacao").val();
+
+                $.ajax({
+                    type: "POST",
+                    url: "/NossasCentraisDeCompras/BuscarListaDeNomesCotacaoesDaCC",
+                    dataType: "json",
+                    data: { 'term': termo },
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return {
+                                label: item.NOME_COTACAO_CENTRAL_COMPRAS,
+                                value: item.NOME_COTACAO_CENTRAL_COMPRAS
+                            };
+                        }));
+                    }
+                });
+            },
+            select: function (event, ui) {
+                debugger;
+
+                $("#inNomeCotacao").val(ui.item.value);
+                //$("#inListaDeRamosDeAtividade").val(0);
+                $('#gridCotacoesDaCentralCompras').bootgrid('reload');
+
+            }, minLength: 4,
+        });
+
+        //BOTÃO PESQUISAR
+        $(document).on("click", "#btn-pesquisar", function () {
+            debugger;
+
+            if ($('#inNomeCotacao').val() != "") {
+                $('#gridCotacoesDaCentralCompras').bootgrid('reload');
+            }
+            else {
+                swal({ title: "ATENÇÃO:\n\nInforme um NOME de COTAÇÃO da Central de Compras do Sistema para pesquisar.", type: "warning", confirmButtonColor: "#337ab7" });
+            }
+        });
+
+        $(".campo").change(function () {
+            debugger;
+
+            if ($('#inNomeCotacao').val() == "") {
+                $('#gridCotacoesDaCentralCompras').bootgrid('reload');
+            }
+        });
+    });
+
+    function carregarGrid() {
+        //CONSULTA os DADOS e CARREGA o GRID ao entrar na página
+        var grid = $('#gridCotacoesDaCentralCompras').bootgrid({
+            ajax: true,
+            navigation: 0, //CABEÇALHO: 2 - Exibe só RODAPÉ
+            columnSelection: false, //SELETOR de COLUNA: True - Habilita / False - Desabilita
+            url: "/NossasCentraisDeCompras/BuscarListaDeCotacoesDaCentraisDeCompras",
+            post: function () {
+                /* PARÂMETROS a serem enviados na REQUISIÇÃO AJAX */
+                return {
+                    'cCC': $('#inCCC').val(),
+                    'descricaoFiltro': $('#inNomeCotacao').val()
+                };
+            },
+            selection: true,
+            multiSelect: true,
+            rowSelect: true,
+            keepSelection: true,
+            formatters: {
+                "status": function (column, row) {
+                    /* Dynamically detect if it is UP or Down. */
+                    var value = row.statusCotacao,
+                    label = ((value === "NOVA") || (value === "EM ANDAMENTO") || (value === "AGUARDANDO")) ? "success" : "danger";
+                    return "<span class='label label-" + label + "'><b>" + value + "</b></span>";
+                }
+            }
+        });
+
+    }
+</script>

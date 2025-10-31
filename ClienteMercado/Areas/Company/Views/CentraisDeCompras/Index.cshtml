@@ -1,0 +1,384 @@
+﻿@model  ClienteMercado.UI.Core.ViewModel.NossasCentraisDeComprasViewModel
+
+@{
+    ViewBag.Title = "Centrais de Compras Sistema";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="http://code.jquery.com/jquery-1.8.2.js"></script>
+<script src="http://code.jquery.com/ui/1.9.0/jquery-ui.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pnotify/3.2.1/pnotify.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pnotify/3.2.1/pnotify.buttons.js"></script>
+
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.9.0/themes/base/jquery-ui.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pnotify/3.2.1/pnotify.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pnotify/3.2.1/pnotify.buttons.css" />
+
+<style>
+    .HideColHead {
+        display: none
+    }
+
+    .HideCol {
+        display: none
+    }
+
+    th {
+        background-color: #CDC9C9;
+        color: white;
+    }
+
+    .status {
+        font-size: 9pt;
+    }
+
+    a:link {
+        text-decoration: none;
+    }
+
+    .sweet-alert button.cancel {
+        background-color: #337ab7;
+        color: white;
+    }
+
+        .sweet-alert button.cancel:hover {
+            background-color: #337ab7;
+            color: white;
+        }
+
+    .ui-pnotify {
+        top: 100px; /*Replace the 25px with the top that you need*/
+        right: 25px;
+        position: absolute;
+        height: auto;
+        z-index: 9999
+    }
+
+        .ui-pnotify.customsuccess .ui-pnotify-container {
+            background-color: #337ab7 !important;
+        }
+
+        .ui-pnotify.customsuccess .ui-pnotify-text {
+            font-size: 11px
+        }
+
+        .ui-pnotify.customsuccess .ui-pnotify-title,
+        .ui-pnotify.customsuccess .ui-pnotify-text,
+        .ui-pnotify.customsuccess .ui-pnotify-icon,
+        .ui-pnotify.customsuccess .ui-pnotify-sticker,
+        .ui-pnotify.customsuccess .ui-pnotify-closer {
+            color: #FFF !important;
+        }
+</style>
+
+<div class="row">
+    @*<div class="col-md-12">*@
+    <!-- BEGIN VALIDATION STATES-->
+    <div class="portlet box blue">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="fas fa-user-friends"></i> Centrais de Compras do Sistema
+            </div>
+        </div>
+        <div class="portlet-body form">
+            <div class="form-actions">
+                <div class="row">
+                    <div class="col-md-12">
+                        <button id="btn-pesquisar" class="btn blue" title="Pesquisar conforme dados selecionados"><i class="fas fa-search"></i> Pesquisar</button>
+                    </div>
+                </div>
+            </div>
+            <!-- BEGIN FORM-->
+            <form action="#" class="form-horizontal">
+                <div class="form-body">
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <div class="col-md-8"><font color="#3297E0"><b>Central Compras:</b></font></div>
+                            <div class="col-md-4"><font color="#3297E0"><b>Ramo Atividade:</b></font></div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="col-md-8">
+                                <input type="text" name="name" id="inNomeCentralCompras" data-required="1" size="10" class="form-control" placeholder="Descrição..." />
+                            </div>
+                            <div class="col-md-4">
+                                @Html.DropDownList("inListaDeRamosDeAtividade", Model.inListaDeRamosDeAtividade, new { @class = "form-control", @id = "inListaDeRamosDeAtividade" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <div class="col-md-8"><font color="#3297E0"><b>Cidade:</b></font></div>
+                            <div class="col-md-4"><font color="#3297E0"><b>UF:</b></font></div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="col-md-8">
+                                <input type="text" name="name" id="inCidade" data-required="1" size="8" class="form-control" placeholder="Cidade" />
+                            </div>
+                            <div class="col-md-2">
+                                @Html.DropDownList("inListaDeUFs", Model.inListaDeUFs, new { @class = "form-control", @id = "inListaDeUFs" })
+                            </div>
+                            <div class="col-md-2">&nbsp;</div>
+                        </div>
+                    </div>
+                    <hr />
+
+                    <div class="form-group">
+                        <!-- BEGIN SAMPLE TABLE PORTLET-->
+                        <div class="portlet-body flip-scroll col-md-12">
+                            <table id="gridCentraisDeComprasDoSistema" class="table table-bordered table-striped table-condensed flip-content">
+                                <thead class="flip-content">
+                                    <tr>
+                                        <th data-column-id="nomeCentralCompras" data-width="30%" data-formatter="link1">Central Compras</th>
+                                        <th data-column-id="ramoAtividadeCentralCompras" data-width="18%" data-formatter="link2">Ramo Atividade</th>
+                                        <th data-column-id="quantasEmpresas" data-width="9%" data-align="right" data-formatter="link3">Empresas</th>
+                                        <th data-column-id="cidadeDaCentralCompras" data-width="16%" data-formatter="link4">Cidade</th>
+                                        <th data-column-id="ufDaCentralCompras" data-width="5%" data-align="center" data-formatter="link5">UF</th>
+                                        <th data-column-id="statusCentralCompras" data-width="10%" data-align="center" data-formatter="status1">Status</th>
+                                        <th data-formatter="commands" data-align="center" data-width="12%">Participar</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <!-- END FORM-->
+
+            <input type="hidden" id="inRecarregaGrid" value="0" />
+        </div>
+    </div>
+    <!-- END VALIDATION STATES-->
+    @*</div>*@
+</div>
+<script>
+    jQuery(document).ready(function () {
+        debugger;
+
+        //===================================================================================
+        //CONSULTA os DADOS e CARREGA o GRID ao entrar na página
+        var grid = $('#gridCentraisDeComprasDoSistema').bootgrid({
+            ajax: true,
+            navigation: 0, //CABEÇALHO: 2 - Exibe só RODAPÉ
+            columnSelection: false, //SELETOR de COLUNA: True - Habilita / False - Desabilita
+            url: "/CentraisDeCompras/BuscarListaDeCentraisDeComprasDoSistema",
+            post: function () {
+                /* PARÂMETROS a serem enviados na REQUISIÇÃO AJAX */
+                var ufDaLista = $('#inListaDeUFs :selected').text();
+
+                if (ufDaLista == "Selecione...") {
+                    ufDaLista = "";
+                }
+
+                return {
+                    'descricaoFiltro': $('#inNomeCentralCompras').val(),
+                    'idGrupoAtividadesFiltro': $('#inListaDeRamosDeAtividade').val(),
+                    'cidadeDaCC': $('#inCidade').val(),
+                    'estadoCC': ufDaLista
+                };
+            },
+            selection: true,
+            multiSelect: true,
+            rowSelect: true,
+            keepSelection: true,
+            formatters: {
+                "status1": function (column, row) {
+                    /* Dynamically detect if it is UP or Down. */
+                    var value = row.statusCentralCompras,
+                    label = (value === "ATIVA") ? "success" : "danger";
+                    return "<span class='label label-" + label + "'><b>" + value + "</b></span>";
+                },
+                "commands": function (column, row) {
+                    var hintConvite = "Eu quero participar desta CENTRAL de COMPRAS";
+
+                    if (row.statusConviteCentralCompras == "") {
+                        return "<button type=\"button\" class=\"btn btn-xs btn-default command-participar\" data-row-id=\"" + row.ID_CENTRAL_COMPRAS + "\" title=\"" + hintConvite + "\"><font color='red'><span class=\"fas fa-user-plus\"></span></font></button>";
+                    }
+                    else {
+                        var value = row.statusConviteCentralCompras,
+                        label = (value === "FAÇO PARTE") ? "success" : "danger";
+                        return "<span class='label label-" + label + "'><b>" + value + "</b></span>";
+                    }
+                },
+                "link1": function(column, row)
+                {
+                    return "<a href=\"@Url.Action("CotacoesDaCentralDeComprasSistema", "CentraisDeCompras")?cCC=" + row.ID_CENTRAL_COMPRAS + "\">" + row.nomeCentralCompras + "</a>";
+                },
+                "link2": function (column, row) {
+                    return "<a href=\"@Url.Action("CotacoesDaCentralDeComprasSistema", "CentraisDeCompras")?cCC=" + row.ID_CENTRAL_COMPRAS + "\">" + row.ramoAtividadeCentralCompras + "</a>";
+                },
+                "link3": function (column, row) {
+                    return "<a href=\"@Url.Action("CotacoesDaCentralDeComprasSistema", "CentraisDeCompras")?cCC=" + row.ID_CENTRAL_COMPRAS + "\">" + row.quantasEmpresas + "</a>";
+                },
+                "link4": function (column, row) {
+                    return "<a href=\"@Url.Action("CotacoesDaCentralDeComprasSistema", "CentraisDeCompras")?cCC=" + row.ID_CENTRAL_COMPRAS + "\">" + row.cidadeDaCentralCompras + "</a>";
+                },
+                "link5": function (column, row) {
+                    return "<a href=\"@Url.Action("CotacoesDaCentralDeComprasSistema", "CentraisDeCompras")?cCC=" + row.ID_CENTRAL_COMPRAS + "\">" + row.ufDaCentralCompras + "</a>";
+                }
+            }
+        }).on("loaded.rs.jquery.bootgrid", function () {
+            /* Executa depois que os dados são carregados e renderizados */
+
+            //PARTICIPAR da CENTRAL de COMPRAS
+            grid.find(".command-participar").on("click", function (e) {
+
+                var codCC = $(this).attr("data-row-id");
+
+                swal({
+                    title: "ATENÇÃO!!\n\n",
+                    text: "Deseja participar desta Central de Compras?",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#337ab7",
+                    confirmButtonText: "Sim",
+                    cancelButtonText: "Não",
+                    closeOnConfirm: true,
+                },
+                function (isConfirm) {
+                    if (isConfirm) {
+                        debugger;
+
+                        $.ajax({
+                            type: "POST",
+                            url: "/CentraisDeCompras/SolicitarParticipacaoNaCC",
+                            dataType: 'json',
+                            data: {
+                                'cCC': codCC
+                            },
+                            success: function (data) {
+                                debugger;
+
+                                if (data.participacaoSolicitada == "Ok") {
+                                    debugger;
+
+                                    swal.close(); //FECHA SWAL MSG
+
+                                    //EXIBE MSG LATERAL À DIREITA SUPERIOR
+                                    new PNotify({
+                                        title: 'Sucesso!',
+                                        text: 'SOLICITAÇÃO de PARTICIPAÇÃO ENVIADA!\n\nAguarde a LIBERAÇÃO.',
+                                        type: 'success',
+                                        styling: 'bootstrap3',
+                                        icons: 'bootstrap3',
+                                        addclass: 'customsuccess',
+                                        animateSpeed: 'fast',
+                                        mouseReset: true,
+                                        Buttons: {
+                                            closer: true
+                                        }
+                                    });
+
+                                    $('#gridCentraisDeComprasDoSistema').bootgrid('reload');
+                                }
+                            }
+                        });
+                    }
+                    else {
+                        $('#gridCentraisDeComprasDoSistema').bootgrid('reload');
+                    }
+                });
+
+            });
+        });
+
+        $('#inRecarregaGrid').val(1);
+        //===================================================================================
+
+        //AUCOMPLETE DESCRIÇÃO CENTRAL COMPRAS
+        $("#inNomeCentralCompras").autocomplete({
+            source: function (request, response) {
+                debugger;
+                var termo = $("#inNomeCentralCompras").val();
+
+                $.ajax({
+                    type: "POST",
+                    url: "/CentraisDeCompras/BuscarListaDescricaoCCDoSistema",
+                    dataType: "json",
+                    data: { 'term': termo },
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return {
+                                label: item.NOME_CENTRAL_COMPRAS,
+                                value: item.NOME_CENTRAL_COMPRAS
+                            };
+                        }));
+                    }
+                });
+            },
+            select: function (event, ui) {
+                debugger;
+
+                $("#inNomeCentralCompras").val(ui.item.value);
+                $("#inListaDeRamosDeAtividade").val(0);
+                $('#inCidade').val('');
+                $('#inListaDeUFs').val(0);
+
+                $("#btn-pesquisar").trigger('click');
+            }, minLength: 3,
+        });
+
+        //AUCOMPLETE CIDADES
+        $("#inCidade").autocomplete({
+            source: function (request, response) {
+                debugger;
+                var termo = $("#inCidade").val();
+
+                $.ajax({
+                    type: "POST",
+                    url: "/CentraisDeCompras/BuscarListaDeCidades",
+                    dataType: "json",
+                    data: { 'term': termo },
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return {
+                                label: item.CIDADE_EMPRESA_USUARIO,
+                                value: item.CIDADE_EMPRESA_USUARIO
+                            };
+                        }));
+                    }
+                });
+            },
+            select: function (event, ui) {
+                debugger;
+
+                $('#inCidade').val(ui.item.label);
+                $("#inNomeCentralCompras").val('');
+                $("#inListaDeRamosDeAtividade").val(0);
+                $('#inListaDeUFs').val(0);
+
+                $("#btn-pesquisar").trigger('click');
+            }, minLength: 3,
+        });
+
+        //VALIDAR CAMPOS do FILTRO
+        $("#inListaDeRamosDeAtividade").change(function () {
+            $("#inNomeCentralCompras").val('');
+            $('#inCidade').val('');
+            $('#inListaDeUFs').val('');
+
+            $("#btn-pesquisar").trigger('click');
+        });
+
+        $("#inListaDeUFs").change(function () {
+            $("#inNomeCentralCompras").val('');
+            $('#inListaDeRamosDeAtividade').val(0);
+            $('#inCidade').val('');
+
+            $("#btn-pesquisar").trigger('click');
+        });
+
+        //BOTÃO PESQUISAR
+        $(document).on("click", "#btn-pesquisar", function () {
+            debugger;
+
+            if (($('#inNomeCentralCompras').val() != "") || (parseInt($('#inListaDeRamosDeAtividade').val()) > 0) || ($('#inCidade').val() != "") || (parseInt($('#inListaDeUFs').val()) > 0)) {
+                $('#gridCentraisDeComprasDoSistema').bootgrid('reload');
+            }
+            else {
+                swal({ title: "ATENÇÃO:\n\nInforme algum VALOR ou opção nos campos do FILTRO para pesquisar.", type: "warning", confirmButtonColor: "#337ab7" });
+            }
+        });
+    });
+
+</script>

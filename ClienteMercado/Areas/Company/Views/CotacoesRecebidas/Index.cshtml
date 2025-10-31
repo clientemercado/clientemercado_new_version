@@ -1,0 +1,387 @@
+﻿@model ClienteMercado.UI.Core.ViewModel.AcompanharCotacaoesViewModel
+
+@{
+    ViewBag.Title = "Cotacoes Recebidas";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="http://code.jquery.com/jquery-1.8.2.js"></script>
+<script src="http://code.jquery.com/ui/1.9.0/jquery-ui.js"></script>
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.9.0/themes/base/jquery-ui.css" />
+
+<style>
+    .HideColHead {
+        display: none
+    }
+
+    .HideCol {
+        display: none
+    }
+
+    th {
+        background-color: #CDC9C9;
+        color: white;
+    }
+
+    .status {
+        font-size: 9pt;
+    }
+
+    a:link {
+        text-decoration: none;
+    }
+</style>
+
+<div class="row">
+    <!-- BEGIN VALIDATION STATES-->
+    <div class="portlet box blue">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="fas fa-money-bill-wave"></i> Cotações Recebidas
+            </div>
+        </div>
+        <div class="portlet-body form">
+            <!-- BEGIN FORM-->
+            <form action="#" class="form-horizontal">
+                <div class="form-body">
+                    <div class="form-group" id="cabecalho" style="">
+                        <label class="col-md-2 control-label"><b>Empresa:</b></label>
+                        <div class="col-md-4">
+                            <h5>@Model.inEmpresaLogadaAdmCC</h5>
+                        </div>
+                        <label class="col-md-2 control-label"><b>Cidade:</b></label>
+                        <div class="col-md-4">
+                            <h5>@Model.inCidadeEmpresaAdmCC</h5>
+                        </div>
+                        <label class="col-md-2 control-label"><b>Usuário Resp:</b></label>
+                        <div class="col-md-4">
+                            <h5>@Model.inNomeUsuarioRespEmpresaAdmCC</h5>
+                        </div>
+                    </div>
+                    <hr />
+
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <div class="col-md-4"><b>Filtrar por:</b></div>
+                            <div class="col-md-6 divvazia"></div>
+                            <div class="col-md-6 cotacao" style="display:none;"><b>Cotação:</b></div>
+                            <div class="col-md-6 ramoatividade" style="display:none;"><b>Ramo Atividade:</b></div>
+                            <div class="col-md-6 centralcompras" style="display:none;"><b>Central Compras:</b></div>
+                            <div class="col-md-2"></div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="col-md-4">
+                                @Html.DropDownList("inListaTiposDeFiltros", Model.inListaTiposDeFiltros, new { @class = "form-control", @id = "inListaTiposDeFiltros" })
+                            </div>
+                            <div class="col-md-6 divvazia"></div>
+                            <div class="col-md-6 cotacao" style="display:none;">
+                                <input type="text" name="name" id="inNomeCotacao" data-required="1" size="10" class="form-control" style="" placeholder="Nome..." />
+                                <input type="hidden" id="inCodCotacao" value="0" />
+                            </div>
+                            <div class="col-md-6 ramoatividade" id="inRamoAtividade" style="display:none;">
+                                @Html.DropDownList("inListaDeRamosDeAtividade", Model.inListaDeRamosDeAtividade, new { @class = "form-control", @id = "inListaDeRamosDeAtividade" })
+                            </div>
+                            <div class="col-md-6 centralcompras" style="display:none;">
+                                <input type="text" name="name" id="inNomeCentralCompras" data-required="1" size="10" class="form-control" placeholder="Descrição..." />
+                                <input type="hidden" id="inCodCentralCompras" value="0" />
+                            </div>
+                            <div class="col-md-2">
+                                <button id="btn-pesquisar" class="btn blue botaopesquisa" title="Pesquisar conforme dados selecionados" style="display:none;"><i class="fas fa-search"></i> Pesquisar</button>
+                            </div>
+                        </div>
+                    </div>
+                    <hr />
+
+                    <div class="form-group">
+                        <!-- BEGIN SAMPLE TABLE PORTLET-->
+                        <div class="portlet-body flip-scroll col-md-12">
+                            <table id="gridCotacoesRecebidas" class="table table-bordered table-striped table-condensed flip-content">
+                                <thead class="flip-content">
+                                    <tr>
+                                        <th data-column-id="nomeDaCotacao" data-width="20%" data-formatter="link1">Cotação</th>
+                                        <th data-column-id="nomeDaCentralCompras" data-width="27%" data-formatter="link2">Central Compras</th>
+                                        <th data-column-id="tipoCotacao" data-width="7%" data-formatter="link3">Tipo</th>
+                                        <th data-column-id="quantosForncedoresRespondendo" data-width="8%" data-align="right" data-formatter="link4">Forn. Resp.</th>
+                                        <th data-column-id="dataRecebimentoCotacao" data-width="9%" data-align="right" data-formatter="link5">Dt. Receb.</th>
+                                        <th data-column-id="dataEncerramentoCotacao" data-width="9%" data-align="right" data-formatter="link6">Dt. Encerrou</th>
+                                        <th data-column-id="quantosForncedoresRespondenderam" data-width="5%" data-align="right" data-formatter="link7">Resp.</th>
+                                        <th data-column-id="statusDaCotacao" data-width="15%" data-align="center" data-formatter="status">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <!-- END FORM-->
+
+        </div>
+    </div>
+    <!-- END VALIDATION STATES-->
+</div>
+
+<script>
+    jQuery(document).ready(function () {
+        debugger;     
+
+        carregarGrid();
+
+        $("#inListaTiposDeFiltros").change(function () {
+            //debugger;
+
+            if ((parseInt($('#inListaTiposDeFiltros').val()) == 0) || (parseInt($('#inListaTiposDeFiltros').val()) == 4) || (parseInt($('#inListaTiposDeFiltros').val()) == 5)) {
+                $('.cotacao').hide();
+                $('.ramoatividade').hide();
+                $('.centralcompras').hide();
+                $('.divvazia').show();
+                $('.botaopesquisa').hide();
+            }
+            else if (parseInt($('#inListaTiposDeFiltros').val()) == 1)
+            {
+                $('.divvazia').hide();
+                $('.ramoatividade').hide();
+                $('.centralcompras').hide();
+                $('.cotacao').show();
+                $('.botaopesquisa').show();
+            }
+            else if (parseInt($('#inListaTiposDeFiltros').val()) == 2) {
+                $('.cotacao').hide();
+                $('.divvazia').hide();
+                $('.centralcompras').hide();
+                $('.ramoatividade').show();
+                $('.botaopesquisa').show();
+            }
+            else if (parseInt($('#inListaTiposDeFiltros').val()) == 3) {
+                $('.ramoatividade').hide();
+                $('.cotacao').hide();
+                $('.divvazia').hide();
+                $('.centralcompras').show();
+                $('.botaopesquisa').show();
+            }
+        });
+
+        //BOTÃO PESQUISAR
+        $(document).on("click", "#btn-pesquisar", function (e) {
+            debugger;
+
+            if (($('#inListaTiposDeFiltros').val() != "") || (parseInt($('#inListaTiposDeFiltros').val()) > 0)) {
+                debugger;
+
+                e.preventDefault();
+
+                if (parseInt($('#inListaTiposDeFiltros').val()) == 1) {
+                    //PESQUISAR P/ COTAÇÃO ESPECÍFICA
+                    if ($('#inNomeCotacao').val() == "") {
+                        swal({ title: "ATENÇÃO:\n\nInforme um NOME de COTAÇÃO para pesquisar.", type: "warning", confirmButtonColor: "#337ab7" });
+                    }
+                    else {
+                        $('#gridCotacoesRecebidas').bootgrid('reload');
+                    }
+                }
+                else if (parseInt($('#inListaTiposDeFiltros').val()) == 2) {
+                    //PESQUISAR P/ RAMO ATIVIDADE
+                    if (parseInt($('#inListaDeRamosDeAtividade').val()) == 0) {
+                        swal({ title: "ATENÇÃO:\n\nInforme um RAMO de ATIVIDADE para pesquisar.", type: "warning", confirmButtonColor: "#337ab7" });
+                    }
+                    else {
+                        $('#gridCotacoesRecebidas').bootgrid('reload');
+                    }
+                }
+                else if (parseInt($('#inListaTiposDeFiltros').val()) == 3) {
+                    //PESQUISAR P/ CENTRAL COMPRAS ESPECÍFICA
+                    if ($('#inNomeCentralCompras').val() == "") {
+                        swal({ title: "ATENÇÃO:\n\nInforme uma CENTRAL de COMPRAS para pesquisar.", type: "warning", confirmButtonColor: "#337ab7" });
+                    }
+                    else {
+                        $('#gridCotacoesRecebidas').bootgrid('reload');
+                    }
+                }
+            }
+            else {
+                swal({ title: "ATENÇÃO:\n\nInforme uma DESCRIÇÃO da Central de Compras ou um RAMO de ATIVIDADE para pesquisar.", type: "warning", confirmButtonColor: "#337ab7" });
+            }
+        });
+
+        //AUCOMPLETE NOME da COTAÇÃO
+        $("#inNomeCotacao").autocomplete({
+            source: function (request, response) {
+                debugger;
+
+                var termo = $("#inNomeCotacao").val();
+
+                $.ajax({
+                    type: "POST",
+                    url: "/CotacoesRecebidas/BuscarListaDeNomesCotacaoesDaCC",
+                    dataType: "json",
+                    data: { 'term': termo },
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return {
+                                label: item.NOME_COTACAO_CENTRAL_COMPRAS,
+                                value: item.NOME_COTACAO_CENTRAL_COMPRAS,
+                                codigo: item.ID_COTACAO_MASTER_CENTRAL_COMPRAS
+                            };
+                        }));
+                    }
+                });
+            },
+            select: function (event, ui) {
+                debugger;
+
+                $("#inNomeCotacao").val(ui.item.value);
+                $("#inCodCotacao").val(ui.item.codigo);
+                $('#gridCotacoesRecebidas').bootgrid('reload');
+                //$('#btn-pesquisar').focus();
+
+            }, minLength: 4,
+        });
+
+        $("#inNomeCentralCompras").autocomplete({
+            source: function (request, response) {
+                debugger;
+                var termo = $("#inNomeCentralCompras").val();
+
+                $.ajax({
+                    type: "POST",
+                    url: "/CotacoesRecebidas/BuscarListaDescricaoCC",
+                    dataType: "json",
+                    data: { 'term': termo },
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return {
+                                label: item.NOME_CENTRAL_COMPRAS,
+                                value: item.NOME_CENTRAL_COMPRAS,
+                                codigo: item.ID_CENTRAL_COMPRAS
+                            };
+                        }));
+                    }
+                });
+            },
+            select: function (event, ui) {
+                debugger;
+
+                $("#inNomeCentralCompras").val(ui.item.value);
+                $("#inCodCentralCompras").val(ui.item.codigo);
+                $('#gridCotacoesRecebidas').bootgrid('reload');
+                //$('#btn-pesquisar').focus();
+
+            }, minLength: 3,
+        });
+
+        $(document).on("click", "#inNomeCotacao", function () {
+            $("#inNomeCotacao").val('');
+        });
+
+        $(document).on("click", "#inNomeCentralCompras", function () {
+            $("#inNomeCentralCompras").val('');
+        });
+    });
+
+    //POPULAR GRID
+    function carregarGrid() {
+        //-------------------------------------------------------------------------------
+        debugger;
+
+        var tipoFiltragem = $('#inListaTiposDeFiltros').val();
+        var codPesquisa = 0;
+        var idRamoAtividade = 0;
+
+        if (tipoFiltragem == 1) {
+            codPesquisa = $('#inCodCotacao').val();
+        }
+        else if (tipoFiltragem == 2) {
+            idRamoAtividade = $('#inListaDeRamosDeAtividade').val();
+        }
+        else if (tipoFiltragem == 3) {
+            codPesquisa = $('#inCodCentralCompras').val();
+        }
+        else {
+            codPesquisa = 0;
+            idRamoAtividade = 0;
+        }
+
+        //CONSULTA os DADOS e CARREGA o GRID ao entrar na página
+        var grid = $('#gridCotacoesRecebidas').bootgrid({
+            ajax: true,
+            navigation: 0, //CABEÇALHO: 2 - Exibe só RODAPÉ
+            columnSelection: false, //SELETOR de COLUNA: True - Habilita / False - Desabilita
+            url: "/CotacoesRecebidas/BuscarListaDeCotacoeRecebidas",
+            post: function () {
+                /* PARÂMETROS a serem enviados na REQUISIÇÃO AJAX */
+                return {
+                    'tipoFiltragem': $('#inListaTiposDeFiltros').val(),
+                    'codPesquisar': codPesquisa,
+                    'idGrupoAtividadesFiltro': idRamoAtividade
+                };
+            },
+            selection: true,
+            multiSelect: true,
+            rowSelect: true,
+            keepSelection: true,
+            formatters: {
+                "status": function (column, row) {
+                    /* Dynamically detect if it is UP or Down. */
+                    debugger;
+
+                    var value = row.statusDaCotacao,
+                    label = ((value === "NOVA")) ? "success" : "danger";
+                    return "<span class='label label-" + label + "'><b>" + value + "</b></span>";
+                },
+                "link1": function (column, row) {
+                    return "<a href=\"@Url.Action("VisualizarResponderCotacao", "CotacoesRecebidas")?cCC=" + row.cCC + "&iCM=" + row.ID_COTACAO_MASTER_CENTRAL_COMPRAS + "&iCCF=" + row.ID_CODIGO_COTACAO_FILHA_CENTRAL_COMPRAS + "\">" + row.nomeDaCotacao + "</a>";
+                },
+                "link2": function (column, row) {
+                    return "<a href=\"@Url.Action("VisualizarResponderCotacao", "CotacoesRecebidas")?cCC=" + row.cCC + "&iCM=" + row.ID_COTACAO_MASTER_CENTRAL_COMPRAS + "&iCCF=" + row.ID_CODIGO_COTACAO_FILHA_CENTRAL_COMPRAS + "\">" + row.nomeDaCentralCompras + "</a>";
+                },
+                "link3": function (column, row) {
+                    return "<a href=\"@Url.Action("VisualizarResponderCotacao", "CotacoesRecebidas")?cCC=" + row.cCC + "&iCM=" + row.ID_COTACAO_MASTER_CENTRAL_COMPRAS + "&iCCF=" + row.ID_CODIGO_COTACAO_FILHA_CENTRAL_COMPRAS + "\">" + row.tipoCotacao + "</a>";
+                },
+                "link4": function (column, row) {
+                    return "<a href=\"@Url.Action("VisualizarResponderCotacao", "CotacoesRecebidas")?cCC=" + row.cCC + "&iCM=" + row.ID_COTACAO_MASTER_CENTRAL_COMPRAS + "&iCCF=" + row.ID_CODIGO_COTACAO_FILHA_CENTRAL_COMPRAS + "\">" + row.quantosForncedoresRespondendo + "</a>";
+                },
+                "link5": function (column, row) {
+                    return "<a href=\"@Url.Action("VisualizarResponderCotacao", "CotacoesRecebidas")?cCC=" + row.cCC + "&iCM=" + row.ID_COTACAO_MASTER_CENTRAL_COMPRAS + "&iCCF=" + row.ID_CODIGO_COTACAO_FILHA_CENTRAL_COMPRAS + "\">" + row.dataRecebimentoCotacao + "</a>";
+                },
+                "link6": function (column, row) {
+                    return "<a href=\"@Url.Action("VisualizarResponderCotacao", "CotacoesRecebidas")?cCC=" + row.cCC + "&iCM=" + row.ID_COTACAO_MASTER_CENTRAL_COMPRAS + "&iCCF=" + row.ID_CODIGO_COTACAO_FILHA_CENTRAL_COMPRAS + "\">" + row.dataEncerramentoCotacao + "</a>";
+                },
+                "link7": function (column, row) {
+                    return "<a href=\"@Url.Action("VisualizarResponderCotacao", "CotacoesRecebidas")?cCC=" + row.cCC + "&iCM=" + row.ID_COTACAO_MASTER_CENTRAL_COMPRAS + "&iCCF=" + row.ID_CODIGO_COTACAO_FILHA_CENTRAL_COMPRAS + "\">" + row.quantosForncedoresRespondenderam + "</a>";
+                },
+            }
+        }).on("selected.rs.jquery.bootgrid", function (e, rows) {
+            //var rowIds = [];
+
+            //for (var i = 0; i < rows.length; i++)
+            //{
+            //    rowIds.push(rows[i].idEmpresa);
+            //}
+
+            //alert("Select: " + rowIds.join(","));
+
+        }).on("deselected.rs.jquery.bootgrid", function (e, rows) {
+            //var rowIds = [];
+
+            //for (var i = 0; i < rows.length; i++)
+            //{
+            //    rowIds.push(rows[i].idEmpresa);
+            //}
+
+            //alert("Deselect: " + rowIds.join(","));
+
+        }).on("loaded.rs.jquery.bootgrid", function () {
+            /* Executa depois que os dados são carregados e renderizados */
+
+            //var quantRegistros = grid.bootgrid("getTotalRowCount");
+            //if (parseInt(quantRegistros) > 0) {
+            //    $('#btn-enviarConvites').show(); //HABILITA botão CONVITE
+            //}
+
+            //grid.find(".command-delete").on("click", function (e) {
+            //    $(this).closest('tr').remove();
+            //});
+        });
+        //-------------------------------------------------------------------------------
+    }
+</script>

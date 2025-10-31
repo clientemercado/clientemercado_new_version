@@ -1,0 +1,75 @@
+﻿@model ClienteMercado.Models.Lembrete
+
+@{
+ViewBag.Title = "ClienteMercado";
+    Layout = "~/Views/Shared/_Layout_Login.cshtml";
+}
+
+<div id="label_titulo_paginas" class="label_paginas">&nbsp;&nbsp;Não lembra sua senha?</div>
+
+<div id="container_lembrete">
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true)
+
+        <div id="campo_lembrete" class="campos_lembrete">
+            @if (Model.retornoEnvio)
+            {
+                <div id="mensagem_apresentacao" class="formata_msg_lembrete">
+                    Informe o e-mail usado no cadastro. O sistema responderá sua solicitação lhe encaminhando os dados para recuperação de senha.
+                </div>
+                <br/>
+                <div id="label_tipo" class="formata_campos_login">
+                    @Html.LabelFor(m => m.TIPO_LOGIN)
+                </div>
+                <div id="campo_selecao_tipo" class="formata_campos_login">
+                    @Html.RadioButton("tipo_login", 1, true, new { @onClick = "setarTipoLogin(this.value,2);" })&nbsp;Empresa&nbsp;
+                    @Html.RadioButton("tipo_login", 2, new { @onClick = "setarTipoLogin(this.value,2);" })&nbsp;Profissional Serviços&nbsp;
+                    @Html.RadioButton("tipo_login", 3, new { @onClick = "setarTipoLogin(this.value,2);" })&nbsp;Usuário Cotações&nbsp;
+                </div>
+                <div id="campo_validacao_tipo" class="formata_campos_login">
+                    @Html.TextBoxFor(m => m.TIPO_LOGIN, new { @type = "hidden", @id = "TIPO_LOGIN", @maxlenght = 1, @size = 1 })
+                    @Html.ValidationMessageFor(m => m.TIPO_LOGIN)
+                </div>
+                <div id="label_email" class="formata_campos_lembrete">
+                    @Html.LabelFor(m => m.EMAIL_ENVIO_SENHA)
+                </div>
+                <div id="campo_email" class="formata_campos_lembrete">
+                    @Html.TextBoxFor(m => m.EMAIL_ENVIO_SENHA, new { style = "font-family: 'Verdana', Geneva, sans-serif; width: 330px;", maxlength = 50, @tabindex = "2" })
+                </div>
+                <div id="mensagem_validacao" class="formata_campos_lembrete">
+                    <span id="mensagemErroDigiteEmail" class="texto_menor_erro">@Html.ValidationMessageFor(m => m.EMAIL_ENVIO_SENHA)</span>
+                    <span id="mensagemErroBuscaEmail" class="texto_menor_erro">@TempData["mensagem"]</span>
+                    <br />
+                    @Html.ActionLink("Voltar", "Login", "Login", new { @class = "linkdois" })
+                </div>
+                <br/>
+                <div id="bt_submit" class="formata_campos_lembrete">
+                    <input type="submit" value="Enviar E-Mail" class="i2Style"/>
+                </div>
+            }
+            else
+            {
+                <div id="mensagem_retorno" class="formata_campos_lembrete">
+                    <h4>@TempData["mensagem"]</h4>
+                </div>
+                <br/>
+                <div id="confirmacao_imprimir">
+                    <a href='@Url.Action("Index", "Home")'><img src='@Url.Content("~/Content/images/home.png")' style='margin-left: 220px; margin-top: 30px; border: none;' /><span id="texto_imprimir">Início</span></a>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    @* Posiciona o cursor  no primeiro campo*@
+    <script type="text/javascript">
+        $(function() {
+            $("input[type=text]").first().focus();
+        });
+    </script>
+}

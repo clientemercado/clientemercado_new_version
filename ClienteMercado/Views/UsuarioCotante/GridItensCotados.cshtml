@@ -1,0 +1,58 @@
+﻿@model  ClienteMercado.Models.AcompanharCotacaoEnviada
+
+@*<div class="row">*@
+    @{
+        <!-- Monta o Grid com a Lista de COTAÇÕES enviadas pelo USUÁRIO COTANTE -->
+        WebGrid grid = new WebGrid(Model.ListagemProdutosDaCotacaoEnviada, canPage: true, rowsPerPage: 30);
+        @grid.GetHtml(
+              htmlAttributes: new { id = "gridProdutosCotacao" },
+              headerStyle: "DataGridHeader",
+              alternatingRowStyle: "DataGridAlternateItemStyle",
+              columns: grid.Columns(
+                       grid.Column("", header: "Produto", style: "text-align-center", format: @<text>@item.nome_produto</text>),
+                       grid.Column("", header: "Marca/Fabricante", style: "text-align-center", format: @<text>@item.marca_produto</text>),
+                       grid.Column("", header: "Quant.", style: "text-align-center", format: @<text>@item.quantidade_produto_exibicao</text>),
+                       grid.Column("", header: "Unidade", style: "text-align-center", format: @<text>@item.unidade_produto</text>),
+                       grid.Column("", header: "Analisar Preços", style: "text-align-center", format: @<text><font color="#0101DF"><a href="#" data-toggle="modal" data-target="#modal_analise_produtos_por_fornecedor" style="text-decoration:none" onClick="CarregarItensCotadosPorFornecedor(@item.id_codigo_cotacao_master, @item.id_codigo_item);"><i class="fa fa-search"></i> <b>por fornecedor</b></a></font></text>),
+                       grid.Column(null, null, format: @<input type="hidden" name="inIdCotacaoMaster" id="inIdCotacaoMaster" value="@item.id_codigo_cotacao_master" />)
+              ),
+              tableStyle: "DataGrid");
+}
+
+    <!-- Janela MODAL - ANÁLISE DE PREÇOS - DE PRODUTO POR FORNECEDOR -->
+    <div id="modal_analise_produtos_por_fornecedor" class="modal fade" role="dialog">
+        <br /><br /><br />
+        <div class="modal-dialog">
+            <div class="modal-content" style="width: 950px;">
+                <div class="modal-header" style="background-color: #337ab7">
+                    <button type="button" class="close" data-dismiss="modal"><i class="fa fa-times"></i></button>
+                    <h4 class="modal-title"><font color=white><i class="fa fa-calculator"></i> Análise - Produtos por Fornecedor</font></h4>
+                </div>
+
+                <div class="modal-body">
+                    <div class="table-responsive" id="produtosCotados">
+                        <table id="gridProdutosCotados" border="1" cellspacing="3" cellpadding="3" width="100%" align="center">
+                            <tr style="background-color: #337ab7;">
+                                <td width="3%">&nbsp;</td>
+                                <td width="25%" align="left"><font color="#FFFFFF">&nbsp;<b>Produto</b></font></td>
+                                <td width="10%" align="center"><font color="#FFFFFF"><b>Quant.</b></font></td>
+                                <td width="10%" align="center"><font color="#FFFFFF"><b>R$ Unit.</b></font></td>
+                                <td width="10%" align="center"><font color="#FFFFFF"><b>R$ Total</b></font></td>
+                                <td width="5%"  align="center"><font color="#FFFFFF"><b>% Desc.</b></font></td>
+                                <td width="10%" align="center"><font color="#FFFFFF"><b>R$ Pedido</b></font></td>
+                                <td width="20%" align="center"><font color="#FFFFFF"><b>Fornecedor</b></font></td>
+                                <td width="7%" align="center"><font color="#FFFFFF"><b>R$ menor</b></font></td>
+                            </tr>
+                        </table>
+
+                        <!-- RESPOSTA DA COTAÇÃO DOS PRODUTOS -->
+                        <table id="resposta_do_fornecedor_por_produto" class="table table-striped table-hover"></table>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!-- Fim janela MODAL-->
+
+@*</div>*@

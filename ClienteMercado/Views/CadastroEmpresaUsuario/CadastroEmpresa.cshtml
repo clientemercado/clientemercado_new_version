@@ -1,0 +1,384 @@
+﻿@model ClienteMercado.Models.CadastroEmpresa
+
+@{
+ViewBag.Title = "ClienteMercado";
+    Layout = "~/Views/Shared/_Layout-Others-Home.cshtml";
+}
+
+<div id="label_titulo_paginas_contato" class="label_paginas">&nbsp;&nbsp;Cadastro da Empresa - Etapa 2 de 3</div>
+
+<div id="container_cadastro_empresa">
+    @using (Html.BeginForm(new { @id = "formCadastroEmpresa" }))
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true)
+
+        <div id="campos_cadastro_empresa" class="campos_cadastro_nova_empresa_usuario">
+            <div id="loading" class="carregando"></div>
+            <div id="mensagem_retorno" class="formata_msg_retorno_operacao">
+                <h4>@TempData["mensagem"]</h4>
+            </div>
+            
+            <div id="secao_cnpj_cpf" class="formata_campos_cadastro">
+                <div id="label_cnpj_cpf" class="formata_label">
+                    @Html.LabelFor(m => m.CNPJ_CPF_EMPRESA_USUARIO)
+                </div>
+                <div id="campo_cnpj_cpf" class="">
+                    @Html.TextBoxFor(m => m.CNPJ_CPF_EMPRESA_USUARIO, new { style = "font-family: 'Verdana', Geneva, sans-serif; width: 160px;", maxlength = 18, @id = "CNPJ_CPF_EMPRESA_USUARIO", @onClick="limparCampoCNPJ();", @onKeyDown="FormataCNPJ(this, event);", @tabindex = "1" })
+                    <span id="mensagemErroCnpj2" class="texto_menor_erro">@Html.ValidationMessageFor(m => m.CNPJ_CPF_EMPRESA_USUARIO, String.Empty)</span>
+                    <img style="margin-left:20px; margin-top:0px;" id="img_load_direcionada1" src="@Url.Content("~/Content/images/ajax-loader_.gif")">
+                </div>
+            </div>
+            <div id="secao_razao_social" class="formata_campos_cadastro">
+                <div id="label_razao_social" class="formata_label">
+                    @Html.LabelFor(m => m.RAZAO_SOCIAL_EMPRESA)
+                </div>
+                <div id="campo_razao_social" class="">
+                    @Html.TextBoxFor(m => m.RAZAO_SOCIAL_EMPRESA, new { style = "font-family: 'Verdana', Geneva, sans-serif; width: 500px;", maxlength = 100, @id = "RAZAO_SOCIAL_EMPRESA", @tabindex = "3" })
+                    <span id="mensagemErroRazao" class="texto_menor_erro">@Html.ValidationMessageFor(m => m.RAZAO_SOCIAL_EMPRESA, String.Empty)</span>
+                    <input type="submit" id="btn_cadastro2" value="Me cadastrar como usuário nesta empresa" class="i2Style2" style="display: none;"/>
+                    <div id="btn_cadastro2_alter" class="i2Style3" style="display: none;">Me cadastrar como usuario nesta empresa</div>
+                </div>
+            </div>
+            <div id="secao_nome_fantasia" class="formata_campos_cadastro">
+                <div id="label_nome_fantasia" class="formata_label">
+                    @Html.LabelFor(m => m.NOME_FANTASIA_EMPRESA)
+                </div>
+                <div id="campo_nome_fantasia" class="">
+                    @Html.TextBoxFor(m => m.NOME_FANTASIA_EMPRESA, new { style = "font-family: 'Verdana', Geneva, sans-serif; width: 500px;", @id = "NOME_FANTASIA_EMPRESA", maxlength = 100, @tabindex = "4" })
+                    <span id="mensagemErroFantasia" class="texto_menor_erro">@Html.ValidationMessageFor(m => m.NOME_FANTASIA_EMPRESA, String.Empty)</span>
+                </div>
+            </div>
+            <div id="secao_email1" class="formata_campos_cadastro">
+                <div id="label_email1" class="formata_label">
+                    @Html.LabelFor(m => m.EMAIL1_EMPRESA)
+                </div>
+                <div id="campo_email1" class="">
+                    @Html.TextBoxFor(m => m.EMAIL1_EMPRESA, new { style = "font-family: 'Verdana', Geneva, sans-serif; width: 330px;", maxlength = 50, @id = "EMAIL1_EMPRESA", @onClick="limparCampoEmail(1);", @tabindex = "5" })
+                    <span id="mensagemErroEmail2" class="texto_menor_erro">@Html.ValidationMessageFor(m => m.EMAIL1_EMPRESA, String.Empty)</span>
+                    <img style="margin-left:20px; margin-top:0px;" id="img_load_direcionada2" src="@Url.Content("~/Content/images/ajax-loader_.gif")">
+                </div>
+            </div>
+            <div id="secao_telefone1" class="formata_campos_cadastro">
+                <div id="label_telefone1" class="formata_label">
+                    @Html.LabelFor(m => m.TELEFONE1_EMPRESA_USUARIO)
+                </div>
+                <div id="campo_telefone1" class="">
+                    @Html.TextBoxFor(m => m.TELEFONE1_EMPRESA_USUARIO, new { style = "font-family: 'Verdana', Geneva, sans-serif; width: 120px;", maxlength = 15, @id = "TELEFONE1_EMPRESA_USUARIO", @tabindex = "6" })
+                    <span id="mensagemErroFone1" class="texto_menor_erro">@Html.ValidationMessageFor(m => m.TELEFONE1_EMPRESA_USUARIO, String.Empty)</span>
+                </div>
+            </div>
+            <div id="secao_localizacao1" class="formata_campos_cadastro">
+                <div id="label_pais" class="formata_label">
+                    @Html.LabelFor(m => m.PAIS_EMPRESA_USUARIO)
+                </div>
+                <div id="campo_pais" class="formata_label">
+                    @Html.DropDownList("PAIS_EMPRESA_USUARIO", Model.ListagemPaises, new { style = "font-family: 'Verdana', Geneva, sans-serif; width: 100px;", @tabindex = "7" }) 
+                    <span id="mensagemErroPais" class="texto_menor_erro">@Html.ValidationMessageFor(m => m.PAIS_EMPRESA_USUARIO, String.Empty)</span>
+                </div>
+                <div id="label_cep" class="formata_label_2">
+                    @Html.LabelFor(m => m.CEP_SEQUENCIAL_ENDERECO , new { style = "margin-left:38px;"})
+                </div>
+                <div id="campo_cep" class="">
+                    @Html.TextBoxFor(m => m.CEP_SEQUENCIAL_ENDERECO, new { style = "font-family: 'Verdana', Geneva, sans-serif; width: 80px; margin-left:58px;", maxlength = 9, @id="CEP_SEQUENCIAL_ENDERECO",  @onClick="limparCampoCEP();", @onkeypress="return MM_formtCep(event,this,'#####-###');", @tabindex = "8" })
+                    <span id="mensagemErroCep2" class="texto_menor_erro">@Html.ValidationMessageFor(m => m.CEP_SEQUENCIAL_ENDERECO, String.Empty)</span>
+                    <img style="margin-left:20px; margin-top:0px;" id="img_load_direcionada3" src="@Url.Content("~/Content/images/ajax-loader_.gif")">
+                </div>
+            </div>
+            <div id="secao_localizacao2" class="formata_campos_cadastro">
+                <div id="label_endereco" class="formata_label">
+                    @Html.LabelFor(m => m.ENDERECO_EMPRESA_USUARIO)
+                </div>
+                <div id="campo_endereco" class="">
+                    @Html.TextBoxFor(m => m.ENDERECO_EMPRESA_USUARIO, new { style = "font-family: 'Verdana', Geneva, sans-serif; width: 500px;", maxlength = 100, @tabindex = "9" })
+                    <span id="mensagemErroEndereco" class="texto_menor_erro">@Html.ValidationMessageFor(m => m.ENDERECO_EMPRESA_USUARIO, String.Empty)</span>
+                </div>
+            </div>
+            <div id="secao_localizacao3" class="formata_campos_cadastro">
+                <div id="label_complemento" class="formata_label">
+                    @Html.LabelFor(m => m.COMPLEMENTO_ENDERECO_EMPRESA_USUARIO)
+                </div>
+                <div id="campo_complemento" class="">
+                    @Html.TextBoxFor(m => m.COMPLEMENTO_ENDERECO_EMPRESA_USUARIO, new { style = "font-family: 'Verdana', Geneva, sans-serif; width: 500px;", maxlength = 50, @tabindex = "10" })
+                    <span id="mensagemErroComplemento" class="texto_menor_erro">@Html.ValidationMessageFor(m => m.COMPLEMENTO_ENDERECO_EMPRESA_USUARIO, String.Empty)</span>
+                </div>
+            </div>
+            <div id="secao_localizacao4" class="formata_campos_cadastro">
+                <div id="label_estado" class="formata_label">
+                    @Html.LabelFor(m => m.NOME_ESTADO_EMPRESA_USUARIO)
+                </div>
+                <div id="campo_estado" class="">
+                    @Html.DropDownList("NOME_ESTADO_EMPRESA_USUARIO", Model.ListagemEstados, new { style = "font-family: 'Verdana', Geneva, sans-serif; width: 100px;", @tabindex = "11" })
+                    <span id="mensagemErroUf" class="texto_menor_erro">@Html.ValidationMessageFor(m => m.NOME_ESTADO_EMPRESA_USUARIO, String.Empty)</span>
+                </div>
+            </div>
+            <div id="secao_localizacao5" class="formata_campos_cadastro">
+                <div id="label_cidade" class="formata_label">
+                    @Html.LabelFor(m => m.NOME_CIDADE_EMPRESA_USUARIO)
+                </div>
+                <div id="campo_cidade" class="formata_label">
+                    @Html.TextBoxFor(m => m.NOME_CIDADE_EMPRESA_USUARIO, new { style = "font-family: 'Verdana', Geneva, sans-serif; width: 200px;", maxlength = 50, @tabindex = "12" })
+                    <span id="mensagemErroCidade" class="texto_menor_erro">@Html.ValidationMessageFor(m => m.NOME_CIDADE_EMPRESA_USUARIO, String.Empty)</span>
+                </div>
+                <div id="label_bairro" class="formata_label">
+                    @Html.LabelFor(m => m.NOME_BAIRRO_EMPRESA_USUARIO, new { style = "margin-left:80px;"})
+                </div>
+                <div id="campo_bairro" class="">
+                    @Html.TextBoxFor(m => m.NOME_BAIRRO_EMPRESA_USUARIO, new { style = "font-family: 'Verdana', Geneva, sans-serif; width: 200px; margin-left:10px;", maxlength = 50, @tabindex = "13" })
+                    <span id="mensagemErroBairro" class="texto_menor_erro">@Html.ValidationMessageFor(m => m.NOME_BAIRRO_EMPRESA_USUARIO, String.Empty)</span>
+                </div>
+            </div>
+            <br/>
+            <div id="secao_receber_emails" class="formata_campos_cadastro_check_email">
+                <div id="campo_receber_emails" class="formata_label">
+                    @Html.CheckBoxFor(m => m.RECEBER_EMAILS_EMPRESA, new { style = "margin-left: 118px;", @id = "RECEBER_EMAILS_EMPRESA", @onClick="setarEmail();" })
+                </div>
+                <div id="label_receber_emails" class="">
+                    @Html.LabelFor(m => m.RECEBER_EMAILS_EMPRESA)
+                </div>
+            </div>
+            <div id="leia_termos_politica" class="formata_termo_politica">
+                <span class="texto_normal">Leia os</span>&nbsp;&nbsp;@Html.ActionLink("Termos de Uso", "Termos", "CadastroEmpresaUsuario", new { @class = "linkdois" })&nbsp;<span class="texto_normal">e</span>&nbsp;@Html.ActionLink("Política de Privacidade", "Politica", "CadastroEmpresaUsuario", new { @class = "linkdois" })
+            </div>
+            
+            @Html.HiddenFor(m => m.ID_CODIGO_TIPO_EMPRESA_USUARIO)
+            @Html.HiddenFor(m => m.ID_CODIGO_ENDERECO_EMPRESA_USUARIO)
+            @Html.HiddenFor(m => m.ACEITACAO_TERMOS_POLITICAS)
+            @Html.HiddenFor(m => m.DATA_CADASTRO_EMPRESA)
+            @Html.HiddenFor(m => m.DATA_ULTIMA_ATUALIZACAO_EMPRESA)
+            @Html.HiddenFor(m => m.ATIVA_INATIVA_EMPRESA)
+            @Html.HiddenFor(m => m.EMPRESA_ADMISTRADORA)
+            @Html.HiddenFor(m => m.ID_GRUPO_ATIVIDADES)
+            @Html.HiddenFor(m => m.NOME_USUARIO_MASTER)
+            @Html.HiddenFor(m => m.USUARIO_CONFIRMADO_EMPRESA_CONFIGURADA)
+            @Html.HiddenFor(m => m.ID_EMPRESA)
+
+            <br/>
+            <div id="bt_submit" class="formata_campos_cadastro_button">
+                <input type="submit" id="btn_cadastro" value="Aceitar os Termos de Uso e Cadastrar" class="i2Style"/>
+            </div>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script type="text/javascript">
+        jQuery(function ($) {
+            //Posiciona o cursor  no primeiro campo da página
+            $("input[type=text]").first().focus();
+
+            //Atribui valores a alguns campos desta View
+            $("#PAIS_EMPRESA_USUARIO").val(4); //Setando país como Brasil. OBS: Ver depois como setar dinâmicamente de acordo com o país q se conectar.
+            $("#RECEBER_EMAILS_EMPRESA").attr("checked", true); //Checa
+            $("#ID_CODIGO_TIPO_EMPRESA_USUARIO").val(1); //Valor 1 -> Indica que é Empresa
+            $("#ACEITACAO_TERMOS_POLITICAS").val(true);
+            $("#ATIVA_INATIVA_EMPRESA").val(true);
+            $("#EMPRESA_ADMISTRADORA").val(false); //True somente para ClienteMercado
+            $("#ID_GRUPO_ATIVIDADES").val(61); //Seleciona por default "Outros" até que seja especificado um novo nas configurações
+
+            $("#img_load_direcionada1").hide();
+            $("#img_load_direcionada2").hide();
+            $('#img_load_direcionada3').hide();
+
+            $("#CNPJ_CPF_EMPRESA_USUARIO").click(function() {
+                if ($("#CNPJ_CPF_EMPRESA_USUARIO").val() != '') {
+                    $("#CNPJ_CPF_EMPRESA_USUARIO").val('');
+                }
+            });
+
+            //Ajax - Consulta CNPJ
+            $("#CNPJ_CPF_EMPRESA_USUARIO").blur(function () {
+                if ($("#CNPJ_CPF_EMPRESA_USUARIO").val() != '') {
+                    $('#img_load_direcionada1').show();
+
+                    $.ajax({
+                        type: 'POST',
+                        url: '/CadastroEmpresaUsuario/VerificaSeCNPJExisteNoBanco', //Caminho Controler/Action
+                        dataType: 'json', //Tipo de dados
+                        data: { 'cnpjDigitado': $("#CNPJ_CPF_EMPRESA_USUARIO").val() }, //Valor passado por parâmetro
+                        success: function (result) {
+                            $('#img_load_direcionada1').hide();
+
+                            //Retorno Json
+                            $("#mensagemErroCnpj2").html('');
+
+                            //Destaque campos identificação e Desabilita/Habilita botão submit
+                            if (result != true) {
+                                $("#mensagemErroCnpj2").html(result.mensagem).css("color", "#FF0000");
+
+                                //Se CNPJ já cadastrado, exibe dados identificadores da Empresa
+                                if (result.razaoSocial != '')
+                                {
+                                    $("#RAZAO_SOCIAL_EMPRESA").val(result.razaoSocial).css("background-color", "#F5F5AB").attr("disabled", true);
+                                    $("#NOME_FANTASIA_EMPRESA").val(result.fantasia).css("background-color", "#F5F5AB").attr("disabled", true);
+                                    $("#NOME_USUARIO_MASTER").val(result.nomeUsuarioMaster).attr("disabled", true);
+                                    $("#EMAIL1_EMPRESA").val(result.eMailOne).attr("disabled", true);
+                                    $("#TELEFONE1_EMPRESA_USUARIO").val(result.telefoneOne).attr("disabled", true);
+                                    $("#PAIS_EMPRESA_USUARIO").val(result.pais).attr("disabled", true);
+                                    $("#CEP_SEQUENCIAL_ENDERECO").val(result.cep).attr("disabled", true);
+                                    $("#ENDERECO_EMPRESA_USUARIO").val(result.endereco).attr("disabled", true);
+                                    $("#COMPLEMENTO_ENDERECO_EMPRESA_USUARIO").val(result.complementoEndereco).attr("disabled", true);
+                                    $("#NOME_ESTADO_EMPRESA_USUARIO").val(result.ufEstado).attr("disabled", true);
+                                    $("#NOME_CIDADE_EMPRESA_USUARIO").val(result.cidade).attr("disabled", true);
+                                    $("#NOME_BAIRRO_EMPRESA_USUARIO").val(result.bairro).attr("disabled", true);
+                                    $('#USUARIO_CONFIRMADO_EMPRESA_CONFIGURADA').val(result.confirmacaoDeCadastro).attr("disabled", true);
+
+                                    $("#ID_EMPRESA").val(result.idEmpresa);
+                                    $("#RECEBER_EMAILS_EMPRESA").attr("checked", true); //Checa
+                                    $("#ID_CODIGO_TIPO_EMPRESA_USUARIO").val(1); //Valor 1 -> Indica que é Empresa
+                                    $("#ACEITACAO_TERMOS_POLITICAS").val(true);
+                                    $("#ATIVA_INATIVA_EMPRESA").val(true);
+                                    $("#EMPRESA_ADMISTRADORA").val(false); //True somente para ClienteMercado
+                                    $("#ID_GRUPO_ATIVIDADES").val(result.grupoAtividades);
+
+                                    //Decide qual botão de cadastro de segundo usuário, irá exibir
+                                    if (result.confirmacaoDeCadastro != true) {
+                                        //Botão fake
+                                        $("#btn_cadastro2_alter").show();
+                                    } else {
+                                        //Botão verdadeiro
+                                        $("#btn_cadastro2").show();
+                                    }
+                                }
+                                else 
+                                    {
+                                        //Limpa os campos / Retira destaque
+                                        $("#RAZAO_SOCIAL_EMPRESA").val(result.razaoSocial).css("background-color", "#ffffff").removeAttr("disabled");
+                                        $("#NOME_FANTASIA_EMPRESA").val(result.fantasia).css("background-color", "#ffffff").removeAttr("disabled");
+                                        $("#NOME_USUARIO_MASTER").val('').removeAttr("disabled");
+                                        $("#EMAIL1_EMPRESA").val('').removeAttr("disabled");
+                                        $("#TELEFONE1_EMPRESA_USUARIO").val('').removeAttr("disabled");
+                                        $("#PAIS_EMPRESA_USUARIO").val(4).removeAttr("disabled");
+                                        $("#CEP_SEQUENCIAL_ENDERECO").val('').removeAttr("disabled");
+                                        $("#ENDERECO_EMPRESA_USUARIO").val('').removeAttr("disabled");
+                                        $("#COMPLEMENTO_ENDERECO_EMPRESA_USUARIO").val('').removeAttr("disabled");
+                                        $("#NOME_ESTADO_EMPRESA_USUARIO").val('').removeAttr("disabled");
+                                        $("#NOME_CIDADE_EMPRESA_USUARIO").val('').removeAttr("disabled");
+                                        $("#NOME_BAIRRO_EMPRESA_USUARIO").val('').removeAttr("disabled");
+
+                                        $("#ID_EMPRESA").val(null);
+                                        $("#RECEBER_EMAILS_EMPRESA").attr("checked", true); //Checa
+                                        $("#ID_CODIGO_TIPO_EMPRESA_USUARIO").val(1); //Valor 1 -> Indica que é Empresa
+                                        $("#ACEITACAO_TERMOS_POLITICAS").val(true);
+                                        $("#ATIVA_INATIVA_EMPRESA").val(true);
+                                        $("#EMPRESA_ADMISTRADORA").val(false); //True somente para ClienteMercado
+                                        $("#ID_GRUPO_ATIVIDADES").val(30);
+
+                                        $("#btn_cadastro2").hide();
+                                        $("#btn_cadastro2_alter").hide();
+                                    }
+
+                                //Desliga botão submit principal
+                                $('#btn_cadastro').attr('disabled', 'disabled');
+                                $('#CNPJ_CPF_EMPRESA_USUARIO').focus();
+
+                            } else {
+                                //Limpa campos, desabilita botões cadastro de mais usuários, remove destaque e habilita campo submit
+                                $("#btn_cadastro2").hide();
+                                $("#btn_cadastro2_alter").hide();
+                                $("#RAZAO_SOCIAL_EMPRESA").val(result.razaoSocial).css("background-color", "#ffffff").removeAttr("disabled");
+                                $("#NOME_FANTASIA_EMPRESA").val(result.fantasia).css("background-color", "#ffffff").removeAttr("disabled");
+                                $("#NOME_USUARIO_MASTER").val('').removeAttr("disabled");
+                                $("#EMAIL1_EMPRESA").val('').removeAttr("disabled");
+                                $("#TELEFONE1_EMPRESA_USUARIO").val('').removeAttr("disabled");
+                                $("#PAIS_EMPRESA_USUARIO").val(4).removeAttr("disabled");
+                                $("#CEP_SEQUENCIAL_ENDERECO").val('').removeAttr("disabled");
+                                $("#ENDERECO_EMPRESA_USUARIO").val('').removeAttr("disabled");
+                                $("#COMPLEMENTO_ENDERECO_EMPRESA_USUARIO").val('').removeAttr("disabled");
+                                $("#NOME_ESTADO_EMPRESA_USUARIO").val('').removeAttr("disabled");
+                                $("#NOME_CIDADE_EMPRESA_USUARIO").val('').removeAttr("disabled");
+                                $("#NOME_BAIRRO_EMPRESA_USUARIO").val('').removeAttr("disabled");
+
+                                $("#ID_EMPRESA").val(null);
+                                $("#RECEBER_EMAILS_EMPRESA").attr("checked", true); //Checa
+                                $("#ID_CODIGO_TIPO_EMPRESA_USUARIO").val(1); //Valor 1 -> Indica que é Empresa
+                                $("#ACEITACAO_TERMOS_POLITICAS").val(true);
+                                $("#ATIVA_INATIVA_EMPRESA").val(true);
+                                $("#EMPRESA_ADMISTRADORA").val(false); //True somente para ClienteMercado
+                                $("#ID_GRUPO_ATIVIDADES").val(30);
+
+                                $('#btn_cadastro').removeAttr('disabled');
+                            }
+                        }
+                    });
+                }
+            });
+
+            $("#btn_cadastro2").on('click', function () {
+                //alert('Atenção!\n\nNo formulário seguinte, entre com seus dados para ser cadastrado como usuário da empresa ' + $("#RAZAO_SOCIAL_EMPRESA").val() + '.\nVocê necessitará de confirmação pelo usuário master, para que seja validado e liberado para usar o sistema.\n\nUsuário Master: ' + $("#NOME_USUARIO_MASTER").val());
+                jAlert('ATENÇÃO!\n\nNo formulário seguinte, entre com seus dados para ser cadastrado como usuário da empresa ' + $("#RAZAO_SOCIAL_EMPRESA").val() + '.\nVocê necessitará de confirmação pelo usuário master, para que seja validado e liberado para usar o sistema.\n\nUsuário Master: ' + $("#NOME_USUARIO_MASTER").val(), '  Ok  ');
+            });
+
+            //Checando evento click do botão fake de adicionar usuário com empresa ainda não configurada pelo usuário master
+            $("#btn_cadastro2_alter").on('click', function () {
+                if ($('#USUARIO_CONFIRMADO_EMPRESA_CONFIGURADA').val() != true) {
+                    //alert('Atenção!\n\nO cadastro de novos usuários para esta empresa só será permitido após o configuração e confirmação do cadastro da EMPRESA pelo usuário master.\n\nUsuário Master: ' + $("#NOME_USUARIO_MASTER").val());
+                    jAlert('ATENÇÃO!\n\nO cadastro de novos usuários para esta empresa só será permitido após o configuração e confirmação do cadastro da EMPRESA pelo usuário master.\n\nUsuário Master: ' + $("#NOME_USUARIO_MASTER").val(), '  Ok  ');
+                }
+            });
+
+            //Ajax - Consulta E-Mail
+            $("#EMAIL1_EMPRESA").blur(function () {
+                if ($("#EMAIL1_EMPRESA").val() != '') {
+                    $('#img_load_direcionada2').show();
+
+                    $.ajax({
+                        type: 'POST',
+                        url: '/CadastroEmpresaUsuario/VerificaSeEmailExisteNoBanco', //Caminho Controler/Action
+                        dataType: 'json', //Tipo de dados
+                        data: { 'emailDigitado': $("#EMAIL1_EMPRESA").val() }, //Valor passado por parâmetro
+                        success: function (result) {
+                            $('#img_load_direcionada2').hide();
+
+                            //Retorno Json
+                            $("#mensagemErroEmail2").html('');
+
+                            //Desabilita/Habilita botão submit
+                            if (result != true) {
+                                $("#mensagemErroEmail2").html(result).css("color", "#FF0000");
+                                $('#btn_cadastro').attr('disabled', 'disabled');
+                                $('#EMAIL1_EMPRESA').focus();
+
+                            } else {
+                                $('#btn_cadastro').removeAttr('disabled');
+                            }
+                        }
+                    });
+                }
+            });
+
+            //Ajax - Consulta o CEP
+            $("#CEP_SEQUENCIAL_ENDERECO").change(function() {
+                if ($("#CEP_SEQUENCIAL_ENDERECO").val() != '') {
+                    $('#img_load_direcionada3').show();
+
+                    $.ajax({
+                        type: 'POST',
+                        url: '/CadastroEmpresaUsuario/BuscaEndereco', //Caminho Controler/Action
+                        dataType: 'json', //Tipo de dados
+                        data: { 'cepDigitado': $("#CEP_SEQUENCIAL_ENDERECO").val() }, //Valor passado por parâmetro
+                        success: function (result) {
+                            $('#img_load_direcionada3').hide();
+
+                            if (result == false) {
+                                $("#mensagemErroCep2").html("* Dígitos insuficientes! Entre com o CEP completo.").css("color", "#FF0000");
+                            } else {
+                                //Retorno Json e posicionamento dos valores em seus campos.
+                                $("#mensagemErroCep2").html('');
+                                $("#ID_CODIGO_ENDERECO_EMPRESA_USUARIO").val(result.id_endereco);
+                                $("#ENDERECO_EMPRESA_USUARIO").val(result.endereco);
+                                $("#NOME_ESTADO_EMPRESA_USUARIO").val(result.estado);
+                                $("#NOME_CIDADE_EMPRESA_USUARIO").val(result.cidade);
+                                $("#NOME_BAIRRO_EMPRESA_USUARIO").val(result.bairro);
+                            }
+
+                        }
+                    });
+                }
+            });
+
+        });
+    </script>
+}

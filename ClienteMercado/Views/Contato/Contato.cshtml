@@ -1,0 +1,72 @@
+﻿@model ClienteMercado.Models.Contato
+
+@{
+ViewBag.Title = "ClienteMercado";
+    Layout = "~/Views/Shared/_Layout-Others-Home.cshtml";
+}
+
+@*<div id="cabeçalho_id_pag">
+    <h1>Contato</h1>
+</div>*@
+
+<div id="label_titulo_paginas_contato" class="label_paginas">&nbsp;&nbsp;Contato</div>
+
+<div id="container_form_contato">
+    @using (Html.BeginForm())
+    {
+        @Html.ValidationSummary(true)
+
+        <div id="campos_para_contato" class="campos_contato">
+            <div id="mensagem_apresentacao" class="formata_msg_contato">
+                Entre em contato com o Cliente & Mercado. Nos envie suas dúvidas, críticas ou sugestões.
+            </div>
+            <div id="mensagem_retorno" class="formata_msg_retorno_operacao2">
+                <h4>@TempData["mensagem"]</h4>
+            </div>
+            <br/>
+            <div id="label_nome" class="formata_campos_contato">
+                @Html.LabelFor(m => m.NomePContato)
+            </div>
+            <div id="campo_nome" class="formata_campos_contato">
+                @Html.TextBoxFor(m => m.NomePContato, new { style = "font-family: 'Verdana', Geneva, sans-serif; width: 330px;", maxlength = 50, @tabindex = "1" })
+                @Html.ValidationMessageFor(m => m.NomePContato, String.Empty)
+            </div>
+            <div id="label_email" class="formata_campos_contato">
+                @Html.LabelFor(m => m.EmailPContato)
+            </div>
+            <div id="campo_email" class="formata_campos_contato">
+                @Html.TextBoxFor(m => m.EmailPContato, new { style = "font-family: 'Verdana', Geneva, sans-serif; width: 330px;", maxlength = 50, @tabindex = "2" })
+                @Html.ValidationMessageFor(m => m.EmailPContato, String.Empty)
+            </div>
+            <div id="label_assunto" class="formata_campos_contato">
+                @Html.LabelFor(m => m.AssuntoPContato)
+            </div>
+            <div id="campo_assunto" class="formata_campos_contato">
+                @Html.DropDownList("AssuntoPContato", Model.ListagemAssuntos, new { style = "font-family: 'Verdana', Geneva, sans-serif; width: 330px;", @tabindex = "3" })
+                @Html.ValidationMessageFor(m => m.AssuntoPContato, String.Empty)
+            </div>
+            <div id="label_mensagem" class="formata_campos_contato">
+                @Html.LabelFor(m => m.MensagemPContato)
+            </div>
+            <div id="campo_mensagem" class="formata_campos_contato">
+                @Html.TextAreaFor(m => m.MensagemPContato, new { style = "font-family: 'Verdana', Geneva, sans-serif; width: 330px; height: 90px;", maxlength = 5000, @size = 51, @tabindex = "4" })
+                @Html.ValidationMessageFor(m => m.MensagemPContato)
+            </div>
+            <br/>
+            <div id="bt_submit" class="formata_campos_contato">
+                <input type="submit" value="Enviar" class="i2Style"/>
+            </div>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    @* Posiciona o cursor  no primeiro campo*@
+    <script type="text/javascript">
+        $(function() {
+            $("input[type=text]").first().focus();
+        });
+    </script>
+}

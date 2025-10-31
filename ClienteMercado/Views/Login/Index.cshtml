@@ -1,0 +1,229 @@
+﻿@model ClienteMercado.Models.Login
+
+<!DOCTYPE html>
+<!--
+Template Name: Metronic - Responsive Admin Dashboard Template build with Twitter Bootstrap 3.3.2
+Version: 3.7.0
+Author: KeenThemes
+Website: http://www.keenthemes.com/
+Contact: support@keenthemes.com
+Follow: www.twitter.com/keenthemes
+Like: www.facebook.com/keenthemes
+Purchase: http://themeforest.net/item/metronic-responsive-admin-dashboard-template/4021469?ref=keenthemes
+License: You must have a valid license purchased only from themeforest(the above link) in order to legally use the theme for your project.
+-->
+<!--[if IE 8]> <html lang="en" class="ie8 no-js"> <![endif]-->
+<!--[if IE 9]> <html lang="en" class="ie9 no-js"> <![endif]-->
+<!--[if !IE]><!-->
+<html lang="en">
+<!--<![endif]-->
+<!-- BEGIN HEAD -->
+<head>
+    <meta charset="utf-8" />
+    <title>ClienteMercado | Login</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <meta content="" name="description" />
+    <meta content="" name="author" />
+    <!-- BEGIN GLOBAL MANDATORY STYLES -->
+    <link href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous" rel="stylesheet">
+    <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=all" rel="stylesheet" type="text/css" />
+    <link href="~/Content/assets/global/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/assets/global/plugins/simple-line-icons/simple-line-icons.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/assets/global/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/assets/global/plugins/uniform/css/uniform.default.css" rel="stylesheet" type="text/css" />
+    <!-- END GLOBAL MANDATORY STYLES -->
+    <!-- BEGIN PAGE LEVEL STYLES -->
+    <link href="~/Content/assets/global/plugins/select2/select2.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/assets/admin/pages/css/login-soft.css" rel="stylesheet" type="text/css" />
+    <!-- END PAGE LEVEL SCRIPTS -->
+    <!-- BEGIN THEME STYLES -->
+    <link href="~/Content/assets/global/css/components.css" id="style_components" rel="stylesheet" type="text/css" />
+    <link href="~/Content/assets/global/css/plugins.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/assets/admin/layout/css/layout.css" rel="stylesheet" type="text/css" />
+    <link id="style_color" href="~/Content/assets/admin/layout/css/themes/darkblue.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/assets/admin/layout/css/custom.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/sweetalert.css" rel="stylesheet" />
+    <!-- END THEME STYLES -->
+    <link rel="shortcut icon" href="favicon.ico" />
+</head>
+<!-- END HEAD -->
+<!-- BEGIN BODY -->
+<body class="login">
+    <!-- BEGIN LOGO -->
+    <div class="logo">
+        <a href="index.html">
+            <img src="~/Content/images/logo_branca.png" alt="" />
+        </a>
+    </div>
+    <!-- END LOGO -->
+    <!-- BEGIN SIDEBAR TOGGLER BUTTON -->
+    <div class="menu-toggler sidebar-toggler">
+    </div>
+    <!-- END SIDEBAR TOGGLER BUTTON -->
+    <!-- BEGIN LOGIN -->
+    <div class="content">
+        <!-- BEGIN LOGIN FORM -->
+        @*<form class="login-form" action="" method="">*@
+            <h3 class="form-title">Informe os dados de Login:</h3>
+            <div class="alert alert-danger display-hide">
+                <button class="close" data-close="alert"></button>
+                <span>
+                    Enter any username and password.
+                </span>
+            </div>
+            <div class="form-group">
+                <!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
+                <label class="control-label visible-ie8 visible-ie9">Username</label>
+                <div class="input-icon">
+                    <i class="fas fa-sign-in-alt"></i>
+                    @Html.TextBoxFor(m => m.LOGIN_EMPRESA_USUARIO, new { @class = "form-control placeholder-no-fix cmplogin", @id="inLogin", @tabindex = "1", @placeholder = "Login ou e-mail", @Obrigatorio = 1, @maxlenght = 30, @size = 30, @type = "text", @onClick = "LimparCampos('inLogin', 'inPassw', '')" })
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label visible-ie8 visible-ie9">Password</label>
+                <div class="input-icon">
+                    <i class="fa fa-lock"></i>
+                    @Html.TextBoxFor(m => m.SENHA_EMPRESA_USUARIO, new { @class = "form-control placeholder-no-fix cmplogin", @id="inPassw", @tabindex = "2", @placeholder = "Senha", @Obrigatorio = 1, @maxlenght = 30, @size = 30, @type = "password", @onClick = "LimparCampos('inLogin', 'inPassw', '')" })
+                </div>
+            </div>
+            <div id="msg-erro-login" class="alert alert-danger" role="alert" style="text-align:center;display:none;">
+                <h4><font color="red">Login ou Senha não localizados</font></h4>
+            </div>
+            <div>
+                <button id="btn-entrar" class="btn blue pull-right reload">Entrar <i class="m-icon-swapright m-icon-white"></i></button>
+            </div>
+            <div class="forget-password">
+                <h4>Esqueceu sua senha?</h4>
+                <p>Clique <a href="javascript:;" id="forget-password">aqui</a> pare redefinir sua senha.</p>
+            </div>
+            <div class="create-account" style="text-align:center;vertical-align:middle;">
+                <p>Não tem conta?&nbsp; <a href="#" id="register-btn"><h4>Cadastre-se agora</h4></a></p>
+            </div>
+        @*</form>*@
+        <!-- END LOGIN FORM -->
+    </div>
+    <!-- END LOGIN -->
+    <!-- BEGIN COPYRIGHT -->
+    <div class="copyright">
+        2020 &copy; ClienteMercado
+    </div>
+    <!-- END COPYRIGHT -->
+    <!-- BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time) -->
+    <!-- BEGIN CORE PLUGINS -->
+    <!--[if lt IE 9]>
+    <script src="../../assets/global/plugins/respond.min.js"></script>
+    <script src="../../assets/global/plugins/excanvas.min.js"></script>
+    <![endif]-->
+    <script src="~/Content/assets/global/plugins/jquery.min.js" type="text/javascript"></script>
+    <script src="~/Content/assets/global/plugins/jquery-migrate.min.js" type="text/javascript"></script>
+    <script src="~/Content/assets/global/plugins/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+    <script src="~/Content/assets/global/plugins/jquery.blockui.min.js" type="text/javascript"></script>
+    <script src="~/Content/assets/global/plugins/uniform/jquery.uniform.min.js" type="text/javascript"></script>
+    <script src="~/Content/assets/global/plugins/jquery.cokie.min.js" type="text/javascript"></script>
+    <!-- END CORE PLUGINS -->
+    <!-- BEGIN PAGE LEVEL PLUGINS -->
+    <script src="~/Content/assets/global/plugins/jquery-validation/js/jquery.validate.min.js" type="text/javascript"></script>
+    <script src="~/Content/assets/global/plugins/backstretch/jquery.backstretch.min.js" type="text/javascript"></script>
+    <script src="~/Content/assets/global/plugins/select2/select2.min.js" type="text/javascript"></script>
+    <!-- END PAGE LEVEL PLUGINS -->
+    <!-- BEGIN PAGE LEVEL SCRIPTS -->
+    <script src="~/Content/assets/global/scripts/metronic.js" type="text/javascript"></script>
+    <script src="~/Content/assets/admin/layout/scripts/layout.js" type="text/javascript"></script>
+    <script src="~/Content/assets/admin/layout/scripts/demo.js" type="text/javascript"></script>
+    <script src="~/Content/assets/admin/pages/scripts/login-soft.js" type="text/javascript"></script>
+    <script src="~/Scripts/sweetalert-dev.js"></script>
+    <script src="~/Scripts/sweetalert.min.js"></script>
+    @*<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>*@
+    <script>
+        jQuery(document).ready(function() {
+              Metronic.init(); // init metronic core components
+              Layout.init(); // init current layout
+              Login.init();
+              Demo.init();
+
+               //IMAGENS de FUNDO ALTERNÁVEIS
+              $.backstretch([
+                "../../Content/assets/admin/pages/media/bg/1.jpg",
+                "../../Content/assets/admin/pages/media/bg/2.jpg",
+                "../../Content/assets/admin/pages/media/bg/3.jpg",
+                "../../Content/assets/admin/pages/media/bg/4.jpg"
+                ], {
+                  fade: 1000,
+                  duration: 8000
+                }
+              );
+
+            //Botão LOGIN
+            $(document).on("click", "#btn-entrar", function () {
+                  debugger;
+                  var cont = 0;
+                  var msg = "";
+                  var obj = {};
+                  var aviso = 0;
+                  var mensagem = "ATENÇÃO!!!\n\nOs CAMPOS em vermelho, são de preenchimento obrigatório!"
+
+                  $(".cmplogin").each(function () {
+
+                      $(this).css({ "border": "1px solid #ccc" });
+                      var input = $(this).val();
+                      console.log($(this).attr("campo") + " " + input);
+
+                      if (($(this).val() == "") && ($(this).attr("obrigatorio") == "1")) {
+                          aviso = 1;
+
+                          if ($(this).hasClass('validacao'))
+                              msg += $(this).attr("campo") + "\n";
+
+                          $(this).css({ "border": "1px solid #F00" });
+                          cont++;
+                      }
+                      else if (($(this).val() != ""))
+                          obj[$(this).attr("id")] = $(this).val();
+                  });
+
+                  if (aviso == 1) {
+                      swal({ title: mensagem, type: "warning", confirmButtonColor: "#337ab7" });
+                  }
+                  else {
+                      $.ajax({
+                          type: "POST",
+                          url: "/Login/ConfirmarLogin",
+                          dataType: "json",
+                          data: {
+                              'login': $('#inLogin').val(),
+                              'passw': $('#inPassw').val()
+                          },
+                          success: function (data) {
+                              debugger;
+
+                              if (data.logado == "nao") {
+                                  $('#msg-erro-login').show();
+                              }
+                              else {
+                                  window.location.href = "@Url.Action("Index", "Home", new { Area = "Company" })"
+                              }
+                          }
+                      });
+                  }
+            });
+
+            //CADASTRAR EMPRESA
+            $(document).on("click", "#register-btn", function () {
+                window.location.href = "@Url.Action("Index", "Registration_company", new { Area = "Acesso" })"
+            });
+        });
+
+        //Limpar determinados campos do FILTRO
+        function LimparCampos(campo1, campo2, campo3) {
+            if ((campo1 == "inLogin") || (campo1 == "inPassw")) {
+                $("#msg-erro-login").hide();
+            }
+        }
+
+    </script>
+    <!-- END JAVASCRIPTS -->
+</body>
+<!-- END BODY -->
+</html>

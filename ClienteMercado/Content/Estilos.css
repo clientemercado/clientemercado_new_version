@@ -1,0 +1,865 @@
+﻿/*Inserido por Edwilson Curti -----------------------------------------------*/
+@charset "UTF-8";
+@import url(http://fonts.googleapis.com/css?family=Titillium+Web);
+@font-face {
+    font-family: ''; /*Ver isso. Default*/
+    src: url('');   /*Ver isso. Default*/
+}
+
+body *
+{
+    margin: 0;
+}
+
+a{ 
+ text-decoration:none;
+ color:#FFFFFF; 
+ } 
+
+a:hover{
+    text-decoration:underline; 
+    color:#B5B5B5;
+}
+
+a.linkdois{ 
+ font-size: 10pt;
+ text-decoration:none;
+ color:#4169E1; 
+ } 
+
+a.linkdois:hover{
+    font-size: 10pt;
+    text-decoration:underline; 
+    color:#4169E1;
+}
+
+#container
+{
+    width: 1001px; 
+    height: 158px;
+    margin-left:auto;
+    margin-right:auto;
+}
+
+#header 
+{
+    width: 1001px; 
+    height: 158px;
+    margin-left:auto;
+    margin-right:auto;
+    background: -moz-linear-gradient(top,  rgba(208,211,211,0.34) 0%, rgba(210,211,213,0.98) 1%, rgba(210,211,213,0.98) 27%, rgba(209,211,213,0.5) 54%, rgba(210,210,210,0.28) 66%, rgba(210,210,210,0.26) 67%, rgba(208,208,212,0.24) 68%, rgba(208,208,212,0.22) 69%, rgba(208,208,212,0.2) 70%, rgba(207,207,212,0.18) 71%, rgba(209,209,209,0.16) 72%, rgba(206,206,212,0.14) 73%, rgba(206,206,213,0.12) 74%, rgba(209,209,209,0.1) 75%, rgba(208,208,208,0.09) 76%, rgba(207,207,207,0.07) 77%, rgba(205,205,205,0.06) 78%, rgba(192,192,213,0.04) 79%, rgba(171,171,213,0.03) 80%, rgba(171,171,171,0.01) 81%, rgba(255,255,255,0.01) 82%, rgba(255,255,255,0) 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(208,211,211,0.34)), color-stop(1%,rgba(210,211,213,0.98)), color-stop(27%,rgba(210,211,213,0.98)), color-stop(54%,rgba(209,211,213,0.5)), color-stop(66%,rgba(210,210,210,0.28)), color-stop(67%,rgba(210,210,210,0.26)), color-stop(68%,rgba(208,208,212,0.24)), color-stop(69%,rgba(208,208,212,0.22)), color-stop(70%,rgba(208,208,212,0.2)), color-stop(71%,rgba(207,207,212,0.18)), color-stop(72%,rgba(209,209,209,0.16)), color-stop(73%,rgba(206,206,212,0.14)), color-stop(74%,rgba(206,206,213,0.12)), color-stop(75%,rgba(209,209,209,0.1)), color-stop(76%,rgba(208,208,208,0.09)), color-stop(77%,rgba(207,207,207,0.07)), color-stop(78%,rgba(205,205,205,0.06)), color-stop(79%,rgba(192,192,213,0.04)), color-stop(80%,rgba(171,171,213,0.03)), color-stop(81%,rgba(171,171,171,0.01)), color-stop(82%,rgba(255,255,255,0.01)), color-stop(100%,rgba(255,255,255,0))); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top,  rgba(208,211,211,0.34) 0%,rgba(210,211,213,0.98) 1%,rgba(210,211,213,0.98) 27%,rgba(209,211,213,0.5) 54%,rgba(210,210,210,0.28) 66%,rgba(210,210,210,0.26) 67%,rgba(208,208,212,0.24) 68%,rgba(208,208,212,0.22) 69%,rgba(208,208,212,0.2) 70%,rgba(207,207,212,0.18) 71%,rgba(209,209,209,0.16) 72%,rgba(206,206,212,0.14) 73%,rgba(206,206,213,0.12) 74%,rgba(209,209,209,0.1) 75%,rgba(208,208,208,0.09) 76%,rgba(207,207,207,0.07) 77%,rgba(205,205,205,0.06) 78%,rgba(192,192,213,0.04) 79%,rgba(171,171,213,0.03) 80%,rgba(171,171,171,0.01) 81%,rgba(255,255,255,0.01) 82%,rgba(255,255,255,0) 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top,  rgba(208,211,211,0.34) 0%,rgba(210,211,213,0.98) 1%,rgba(210,211,213,0.98) 27%,rgba(209,211,213,0.5) 54%,rgba(210,210,210,0.28) 66%,rgba(210,210,210,0.26) 67%,rgba(208,208,212,0.24) 68%,rgba(208,208,212,0.22) 69%,rgba(208,208,212,0.2) 70%,rgba(207,207,212,0.18) 71%,rgba(209,209,209,0.16) 72%,rgba(206,206,212,0.14) 73%,rgba(206,206,213,0.12) 74%,rgba(209,209,209,0.1) 75%,rgba(208,208,208,0.09) 76%,rgba(207,207,207,0.07) 77%,rgba(205,205,205,0.06) 78%,rgba(192,192,213,0.04) 79%,rgba(171,171,213,0.03) 80%,rgba(171,171,171,0.01) 81%,rgba(255,255,255,0.01) 82%,rgba(255,255,255,0) 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top,  rgba(208,211,211,0.34) 0%,rgba(210,211,213,0.98) 1%,rgba(210,211,213,0.98) 27%,rgba(209,211,213,0.5) 54%,rgba(210,210,210,0.28) 66%,rgba(210,210,210,0.26) 67%,rgba(208,208,212,0.24) 68%,rgba(208,208,212,0.22) 69%,rgba(208,208,212,0.2) 70%,rgba(207,207,212,0.18) 71%,rgba(209,209,209,0.16) 72%,rgba(206,206,212,0.14) 73%,rgba(206,206,213,0.12) 74%,rgba(209,209,209,0.1) 75%,rgba(208,208,208,0.09) 76%,rgba(207,207,207,0.07) 77%,rgba(205,205,205,0.06) 78%,rgba(192,192,213,0.04) 79%,rgba(171,171,213,0.03) 80%,rgba(171,171,171,0.01) 81%,rgba(255,255,255,0.01) 82%,rgba(255,255,255,0) 100%); /* IE10+ */
+    background: linear-gradient(to bottom,  rgba(208,211,211,0.34) 0%,rgba(210,211,213,0.98) 1%,rgba(210,211,213,0.98) 27%,rgba(209,211,213,0.5) 54%,rgba(210,210,210,0.28) 66%,rgba(210,210,210,0.26) 67%,rgba(208,208,212,0.24) 68%,rgba(208,208,212,0.22) 69%,rgba(208,208,212,0.2) 70%,rgba(207,207,212,0.18) 71%,rgba(209,209,209,0.16) 72%,rgba(206,206,212,0.14) 73%,rgba(206,206,213,0.12) 74%,rgba(209,209,209,0.1) 75%,rgba(208,208,208,0.09) 76%,rgba(207,207,207,0.07) 77%,rgba(205,205,205,0.06) 78%,rgba(192,192,213,0.04) 79%,rgba(171,171,213,0.03) 80%,rgba(171,171,171,0.01) 81%,rgba(255,255,255,0.01) 82%,rgba(255,255,255,0) 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#57d0d3d3', endColorstr='#00ffffff',GradientType=0 ); /* IE6-9 */
+}
+
+#toplogo{
+    float: left;
+}
+
+#topbar{
+    float: right;
+    margin-top: 30px;
+}
+
+#conteudo
+{
+    width:1001px;
+    height:500px;
+    padding:15px;
+    margin-left:auto;
+    margin-right:auto;
+    margin-top:20px;
+    text-align:left;
+    background-color: #fff;
+}
+
+#conteudo2
+{
+    width:1001px;
+    height:650px;
+    padding:15px;
+    margin-left:auto;
+    margin-right:auto;
+    margin-top:20px;
+    text-align:left;
+    background-color: #fff;
+}
+
+#conteudo3
+{
+    width:1001px;
+    height:400px;
+    padding:15px;
+    margin-left:auto;
+    margin-right:auto;
+    margin-top:20px;
+    text-align:left;
+    background-color: #fff;
+}
+
+#barra_verm_superior
+{
+    width:744px; 
+    height:27px;
+    margin-top:auto;
+    margin-left:auto;
+    background-color: #a90000;
+}
+
+#barra_branca_superior 
+{
+    width: 744px; 
+    height: 2px;
+    margin-top:auto;
+    margin-left:auto;
+}
+
+#barra_cinza_superior 
+{
+    width: 744px; 
+    height: 10px;
+    margin-top:auto;
+    margin-left:auto;
+    background-color: #333333;
+}
+
+#texto_bem_vindo
+{
+    font-family: 'Titillium Web', sans-serif;
+    font-weight: bold;
+    color: #ffffff;
+    font-size: 10pt;
+    padding: 0px;
+    margin-top: 0px;
+    margin-left: 7px;
+}
+
+#texto_normal
+{
+    font-family: 'Titillium Web', sans-serif;
+    font-weight: normal;
+    color: #ffffff;
+    font-size: 10pt;
+    padding: 0px;
+    margin-top: 0px;
+}
+
+#texto_italico
+{
+    font-family: 'Titillium Web', sans-serif;
+    font-weight: normal;
+    font-style: italic;
+    color: #ffffff;
+    font-size: 10pt;
+    padding: 0px;
+    margin-top: 0px;
+}
+
+#texto_login_cadastre_se
+{
+    font-family: 'Titillium Web', sans-serif;
+    font-weight: bold;
+    color: #ffffff;
+    font-size: 10pt;
+    padding: 0px;
+    margin-top: 0px;
+}
+
+#texto_apps_iphone
+{
+    font-family: 'Titillium Web', sans-serif;
+    font-weight: normal;
+    color: #ffffff;
+    font-size: 10pt;
+    padding: 0px;
+    margin-top: 0px;
+    margin-left: 400px;
+}
+
+#texto_apps_android
+{
+    font-family: 'Titillium Web', sans-serif;
+    font-weight: normal;
+    color: #ffffff;
+    font-size: 10pt;
+    padding: 0px;
+    margin-top: 0px;
+    margin-left: 400px;
+}
+
+#texto_apps_winPhone
+{
+    font-family: 'Titillium Web', sans-serif;
+    font-weight: normal;
+    color: #ffffff;
+    font-size: 10pt;
+    padding: 0px;
+    margin-top: 0px;
+    margin-left: 4px;
+}
+
+#barra_apps
+{
+    font-family: 'Titillium Web', sans-serif;
+    font-weight: normal;
+    color: #ffffff;
+    padding: 0px;
+    margin-top: 0px;
+    margin-left: 4px;
+}
+
+#texto_contato_quem_somos
+{
+    font-family: 'Titillium Web', sans-serif;
+    color: #ffffff;
+    font-size: 10pt;
+    padding: 0px;
+    margin-top: -30px;
+    margin-left: 170px;
+}
+
+#texto1_rodape
+{
+    font-family: 'Titillium Web', sans-serif;
+    color: #ffffff;
+    font-size: 7pt;
+    padding: 0px;
+    margin-top: -35px;
+    margin-left: 500px;
+}
+
+#texto2_rodape
+{
+    font-family: 'Titillium Web', sans-serif;
+    color: #ffffff;
+    font-size: 7pt;
+    padding: 0px;
+    margin-top: 2px;
+    margin-left: 500px;
+}
+
+#texto3_rodape
+{
+    font-family: 'Titillium Web', sans-serif;
+    color: #ffffff;
+    font-size: 7pt;
+    padding: 0px;
+    margin-top: 3px;
+    margin-left: 500px;
+}
+
+#texto_redirect
+{
+    font-family: 'Verdana', Geneva, sans-serif;
+    color: #696969;
+    font-weight: bold;
+    font-size: 10pt;
+    padding: 0px;
+    margin-top: 0px;
+}
+
+#texto_opcoes_cadastro1
+{
+    font-family: 'Verdana', Geneva, sans-serif;
+    color: #696969;
+    border: none;
+    font-weight: bold;
+    font-size: 10pt;
+    padding: 0px;
+    margin-top: 0px;
+    margin-left:8%;
+}
+
+#texto_opcoes_cadastro2
+{
+    font-family: 'Verdana', Geneva, sans-serif;
+    color: #696969;
+    border: none;
+    font-weight: bold;
+    font-size: 10pt;
+    padding: 0px;
+    margin-top: 0px;
+    margin-left:20%;
+}
+
+#texto_opcoes_cadastro3
+{
+    font-family: 'Verdana', Geneva, sans-serif;
+    color: #696969;
+    border: none;
+    font-weight: bold;
+    font-size: 10pt;
+    padding: 0px;
+    margin-top: 0px;
+    margin-left:21%;
+}
+
+#barra_verm_rodape 
+{
+    width: 1001px; 
+    height: 5px;
+    margin-left:auto;
+    margin-right:auto;
+    background-color: #a90000;
+}
+
+#barra_branca_rodape 
+{
+    width: 1001px; 
+    height: 4px;
+    margin-left:auto;
+    margin-right:auto;
+}
+
+#footer
+{
+    width: 1001px; 
+    height: 92px;
+    margin-left:auto;
+    margin-right:auto;
+    background-color: #333333;
+}
+
+#logo_branca_rodape
+{
+    margin-left:auto;
+    margin-right:auto;
+    background-image: url(~/Content/images/logo_branca.png);
+}
+
+h1 {
+    font-family: 'Verdana', Geneva, sans-serif;
+    color: #696969;
+    font-size: 20pt;
+}
+
+h2 {
+    font-family: 'Verdana', Geneva, sans-serif;
+    color: #696969;
+    font-size: 15pt;
+    padding-top: 10px;
+}
+
+h3 {
+    font-family: 'Verdana', Geneva, sans-serif;
+    color: #696969;
+    font-size: 13pt;
+    padding-top: 10px;
+}
+
+h4 {
+    font-family: 'Verdana', Geneva, sans-serif;
+    color: #FF0000;
+    font-size: 10pt;
+    padding-top: 10px;
+}
+
+h5 {
+    font-family: 'Verdana', Geneva, sans-serif;
+    color: #696969;
+    font-size: 9pt;
+    padding-top: 10px;
+}
+
+#barra_cabecalho 
+{
+    width: 985px;
+    color: #333333;
+    border-bottom: 1px solid;
+    margin-left: 0px;
+    margin-right:auto;
+}
+
+#label_acesse 
+{
+    padding-top: 10px;
+    margin-left:25%;
+}
+
+#container_form_contato 
+{
+    border-radius:0px 0px 4px 4px;
+    -moz-border-radius:0px 0px 4px 4px;
+    -webkit-border-radius:0px 0px 4px 4px;
+    -o-border-radius:0px 0px 4px 4px;
+    -ms-border-radius: 0px 0px 4px 4px;
+    background: #E8E8E8;
+    border:1px solid;
+    border-color: #CFCFCF;
+    width: 980px;
+    height: 470px;
+    margin-left: 0px;
+}
+
+#container_cadastro_empresa
+{
+    border-radius:0px 0px 4px 4px;
+    -moz-border-radius:0px 0px 4px 4px;
+    -webkit-border-radius:0px 0px 4px 4px;
+    -o-border-radius:0px 0px 4px 4px;
+    -ms-border-radius: 0px 0px 4px 4px;
+    background: #E8E8E8;
+    border:1px solid;
+    border-color: #CFCFCF;
+    width: 980px;
+    height: 600px;
+    margin-left: 0px;
+}
+
+#container_cadastro_usuario
+{
+    border-radius:0px 0px 4px 4px;
+    -moz-border-radius:0px 0px 4px 4px;
+    -webkit-border-radius:0px 0px 4px 4px;
+    -o-border-radius:0px 0px 4px 4px;
+    -ms-border-radius: 0px 0px 4px 4px;
+    background: #E8E8E8;
+    border:1px solid;
+    border-color: #CFCFCF;
+    width: 980px;
+    height: 600px;
+    margin-left: 0px;
+}
+
+#container_form_confirmacao_cadastro
+{
+    border-radius:4px;
+    -moz-border-radius:4px;
+    -webkit-border-radius:4px;
+    background: #E8E8E8;
+    border:1px solid;
+    border-color: #CFCFCF;
+    width: 665px;
+    height: 255px;
+    margin-left:17%;
+}
+
+#label_titulo_paginas
+{
+    border-radius:4px 4px 0px 0px;
+    -moz-border-radius:4px 4px 0px 0px;
+    -webkit-border-radius:4px 4px 0px 0px;
+    -o-border-radius:4px 4px 0px 0px;
+    -ms-border-radius: 4px 4px 0px 0px;
+    background: #696969;
+    border:1px solid;
+    border-color: #696969;
+    width: 500px;
+    height: 30px;
+    margin-top: 75px;
+    margin-left:22%;
+}
+
+#label_titulo_paginas_contato
+{
+    border-radius:4px 4px 0px 0px;
+    -moz-border-radius:4px 4px 0px 0px;
+    -webkit-border-radius:4px 4px 0px 0px;
+    -o-border-radius:4px 4px 0px 0px;
+    -ms-border-radius: 4px 4px 0px 0px;
+    background: #696969;
+    border:1px solid;
+    border-color: #696969;
+    width: 980px;
+    height: 30px;
+    margin-top: 15px;
+    margin-left:0px;
+}
+
+#container_opcoes_cadastro
+{
+    border-radius:0px 0px 4px 4px;
+    -moz-border-radius: 0px 0px 4px 4px;
+    -webkit-border-radius: 0px 0px 4px 4px;
+    -o-border-radius: 0px 0px 4px 4px;
+    -ms-border-radius: 0px 0px 4px 4px;
+    background: #E8E8E8;
+    border:1px solid;
+    border-color: #CFCFCF;
+    width: 500px;
+    height: 160px;
+    margin-left:22%;
+}
+
+.mensagemErroLogin
+{
+    font-family: 'Verdana', Geneva, sans-serif;
+    font-size: 10pt;
+}
+
+.texto_menor_erro
+{
+    font-family: 'Verdana', sans-serif;
+    color: red;
+    font-weight: bold;
+    font-size: 8pt;
+    padding: 0px;
+    margin-top: 0px;
+}
+
+p
+{
+    font-family: 'Verdana', Geneva, sans-serif;
+    color: #333333;
+    font-size: 11pt;
+    padding-top: 10px;
+}
+
+.campos_mensagem_validacao 
+{
+    font-family: 'Verdana', Geneva, sans-serif; font-size: 3pt;
+}
+
+.alinha_texto_confirmacao
+{
+    margin-left:12.5%;
+}
+
+.alinha_texto_confirmacao2
+{
+    margin-left:12.5%;
+}
+
+.alinha_texto_confirmacao3
+{
+    margin-top: 6%;
+    margin-left:5%;
+}
+
+.alinha_texto_login
+{
+    margin-left:5%;
+}
+
+.campos_contato {
+    padding-top: 1px;
+}
+
+.campos_cadastro_etapa1 {
+    padding-top: 2px;
+}
+
+.campos_cadastro_nova_empresa_usuario {
+    padding-top: 1px;
+}
+
+.formata_campos_contato
+{
+    font-family: 'Verdana', Geneva, sans-serif;
+    font-size: 10pt;
+    margin-left:2%;
+    padding-top: 5px;
+}
+
+.formata_msg_retorno_operacao
+{
+    font-family: 'Verdana', Geneva, sans-serif;
+    font-size: 10pt;
+    margin-left:17%;
+    padding-top: 10px;
+}
+
+.formata_msg_retorno_operacao2
+{
+    font-family: 'Verdana', Geneva, sans-serif;
+    font-size: 10pt;
+    margin-left:22px;
+    padding-top: 10px;
+}
+
+.formata_campos_cadastro
+{
+    font-family: 'Verdana', Geneva, sans-serif;
+    font-size: 10pt;
+    margin-left:2%;
+    padding-top: 10px;
+}
+
+.formata_campos_cadastro_check_email
+{
+    font-family: 'Verdana', Geneva, sans-serif;
+    font-size: 10pt;
+    margin-left:4.7%;
+    padding-top: 10px;
+}
+
+.formata_campos_cadastro_button
+{
+    font-family: 'Verdana', Geneva, sans-serif;
+    font-size: 10pt;
+    margin-left:16%;
+    padding-top: 10px;
+}
+
+.area_botoes {
+    margin-top: -435px;
+    margin-left: 680px;
+}
+
+.formata_label
+{
+    width: 15%;
+    position: relative;
+    float: left;
+}
+
+.formata_label_2
+{
+    width: 5%;
+    position: relative;
+    float: left;
+}
+
+.formata_label_3
+{
+    width: 10%;
+    position: relative;
+    float: left;
+}
+
+.carregando
+{
+    border-radius:0px 0px 4px 4px;
+    -moz-border-radius:0px 0px 4px 4px;
+    -webkit-border-radius:0px 0px 4px 4px;
+    -o-border-radius:0px 0px 4px 4px;
+    -ms-border-radius: 0px 0px 4px 4px;
+    width: 980px;
+    height: 500px;
+    top: 39.2%; 
+    left: 21.5%;
+    margin: -10px 0 0 -125px; 
+    position: absolute; 
+    z-index: 9999;
+    background:url('/Content/images/ajax-loader_.gif') no-repeat;
+    background-position: center;
+	background-color: #CFCFCF;
+    opacity:.6;
+    display: none;
+} 
+
+#campo_cnpj_cpf 
+{
+    font-family: 'Verdana', Geneva, sans-serif;
+    font-size: 10pt;
+    margin-left:2%;
+    margin-top: 0px;
+    padding-left: 75px;
+}
+
+#mensagemErroCnpj
+{
+    margin-left:6%;
+}
+
+#mensagemErroEmail
+{
+    margin-left:15%;
+}
+
+#mensagemErroCpf
+{
+    margin-left:6%;
+}
+
+#mensagemErroLogin
+{
+    margin-left:15%;
+}
+
+#mensagemErroCep 
+{
+    margin-left:41%;
+}
+
+.formata_termo_politica
+{
+    font-family: 'Verdana', Geneva, sans-serif;
+    font-size: 8pt;
+    color: #4169E1;
+    margin-left:5%;
+    margin-left: 165px;
+    padding-top: 10px;
+}
+
+.formata_msg
+{
+    font-family: 'Verdana', Geneva, sans-serif;
+    font-size: 10pt;
+    color: #000000;
+    margin-left:5%;
+    padding-top: 10px;
+}
+
+.formata_msg_contato
+{
+    font-family: 'Verdana', Geneva, sans-serif;
+    font-size: 10pt;
+    color: #000000;
+    margin-left: 22px;
+    padding-top: 10px;
+}
+
+.formata_opcoes_cadastro
+{
+    font-family: 'Verdana', Geneva, sans-serif;
+    font-weight: bold;
+    font-size: 10pt;
+    color: #4169E1;
+    margin-left:10%;
+    padding-top: 10px;
+}
+
+.label_paginas
+{
+    font-family: 'Verdana', Geneva, sans-serif;
+    color:  #ffffff;
+    border: none;
+    font-size: 12pt;
+    padding: 0px;
+    margin-top: 0px;
+    margin-left:23%;
+}
+
+.texto_normal
+{
+    font-family: 'Verdana', Geneva, sans-serif;
+    font-weight: normal;
+    color: #000000;
+    font-size: 10pt;
+    padding: 0px;
+    margin-top: 0px;
+}
+
+.i2Style
+{
+    font:normal 15px Verdana, Geneva, sans-serif;
+    font-style:normal;
+    color:#FFFFFF;
+    background:#333333;
+    border:1px solid #bbb;
+    text-shadow:0px 0px 0px #fff;
+    border-radius:10px 10px 10px 10px;
+    -moz-border-radius:10px 10px 10px 10px;
+    -webkit-border-radius:10px 10px 10px 10px;
+    padding:10px 20px;
+    cursor:pointer;
+    margin:0 auto;
+}
+.i2Style:active
+{
+    cursor:pointer;
+    position:relative;
+    top:2px;
+}
+
+.i2Style2
+{
+    font:normal 11px Verdana, Geneva, sans-serif;
+    font-style:normal;
+    color:#FFFFFF;
+    background:#333333;
+    border:1px solid #bbb;
+    text-shadow:0px 0px 0px #fff;
+    border-radius:10px 10px 10px 10px;
+    -moz-border-radius:10px 10px 10px 10px;
+    -webkit-border-radius:10px 10px 10px 10px;
+    padding:4px 4px;
+    cursor:pointer;
+    margin:0 auto;
+}
+.i2Style2:active
+{
+    cursor:pointer;
+    position:relative;
+    top:2px;
+}
+
+.i2Style3
+{
+    font:normal 11px Verdana, Geneva, sans-serif;
+    font-style:normal;
+    color:#FFFFFF;
+    background:#333333;
+    border:1px solid #bbb;
+    text-shadow:0px 0px 0px #fff;
+    border-radius:10px 10px 10px 10px;
+    -moz-border-radius:10px 10px 10px 10px;
+    -webkit-border-radius:10px 10px 10px 10px;
+    padding:5px 5px;
+    /*text-align: center;*/
+    line-height: 11px;
+    cursor:pointer;
+    margin-left: 660px;
+    margin-top: -24px;
+    width: 251px; 
+    height: 12px;
+}
+.i2Style3:active
+{
+    cursor:pointer;
+    position:relative;
+    top:2px;
+}
+
+/*--------------------------------------------------------------------------*/
+
+/*header, footer, nav, section {
+    display: block;
+}*/
+
+
+/* Styles for basic forms
+-----------------------------------------------------------*/
+fieldset {
+    border: 1px solid #ddd;
+    padding: 0 1.4em 1.4em 1.4em;
+    margin: 0 0 1.5em 0;
+}
+
+legend {
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+textarea {
+    min-height: 75px;
+}
+
+.editor-label {
+    margin: 1em 0 0 0;
+}
+
+.editor-field {
+    margin: 0.5em 0 0 0;
+}
+
+
+/* Styles for validation helpers
+-----------------------------------------------------------*/
+.field-validation-error {
+    color: #f00;
+}
+
+.field-validation-valid {
+    display: none;
+}
+
+.input-validation-error {
+    border: 1px solid #f00;
+    background-color: #fee;
+}
+
+.validation-summary-errors {
+    font-weight: bold;
+    color: #f00;
+}
+
+.validation-summary-valid {
+    display: none;
+}
+

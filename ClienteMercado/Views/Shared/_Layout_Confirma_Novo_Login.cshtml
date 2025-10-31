@@ -1,0 +1,54 @@
+﻿@*<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width"  />
+    <meta http-equiv="refresh" content="5, http://www.clientemercado.com.br/Login/Login" />
+    <title>@ViewBag.Title</title>
+    <link href="@Url.Content("~/Content/Login.css")" rel="stylesheet" type="text/css" />
+    <link href="~/Content/jquery.alerts.css" rel="stylesheet" /> <!-- Nova linha -->
+
+    <script src="~/Scripts/jquery-2.1.3.js"></script>
+    <script src="~/Scripts/jquery-ui.js"></script>
+    <script src="~/Scripts/jquery-ui.min.js"></script>
+    <script src="~/Scripts/validacoes.js"></script>
+    <script src="~/Scripts/jquery.alerts.js"></script> <!-- Nova linha -->
+
+</head>
+    <body>
+        <div id="container">
+          <div id="header">
+              <div id="toplogo">
+                  <a href='@Url.Action("Index", "Home")'><img src='@Url.Content("~/Content/images/logo_cliente.png")' style='margin-left: 50px; margin-top: 15px; width: 141px; height: 141px; border: none;' /></a>
+              </div>
+
+              <div id="topbar">
+                  <div id="barra_verm_superior">
+                        <div id="texto_bem_vindo">Seja bem-vindo! <span id="texto_normal"></span><span id="texto_apps_android">@Html.ActionLink("CRIAR CONTA", "Index", "CadastroEmpresaUsuario")</span><span id="barra_apps">|</span><span id="texto_apps_winPhone">@Html.ActionLink("ACESSAR CONTA", "Login", "Login")</span></div>
+                  </div>
+                  <div id="barra_branca_superior"></div>
+                  <div id="barra_cinza_superior"></div>
+              </div>
+          </div>
+
+          <div id="conteudo">
+            @RenderBody()
+          </div>
+
+          <div id="barra_verm_rodape"></div>
+          <div id="barra_branca_rodape"></div>
+          <div id="footer">
+              <a href='@Url.Action("Index", "Home")'><img src='@Url.Content("~/Content/images/logo_branca.png")' style='margin-left: 25px; margin-top: 35px; border: none;' /></a>
+              <div id="texto_contato_quem_somos">@Html.ActionLink("C O N T A T O", "Contato", "Contato")<span id="texto_normal">&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;</span>@Html.ActionLink("Q U E M  S O M O S", "Somos", "Home")</div>
+              <div id="texto1_rodape">&#169; 2015&nbsp;&nbsp;ClienteMercado.com.br</div>
+              <div id="texto2_rodape">NOVA MÍDIA Sistemas Ltda - CNPJ/MF 86.570.306/0001-07 / Av. Vitória, 000 - Centro - Vitória-ES</div>
+              <div id="texto3_rodape">CEP 29.041-370</div>
+          </div>
+        </div>
+        
+
+       @Scripts.Render("~/bundles/jquery")
+       @RenderSection("scripts", required: false)
+
+   </body>
+</html>*@

@@ -1,0 +1,133 @@
+﻿@model ClienteMercado.Models.GerarFinanceiro
+
+@{
+    ViewBag.Title = "ClienteMercado";
+    Layout = "~/Views/Shared/_Layout_internas.cshtml";
+}
+
+<div id="container_financeiro">
+
+    <form action="" method="post">
+        <div id="linha_navegacao_meios_pagamento">
+            <div id="linha_opcoes_navegacao_meios_pagamento" class="linha_opcoes_navegacao">
+                <div id="area_navegacao1_setado" class="">
+                    <span class="nomes_navegacao_setado">@Html.LabelFor(m => m.ID_MEIO_PAGAMENTO)</span>
+                </div>
+                <div id="seta1" class="seta-direita_setado"></div>
+            </div>
+
+            <div id="titulo_meios" class="titulos_setores">
+                &nbsp;&nbsp;Efetuar pagamento:
+            </div>
+
+            <div id="sub_container_pagamento_cartao">
+                <div id="secao_pagamentos" class="formata_campos_cadastro2">
+                    <div id="tela_pagamentos2" class="">
+                        <div id="aviso_atencao">
+                            <img src='@Url.Content("~/Content/images/warning.png")' style='margin-left: 50%; margin-top: 25px; border: none;' />
+                        </div>
+                        <br />
+                        <div id="mensagem_apresentacao1" class="formata_msg_sucesso">
+                            Sr(a). @ViewBag.nomeUsuarioLogado,
+                        </div>
+                        <br />
+                        @if (ViewBag.statusFinanceiro == "vincendo")
+                        {
+                            <div id="mensagem_apresentacao2" class="formata_msg_sucesso3">
+                                A mensalidade de sua assinatura vencerá no dia @ViewBag.dataVencimentoFatura.
+                            </div>
+                            <br />
+                            <div id="mensagem_apresentacao3" class="formata_msg_sucesso3">
+                                Detectamos que um título já foi gerado para pagamento por BOLETO BANCÁRIO ou CARTÃO de CRÉDITO através do MOIP.
+                            </div>
+                            <div id="mensagem_apresentacao4" class="formata_msg_sucesso3">
+                                Assim que formos informados do pagamento pela instituição bancária (24hrs/48hrs pós pagamento) e a baixa efetuada no sistema, este aviso não mais aparecerá.
+                            </div>
+                        }
+                        else
+                        {
+                            <div id="mensagem_apresentacao2" class="formata_msg_sucesso3">
+                                A mensalidade de sua assinatura se encontra vencida desde o dia @ViewBag.dataVencimentoFatura.
+                            </div>
+                            <br />
+                            <div id="mensagem_apresentacao3" class="formata_msg_sucesso3">
+                                Detectamos que um título já foi gerado para pagamento por BOLETO BANCÁRIO ou CARTÃO de CRÉDITO através do MOIP.
+                            </div>
+                            <div id="mensagem_apresentacao4" class="formata_msg_sucesso3">
+                                Caso já tenha efetuado o pagamento, seu acesso estará liberado assim que formos informados pela instituição bancária (24hrs/48hrs pós pagamento) e a baixa efetuada no sistema.
+                            </div>
+                        }
+
+                        <br />
+                        <div id="mensagem_apresentacao4" class="formata_msg_sucesso3">
+                            Para maiores esclarecimentos, entre em contato conosco pelo telefone (27) 3741-3029.
+                        </div>
+                        <br />
+                        <div id="mensagem_apresentacao4" class="formata_msg_sucesso3">
+                            Atenciosamente,
+                        </div>
+                        @*<br />*@
+                        <div id="mensagem_apresentacao4" class="formata_msg_sucesso3">
+                            Equipe Cliente & Mercado
+                        </div>
+                        @if (ViewBag.statusFinanceiro == "vincendo")
+                        {
+                            <div id="ir_area_trabalho" class="formata_ir_area_trabalho">
+                                @Html.ActionLink("Ir para minha área de trabalho", "IrParaOPerfilDoUsuario", "FinanceiroClienteMercado",
+                                    new
+                                    {
+                                        @nmU = ClienteMercado.Utils.Utilitarios.MD5Crypt.Criptografar(@ViewBag.nomeUsuarioLogado),
+                                        @nmE = ClienteMercado.Utils.Utilitarios.MD5Crypt.Criptografar(@ViewBag.nomeEmpresaLogado),
+                                        @tpL = @ViewBag.tipoLogin
+                                    }, 
+                                    new { @class = "linkdois" })
+                            </div>
+                        }
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    @*@Scripts.Render("~/bundles/jqueryval")*@
+
+    <script type="text/javascript">
+        //$(document).ready(function() {
+        //    //Posiciona o cursor  no primeiro campo da página
+        //    $("input[type=text]").first().focus();
+
+        //    $("#RESPONSAVEL_EMISSAO_COBRANCA").change(function (event) {
+        //        if ($("#RESPONSAVEL_EMISSAO_COBRANCA").val() == 1) {
+        //            $("#pagador_nome").val($("#NOME_EMPRESA_PAGADOR").val());
+        //            $("#pagador_email").val($("#EMAIL_EMPRESA_PAGADOR").val());
+        //            $("#pagador_cep").val($("#CEP_EMPRESA_PAGADOR").val());
+        //            $("#pagador_telefone").val($("#TELEFONE_EMPRESA_PAGADOR").val());
+        //            $("#pagador_logradouro").val($("#LOGRADOURO_EMPRESA_PAGADOR").val());
+        //            $("#pagador_numero").val($("#NUMERO_LOGRADOURO_EMPRESA_PAGADOR").val());
+        //            $("#pagador_bairro").val($("#BAIRRO_EMPRESA_PAGADOR").val());
+        //            $("#pagador_cidade").val($("#CIDADE_EMPRESA_PAGADOR").val());
+        //            $("#pagador_estado").val($("#ESTADO_EMPRESA_PAGADOR").val());
+        //        }
+        //        else if ($("#RESPONSAVEL_EMISSAO_COBRANCA").val() == 2) {
+        //            $("#pagador_nome").val($("#NOME_USUARIO_PAGADOR").val());
+        //            $("#pagador_email").val($("#EMAIL_USUARIO_PAGADOR").val());
+        //            $("#pagador_cep").val($("#CEP_USUARIO_PAGADOR").val());
+        //            $("#pagador_telefone").val($("#TELEFONE_USUARIO_PAGADOR").val());
+        //            $("#pagador_logradouro").val($("#LOGRADOURO_USUARIO_PAGADOR").val());
+        //            $("#pagador_numero").val($("#NUMERO_LOGRADOURO_USUARIO_PAGADOR").val());
+        //            $("#pagador_bairro").val($("#BAIRRO_USUARIO_PAGADOR").val());
+        //            $("#pagador_cidade").val($("#CIDADE_USUARIO_PAGADOR").val());
+        //            $("#pagador_estado").val($("#ESTADO_USUARIO_PAGADOR").val());
+        //        }
+
+        //        //alert('pagador_nome= ' + $("#pagador_nome").val());
+        //    });
+
+        //});
+
+    </script>
+
+}
