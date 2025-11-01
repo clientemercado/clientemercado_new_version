@@ -30,5 +30,12 @@ namespace ClienteMercado.Utils.Net
             set { HttpContext.Current.Session.Add("tipoDeUsuario", value); }
         }
 
+        //Session usada no armazenamento do objeto 'novaEmpresa', que carrega consigo os dados da empresa a ser cadastrada em conjunto com o usuário master (Ver se posso substituir)
+        public static bool empAdmSoft
+        {
+            get { return (bool)HttpContext.Current.Session["empAdmSoft"]; }
+            set { HttpContext.Current.Session.Add("empAdmSoft", value); }
+        }
+
     }
 }

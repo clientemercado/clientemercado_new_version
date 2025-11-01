@@ -193,12 +193,15 @@
                     <li>
                         <a href="javascript:;">
                             <i class="fas fa-users"></i>
-                            <span class="title">Central de Vendas</span>
+                            <span class="title">Cadastros</span>
                             <span class="arrow "></span>
                         </a>
                         <ul class="sub-menu">
                             <li>
-                                <a href="@Url.Action("CriarNovaEmpresaFornecedor", "NovaEmpresaFornecedor", new { Area = "Company" })" class="btn btn-primary essencial" title="Lista das Centrais de Compras das quais participamos" id="btn-NovoTitulo" style=""> Cadastro Empresa Forn.</a>
+                                @if ((bool)Session["empAdmSoft"])
+                                {
+                                    <a href="@Url.Action("CriarNovaEmpresaFornecedor", "NovaEmpresaFornecedor", new { Area = "Company" })" class="btn btn-primary essencial" title="Lista das Centrais de Compras das quais participamos" id="btn-NovoTitulo" style=""> Cadastro Empresa Forn.</a>
+                                }
                             </li>
                             <li>
                                 <a href="@Url.Action("CadastroDosProdutosEmpresaFornecedora", "ProdutosEmpresaFornecedor", new { Area = "Company" })" class="btn btn-primary essencial" title="Cadastro dos Produtos da Empresa Fornecedora" id="btn-NovoTitulo" style=""> Cadastro Produtos</a>

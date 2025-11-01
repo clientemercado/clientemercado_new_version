@@ -32,7 +32,7 @@ namespace ClienteMercado.Controllers
                 Login viewModelLogin = new Login();
                 loginDoUsuario.LOGIN_EMPRESA_USUARIO_LOGINS = login;
                 loginDoUsuario.SENHA_EMPRESA_USUARIO_LOGINS = Hash.GerarHashMd5(passw);
-                empresa_usuario_logins empresaUsuarioLogins = new NLoginService().ConsultarLoginUsuarioEmpresa(loginDoUsuario);
+                empresa_usuario_logins empresaUsuarioLogins = new NLoginService().ConsultarLoginUsuarioEmpresa(loginDoUsuario);                
 
                 USUARIO_FORNECEDOR usuarioFornecodrLogins = new USUARIO_FORNECEDOR();
                 if (empresaUsuarioLogins == null)
@@ -59,6 +59,8 @@ namespace ClienteMercado.Controllers
                 {
                     resultado = new { logado = "nao", mensagemLogin = "Usuário ou Senha inválidos" };
                 }
+
+                Sessao.empAdmSoft = (empresaUsuarioLogins != null) ? (bool)empresaUsuarioLogins.usuario_empresa.empresa_usuario.emp_adm_soft : false;
 
                 return Json(resultado, JsonRequestBehavior.AllowGet);
             }

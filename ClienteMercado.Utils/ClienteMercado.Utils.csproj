@@ -103,6 +103,7 @@
     <Compile Include="Validation\Validacoes.cs" />
     <Compile Include="ViewModel\DadosDaCentralComprasViewModel.cs" />
     <Compile Include="ViewModel\dadosLocalizacao.cs" />
+    <Compile Include="ViewModel\dadosProdutosImportacao.cs" />
     <Compile Include="ViewModel\ItemASerCanceladoOPedidoDetalhesViewModel.cs" />
     <Compile Include="ViewModel\ListaCentraisComprasViewModel.cs" />
     <Compile Include="ViewModel\ListaDadosDeLocalizacaoViewModel.cs" />

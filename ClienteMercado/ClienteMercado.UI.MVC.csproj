@@ -176,6 +176,7 @@
     <Compile Include="Controllers\CadastroProfissionalUsuarioController.cs" />
     <Compile Include="Controllers\CadastroUsuarioCotanteController.cs" />
     <Compile Include="Controllers\CadastroUsuarioEmpresaController.cs" />
+    <Compile Include="Controllers\ClienteMercadoWebApiController.cs" />
     <Compile Include="Controllers\ContatoController.cs" />
     <Compile Include="Controllers\FinanceiroClienteMercadoController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
